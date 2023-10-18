@@ -53,7 +53,7 @@
         <c:HumanTimeFormatter x:Key="HumenTime"/>
     </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Auto">
+                  VerticalScrollBarVisibility="Auto" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
         <StackPanel>
             <local:TextBoxWithPlaceholder Text="{Binding Name}" Placeholder="Name" Height="24" VerticalAlignment="Center"/>
             <Grid>
