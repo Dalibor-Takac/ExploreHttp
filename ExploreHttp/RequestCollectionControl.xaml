@@ -41,9 +41,10 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <Button HorizontalAlignment="Right">
+                    <Button HorizontalAlignment="Right" Margin="4,0,0,0">
                         <TextBlock Text=""
-                                   Style="{StaticResource Icons}"/>
+                                   Style="{StaticResource Icons}"
+                                   FontSize="12"/>
                     </Button>
                 </StackPanel>
             </Expander.Header>

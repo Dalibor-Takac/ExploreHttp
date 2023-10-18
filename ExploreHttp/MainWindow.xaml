@@ -77,7 +77,7 @@
                                                VerticalAlignment="Center"
                                                Margin="4,0,4,0"/>
                                     <Button HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock Text="" Style="{StaticResource Icons}"/>
+                                        <TextBlock Text="" Style="{StaticResource Icons}" FontSize="12"/>
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
