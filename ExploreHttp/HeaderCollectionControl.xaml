@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="ExploreHttp.HeaderCollectionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:ExploreHttp.Models"
+             xmlns:local="clr-namespace:ExploreHttp"
+             xmlns:c="clr-namespace:ExploreHttp.Utilities"
+             mc:Ignorable="d" 
+             d:DesignHeight="200"
+             d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type=vm:HeaderCollection}">
+    <UserControl.Resources>
+        <c:BooleanToVisibilityConverter x:Key="BoolToVisPositive" TrueMapping="Visible" FalseMapping="Collapsed"/>
+    </UserControl.Resources>
+    <GroupBox>
+        <GroupBox.Header>
+            <TextBlock Text="Headers"/>
+        </GroupBox.Header>
+        <StackPanel>
+            <ItemsControl ItemsSource="{Binding Headers}"
+                d:ItemsSource="{d:SampleData ItemCount=5}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24" SharedSizeGroup="hSharedEnable"/>
+                                <ColumnDefinition SharedSizeGroup="hSharedName"/>
+                                <ColumnDefinition SharedSizeGroup="hSharedVal"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox IsChecked="{Binding IsEnabled}"
+                                      IsEnabled="{Binding Path=DataContext.IsEditable, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HeaderCollectionControl}}}"/>
+                            <local:TextBoxWithPlaceholder Text="{Binding HeaderName}"
+                                                          Placeholder="Header name"
+                                                          Grid.Column="1"
+                                                          IsEnabled="{Binding Path=DataContext.IsEditable, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HeaderCollectionControl}}}"/>
+                            <local:TextBoxWithPlaceholder Text="{Binding HeaderValue}"
+                                                          Placeholder="Header Value"
+                                                          Grid.Column="2"
+                                                          IsEnabled="{Binding Path=DataContext.IsEditable, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HeaderCollectionControl}}}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Separator/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="24" SharedSizeGroup="hSharedEnable"/>
+                    <ColumnDefinition SharedSizeGroup="hSharedName"/>
+                    <ColumnDefinition SharedSizeGroup="hSharedVal"/>
+                </Grid.ColumnDefinitions>
+                <Button Visibility="{Binding IsEditable, Converter={StaticResource BoolToVisPositive}}"
+                        Click="OnAddHeader">
+                    <TextBlock Text="" Style="{StaticResource Icons}" FontSize="10"/>
+                </Button>
+            </Grid>
+        </StackPanel>
+    </GroupBox>
+</UserControl>

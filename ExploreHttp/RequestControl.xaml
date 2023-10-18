@@ -1,0 +1,115 @@
+﻿<UserControl x:Class="ExploreHttp.RequestControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:ExploreHttp.Models"
+             xmlns:local="clr-namespace:ExploreHttp"
+             xmlns:c="clr-namespace:ExploreHttp.Utilities"
+             mc:Ignorable="d" 
+             d:DesignHeight="800"
+             d:DesignWidth="450"
+             d:DataContext="{d:DesignInstance Type=vm:RequestModel}">
+    <UserControl.Resources>
+        <x:Array Type="vm:RequestMethod" x:Key="AllMethods">
+            <vm:RequestMethod>Get</vm:RequestMethod>
+            <vm:RequestMethod>Post</vm:RequestMethod>
+            <vm:RequestMethod>Put</vm:RequestMethod>
+            <vm:RequestMethod>Patch</vm:RequestMethod>
+            <vm:RequestMethod>Delete</vm:RequestMethod>
+            <vm:RequestMethod>Options</vm:RequestMethod>
+            <vm:RequestMethod>Head</vm:RequestMethod>
+        </x:Array>
+        <x:Array Type="vm:BodyType" x:Key="AllBodies">
+            <vm:BodyType>Text</vm:BodyType>
+            <vm:BodyType>FileStream</vm:BodyType>
+        </x:Array>
+        <DataTemplate DataType="vm:BodyProvider" x:Key="TextEditorBody">
+            <GroupBox Header="Body">
+                <TextBox Text="{Binding Source}" AcceptsReturn="True" MinHeight="60"/>
+            </GroupBox>
+        </DataTemplate>
+        <DataTemplate DataType="vm:BodyProvider" x:Key="StreamBody">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="24"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Source}"/>
+                <Button Grid.Column="1">
+                    <TextBlock Text="" Style="{StaticResource Icons}"/>
+                </Button>
+            </Grid>
+        </DataTemplate>
+        <Style TargetType="ContentPresenter" x:Key="BodyChoice">
+            <Setter Property="ContentTemplate" Value="{StaticResource TextEditorBody}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static vm:BodyType.FileStream}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource StreamBody}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <c:HumanDataSizeFormatter x:Key="HumanDataSize"/>
+        <c:HumanTimeFormatter x:Key="HumenTime"/>
+    </UserControl.Resources>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <local:TextBoxWithPlaceholder Text="{Binding Name}" Placeholder="Name" Height="24" VerticalAlignment="Center"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox ItemsSource="{StaticResource AllMethods}" SelectedValue="{Binding Method}" VerticalAlignment="Center"/>
+                <local:TextBoxWithPlaceholder Text="{Binding Url}" Placeholder="Url" Grid.Column="1" Height="24" VerticalAlignment="Center"/>
+                <Button Height="24" Grid.Column="2" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="" Style="{StaticResource Icons}" Margin="0,0,2,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Run" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+            <local:HeaderCollectionControl DataContext="{Binding RequestHeaders}"/>
+            <Separator/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Body Kind:"/>
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{StaticResource AllBodies}"
+                          SelectedValue="{Binding RequestBody.Type}"/>
+            </Grid>
+            <ContentPresenter Content="{Binding RequestBody}" Style="{StaticResource BodyChoice}"/>
+            <Separator/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Response:" VerticalAlignment="Center" Margin="4, 0"/>
+                <TextBlock Text="{Binding ResponseStatus}" FontWeight="Bold" FontSize="10" VerticalAlignment="Bottom"/>
+            </StackPanel>
+            <local:HeaderCollectionControl DataContext="{Binding ResponseHeaders}"/>
+            <TextBox IsEnabled="False" MinHeight="60" Text="{Binding ResponseBody.Source}"/>
+            <StatusBar>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Received:"/>
+                        <TextBlock Text="{Binding ResponseBody.Size, Converter={StaticResource HumanDataSize}}"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Took:"/>
+                        <TextBlock Text="{Binding ResponseDuration, Converter={StaticResource HumenTime}}"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <Button>
+                        <TextBlock Text="Logs"/>
+                    </Button>
+                </StatusBarItem>
+            </StatusBar>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
