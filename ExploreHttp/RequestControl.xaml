@@ -50,7 +50,7 @@
             </Style.Triggers>
         </Style>
         <c:HumanDataSizeFormatter x:Key="HumanDataSize"/>
-        <c:HumanTimeFormatter x:Key="HumenTime"/>
+        <c:HumanTimeFormatter x:Key="HumanTime"/>
     </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                   VerticalScrollBarVisibility="Auto" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
@@ -101,7 +101,7 @@
                 <StatusBarItem>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Took:"/>
-                        <TextBlock Text="{Binding ResponseDuration, Converter={StaticResource HumenTime}}"/>
+                        <TextBlock Text="{Binding ResponseDuration, Converter={StaticResource HumanTime}}"/>
                     </StackPanel>
                 </StatusBarItem>
                 <StatusBarItem HorizontalAlignment="Right">

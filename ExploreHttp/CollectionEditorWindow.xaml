@@ -1,0 +1,83 @@
+﻿<Window x:Class="ExploreHttp.CollectionEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExploreHttp"
+        xmlns:vm="clr-namespace:ExploreHttp.Models"
+        mc:Ignorable="d"
+        Title="New Collection"
+        Height="350"
+        Width="550"
+        WindowStartupLocation="CenterOwner"
+        d:DataContext="{d:DesignInstance Type=vm:RequestCollection}">
+    <Window.Resources>
+        <x:Array x:Key="AllKinds" Type="vm:CollectionKind">
+            <vm:CollectionKind>Manual</vm:CollectionKind>
+            <vm:CollectionKind>OpenApi</vm:CollectionKind>
+        </x:Array>
+    </Window.Resources>
+    <Grid Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="32"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="409*"/>
+            <ColumnDefinition Width="80"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Name" VerticalAlignment="Center"/>
+        <TextBox Grid.Column="1" Text="{Binding CollectionName}" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+        <TextBlock Text="Kind" VerticalAlignment="Center" Grid.Row="1"/>
+        <ComboBox ItemsSource="{StaticResource AllKinds}" SelectedItem="{Binding Kind}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <GroupBox Header="Environments" Grid.Row="2" Grid.ColumnSpan="3">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding SavedEnvironments}"
+                                  d:ItemsSource="{d:SampleData ItemCount=3}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StatusBar>
+                                    <StatusBarItem>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </StatusBarItem>
+                                    <StatusBarItem HorizontalAlignment="Right">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Click="EditEnvironment_Click">
+                                                <TextBlock Text="" Style="{StaticResource Icons}"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </StatusBarItem>
+                                </StatusBar>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Button HorizontalAlignment="Left" Margin="4" Click="AddEnvironment_Click">
+                        <TextBlock Text="" Style="{StaticResource Icons}"/>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+        <Button Click="Confirm_Click" Grid.Row="3">
+            <StackPanel Orientation="Horizontal" Margin="4">
+                <TextBlock Text="" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                <TextBlock Text="Ok" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Button>
+        <Button Click="Cancel_Click" Grid.Row="3" Grid.Column="2">
+            <StackPanel Orientation="Horizontal" Margin="4">
+                <TextBlock Text="" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                <TextBlock Text="Cancel" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Button>
+    </Grid>
+</Window>

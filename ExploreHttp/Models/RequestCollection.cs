@@ -5,8 +5,7 @@ using System.Windows;
 
 namespace ExploreHttp.Models
 {
-    [ObservableObject]
-    public partial class RequestCollection
+    public partial class RequestCollection : ObservableObject
     {
         public string CollectionName { get; set; }
         public CollectionKind Kind { get; set; }
@@ -25,8 +24,7 @@ namespace ExploreHttp.Models
         }
     }
 
-    [ObservableObject]
-    public partial class SavedRequest
+    public partial class SavedRequest : ObservableObject
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -34,10 +32,31 @@ namespace ExploreHttp.Models
         public string Url { get; set; }
     }
 
-    [ObservableObject]
-    public partial class SavedEnvironment
+    public partial class SavedEnvironment : ObservableObject
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public ObservableCollection<EnvironmentVariable> Variables { get; set; }
+
+        public SavedEnvironment()
+        {
+            Variables = new ObservableCollection<EnvironmentVariable>();
+        }
+
+        public SavedEnvironment Clone()
+        {
+            var clone = new SavedEnvironment();
+            clone.Id = Id;
+            clone.Name = Name;
+            clone.Variables = new ObservableCollection<EnvironmentVariable>(Variables);
+            return clone;
+        }
+    }
+
+    public partial class EnvironmentVariable : ObservableObject
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }

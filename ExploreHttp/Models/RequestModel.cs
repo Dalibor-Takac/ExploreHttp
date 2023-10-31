@@ -5,8 +5,7 @@ using System.Windows;
 
 namespace ExploreHttp.Models
 {
-    [ObservableObject]
-    public partial class RequestModel
+    public partial class RequestModel : ObservableObject
     {
         public string Name { get; set; }
         public RequestMethod Method { get; set; }
@@ -27,8 +26,7 @@ namespace ExploreHttp.Models
         }
     }
 
-    [ObservableObject]
-    public partial class HeaderItemModel
+    public partial class HeaderItemModel : ObservableObject
     {
         public string HeaderName { get; set; }
         public string HeaderValue { get; set; }
@@ -42,8 +40,7 @@ namespace ExploreHttp.Models
         }
     }
 
-    [ObservableObject]
-    public partial class HeaderCollection
+    public partial class HeaderCollection : ObservableObject
     {
         public ObservableCollection<HeaderItemModel> Headers { get; set; }
         public bool IsEditable { get; set; }
@@ -54,8 +51,7 @@ namespace ExploreHttp.Models
         }
     }
 
-    [ObservableObject]
-    public partial class BodyProvider
+    public partial class BodyProvider : ObservableObject
     {
         public BodyType Type { get; set; }
         public string ContentType { get; set; }

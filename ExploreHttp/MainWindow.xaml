@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:ExploreHttp.Models"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=vm:ApplicationViewModel}"
-        Title="ExploreHttp"
+        Title="Explore HTTP"
         Height="{Binding UIState.Height, Mode=TwoWay}"
         d:Height="480"
         Width="{Binding UIState.Width, Mode=TwoWay}"
@@ -19,7 +19,7 @@
         Icon="/icon.png">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" MinWidth="250"/>
+            <ColumnDefinition Width="300" MinWidth="300"/>
             <ColumnDefinition Width="8"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -29,17 +29,23 @@
         </Grid.RowDefinitions>
         <ToolBarPanel>
             <ToolBar>
-                <Button>
+                <Button Click="NewCollection_Click">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                         <TextBlock Text="New collection" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
                 <Separator/>
-                <Button>
+                <Button Click="OpenSettings_Click">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                         <TextBlock Text="Settings" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Click="About_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                        <TextBlock Text="About" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </ToolBar>
@@ -60,7 +66,9 @@
             </StackPanel>
         </ScrollViewer>
         <GridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Stretch"/>
-        <TabControl Grid.Column="2" Grid.RowSpan="2" ItemsSource="{Binding OpenRequests}">
+        <TabControl Grid.Column="2" Grid.RowSpan="2"
+                    ItemsSource="{Binding OpenRequests}"
+                    d:ItemsSource="{d:SampleData ItemCount=3}">
             <TabControl.ItemContainerStyle>
                 <Style TargetType="TabItem">
                     <Setter Property="HeaderTemplate">
@@ -76,7 +84,7 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Margin="4,0,4,0"/>
-                                    <Button HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Button HorizontalAlignment="Center" VerticalAlignment="Center" Click="NewRequest_Click">
                                         <TextBlock Text="" Style="{StaticResource Icons}" FontSize="12"/>
                                     </Button>
                                 </StackPanel>

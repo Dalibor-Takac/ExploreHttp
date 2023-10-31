@@ -5,8 +5,7 @@ using System.Windows;
 
 namespace ExploreHttp.Models
 {
-    [ObservableObject]
-    public partial class ApplicationViewModel
+    public partial class ApplicationViewModel : ObservableObject
     {
         public ObservableCollection<RequestModel> OpenRequests { get; set; }
         public ObservableCollection<RequestCollection> Collections { get; set; }
@@ -237,8 +236,7 @@ namespace ExploreHttp.Models
         }
     }
 
-    [ObservableObject]
-    public partial class UIState
+    public partial class UIState : ObservableObject
     {
         public double X { get; set; }
         public double Y { get; set; }

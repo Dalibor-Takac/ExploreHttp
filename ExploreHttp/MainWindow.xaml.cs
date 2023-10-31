@@ -34,5 +34,27 @@ namespace ExploreHttp
             Vm.ToSettings(SavedState.Default);
             SavedState.Default.Save();
         }
+
+        private void NewCollection_Click(object sender, RoutedEventArgs e)
+        {
+            var newCollection = CollectionEditorWindow.OpenModal(this);
+            if (newCollection != null)
+                Vm.Collections.Add(newCollection);
+        }
+
+        private void OpenSettings_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void NewRequest_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

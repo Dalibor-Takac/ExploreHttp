@@ -41,8 +41,11 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <Button HorizontalAlignment="Right" Margin="4,0,0,0">
-                        <TextBlock Text=""
+                    <Button HorizontalAlignment="Right" Margin="4,0,0,0" Width="28">
+                        <TextBlock Text="" Style="{StaticResource Icons}"/>
+                    </Button>
+                    <Button HorizontalAlignment="Right" Margin="4,0,0,0" Width="28">
+                        <TextBlock Text=""
                                    Style="{StaticResource Icons}"
                                    FontSize="12"/>
                     </Button>
