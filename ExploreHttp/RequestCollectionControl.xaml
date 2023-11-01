@@ -20,36 +20,42 @@
             BorderBrush="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" BorderThickness="1">
         <Expander IsExpanded="{Binding IsExpanded}">
             <Expander.Header>
-                <StackPanel Orientation="Horizontal">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="28"/>
+                        <ColumnDefinition Width="28"/>
+                    </Grid.ColumnDefinitions>
                     <TextBlock Text="✱"
-                               Style="{StaticResource Icons}"
-                               VerticalAlignment="Stretch"
-                               HorizontalAlignment="Stretch"
-                               Margin="4,0,0,0"/>
+                        Style="{StaticResource Icons}"
+                        HorizontalAlignment="Center"/>
                     <TextBlock Text="{Binding CollectionName}"
-                               d:Text="Example collection"
-                               VerticalAlignment="Center"
-                               Margin="0,0,4,0"/>
+                        d:Text="Example collection"
+                        VerticalAlignment="Center"
+                        Margin="4,0,4,0"
+                        Grid.Column="1"/>
                     <ComboBox ItemsSource="{Binding SavedEnvironments}"
-                              SelectedIndex="{Binding SelectedEnvironmentIndex}"
-                              d:ItemsSource="{d:SampleData ItemCount=3}"
-                              d:SelectedIndex="1"
-                              HorizontalAlignment="Right">
+                        SelectedIndex="{Binding SelectedEnvironmentIndex}"
+                        d:ItemsSource="{d:SampleData ItemCount=3}"
+                        d:SelectedIndex="1"
+                        Grid.Column="2">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <Button HorizontalAlignment="Right" Margin="4,0,0,0" Width="28">
-                        <TextBlock Text="" Style="{StaticResource Icons}"/>
+                    <Button Grid.Column="3">
+                        <TextBlock Text="&#xE109;" Style="{StaticResource Icons}"/>
                     </Button>
-                    <Button HorizontalAlignment="Right" Margin="4,0,0,0" Width="28">
-                        <TextBlock Text=""
-                                   Style="{StaticResource Icons}"
-                                   FontSize="12"/>
+                    <Button Grid.Column="4">
+                        <TextBlock Text="&#xE104;"
+                            Style="{StaticResource Icons}"
+                            FontSize="12"/>
                     </Button>
-                </StackPanel>
+                </Grid>
             </Expander.Header>
             <StackPanel>
                 <ItemsControl ItemsSource="{Binding SavedRequests}"

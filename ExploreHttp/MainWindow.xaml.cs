@@ -47,7 +47,7 @@ namespace ExploreHttp
 
         }
 
-        private void NewRequest_Click(object sender, RoutedEventArgs e)
+        private void CloseRequest_Click(object sender, RoutedEventArgs e)
         {
 
         }
