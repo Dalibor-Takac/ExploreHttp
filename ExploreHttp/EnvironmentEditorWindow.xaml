@@ -27,19 +27,31 @@
         <GroupBox Header="Variables" Grid.Row="1" Grid.ColumnSpan="3">
             <ScrollViewer HorizontalScrollBarVisibility="Disabled">
                 <StackPanel>
+                    <Grid Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="Name" IsEnabled="False" FontWeight="Bold" FontSize="14" Grid.Column="1" Margin="1,2"/>
+                        <TextBox Text="Value" IsEnabled="False" FontWeight="Bold" FontSize="14" Grid.Column="2" Margin="1,2"/>
+                    </Grid>
                     <ItemsControl ItemsSource="{Binding Variables}"
                                   d:ItemsSource="{d:SampleData ItemCount=5}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="24" SharedSizeGroup="envEnabled"/>
-                                        <ColumnDefinition SharedSizeGroup="envName"/>
-                                        <ColumnDefinition SharedSizeGroup="envValue"/>
+                                        <ColumnDefinition Width="24"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox IsChecked="{Binding IsEnabled}"/>
-                                    <TextBox Text="{Binding Name}" Grid.Column="1"/>
-                                    <TextBox Text="{Binding Value}" Grid.Column="2"/>
+                                    <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                                            Margin="2">
+                                        <CheckBox IsChecked="{Binding IsEnabled}"/>
+                                    </Border>
+                                    <TextBox Text="{Binding Name}" Grid.Column="1" Margin="1"/>
+                                    <TextBox Text="{Binding Value}" Grid.Column="2" Margin="1"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

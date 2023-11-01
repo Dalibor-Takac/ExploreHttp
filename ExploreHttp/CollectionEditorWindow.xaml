@@ -26,7 +26,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="409*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="80"/>
         </Grid.ColumnDefinitions>
         <TextBlock Text="Name:" VerticalAlignment="Center"/>
@@ -46,18 +46,16 @@
                                   d:ItemsSource="{d:SampleData ItemCount=3}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StatusBar>
-                                    <StatusBarItem>
-                                        <TextBlock Text="{Binding Name}"/>
-                                    </StatusBarItem>
-                                    <StatusBarItem HorizontalAlignment="Right">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Click="EditEnvironment_Click">
-                                                <TextBlock Text="{StaticResource EditIcon}" Style="{StaticResource Icons}"/>
-                                            </Button>
-                                        </StackPanel>
-                                    </StatusBarItem>
-                                </StatusBar>
+                                <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="32"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Name}" FontSize="14" Margin="2" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+                                    <Button Click="EditEnvironment_Click" Grid.Column="1" Margin="2">
+                                        <TextBlock Text="{StaticResource EditIcon}" Style="{StaticResource Icons}"/>
+                                    </Button>
+                                </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
