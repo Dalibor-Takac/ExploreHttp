@@ -37,6 +37,7 @@ namespace ExploreHttp
             }
             var metadata = ModelConverter.ToStorage(Vm);
             Vm.Loader.UpdateMetadata(metadata);
+            Vm.UnsavedChangesIndicatorVisibility = Visibility.Collapsed;
         }
 
         private Window GetParentWindow()
@@ -56,10 +57,11 @@ namespace ExploreHttp
 
         private void EditCollection_Click(object sender, RoutedEventArgs e)
         {
-            var result = CollectionEditorWindow.OpenModal(GetParentWindow(), Vm);
+            var result = CollectionEditorWindow.OpenModal(GetParentWindow(), Vm.Clone());
             if (result != null)
             {
-                SaveCollection();
+                DataContext = result;
+                result.UnsavedChangesIndicatorVisibility = Visibility.Visible;
             }
         }
 

@@ -33,6 +33,23 @@ public partial class RequestCollection : ObservableObject
     }
 
     public CollectionLoader Loader { get; set; }
+
+    public RequestCollection Clone()
+    {
+        var result = new RequestCollection()
+        {
+            CollectionName = CollectionName,
+            Kind = Kind,
+            Source = Source,
+            UnsavedChangesIndicatorVisibility = UnsavedChangesIndicatorVisibility,
+            SavedRequests = new ObservableCollection<SavedRequest>(SavedRequests),
+            SavedEnvironments = new ObservableCollection<SavedEnvironment>(SavedEnvironments),
+            SelectedEnvironmentIndex = SelectedEnvironmentIndex,
+            IsExpanded = IsExpanded,
+            Loader = Loader
+        };
+        return result;
+    }
 }
 
 public partial class SavedRequest : ObservableObject
