@@ -7,14 +7,23 @@ namespace ExploreHttp.Models
 {
     public partial class RequestCollection : ObservableObject
     {
-        public string CollectionName { get; set; }
-        public CollectionKind Kind { get; set; }
-        public string Source { get; set; }
-        public Visibility UnsavedChangesIndicatorVisibility { get; set; }
-        public ObservableCollection<SavedRequest> SavedRequests { get; set; }
-        public ObservableCollection<SavedEnvironment> SavedEnvironments { get; set; }
-        public int SelectedEnvironmentIndex { get; set; }
-        public bool IsExpanded { get; set; }
+        private string collectionName;
+        private CollectionKind kind;
+        private string source;
+        private Visibility unsavedChangesIndicatorVisibility;
+        private ObservableCollection<SavedRequest> savedRequests;
+        private ObservableCollection<SavedEnvironment> savedEnvironments;
+        private int selectedEnvironmentIndex;
+        private bool isExpanded;
+
+        public string CollectionName { get => collectionName; set => SetProperty(ref collectionName, value); }
+        public CollectionKind Kind { get => kind; set => SetProperty(ref kind, value); }
+        public string Source { get => source; set => SetProperty(ref source, value); }
+        public Visibility UnsavedChangesIndicatorVisibility { get => unsavedChangesIndicatorVisibility; set => SetProperty(ref unsavedChangesIndicatorVisibility, value); }
+        public ObservableCollection<SavedRequest> SavedRequests { get => savedRequests; set => SetProperty(ref savedRequests, value); }
+        public ObservableCollection<SavedEnvironment> SavedEnvironments { get => savedEnvironments; set => SetProperty(ref savedEnvironments, value); }
+        public int SelectedEnvironmentIndex { get => selectedEnvironmentIndex; set => SetProperty(ref selectedEnvironmentIndex, value); }
+        public bool IsExpanded { get => isExpanded; set => SetProperty(ref isExpanded, value); }
 
         public RequestCollection()
         {
@@ -26,17 +35,26 @@ namespace ExploreHttp.Models
 
     public partial class SavedRequest : ObservableObject
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public RequestMethod Method { get; set; }
-        public string Url { get; set; }
+        private Guid id;
+        private string name;
+        private RequestMethod method;
+        private string url;
+
+        public Guid Id { get => id; set => SetProperty(ref id, value); }
+        public string Name { get => name; set => SetProperty(ref name, value); }
+        public RequestMethod Method { get => method; set => SetProperty(ref method, value); }
+        public string Url { get => url; set => SetProperty(ref url, value); }
     }
 
     public partial class SavedEnvironment : ObservableObject
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public ObservableCollection<EnvironmentVariable> Variables { get; set; }
+        private Guid id;
+        private string name;
+        private ObservableCollection<EnvironmentVariable> variables;
+
+        public Guid Id { get => id; set => SetProperty(ref id, value); }
+        public string Name { get => name; set => SetProperty(ref name, value); }
+        public ObservableCollection<EnvironmentVariable> Variables { get => variables; set => SetProperty(ref variables, value); }
 
         public SavedEnvironment()
         {
@@ -55,8 +73,12 @@ namespace ExploreHttp.Models
 
     public partial class EnvironmentVariable : ObservableObject
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public bool IsEnabled { get; set; }
+        private string name;
+        private string value;
+        private bool isEnabled;
+
+        public string Name { get => name; set => SetProperty(ref name, value); }
+        public string Value { get => value; set => SetProperty(ref value, value); }
+        public bool IsEnabled { get => isEnabled; set => SetProperty(ref isEnabled, value); }
     }
 }

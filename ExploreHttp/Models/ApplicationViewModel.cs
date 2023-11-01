@@ -7,9 +7,13 @@ namespace ExploreHttp.Models
 {
     public partial class ApplicationViewModel : ObservableObject
     {
-        public ObservableCollection<RequestModel> OpenRequests { get; set; }
-        public ObservableCollection<RequestCollection> Collections { get; set; }
-        public UIState UIState { get; set; }
+        private ObservableCollection<RequestModel> openRequests;
+        private ObservableCollection<RequestCollection> collections;
+        private UIState uIState;
+
+        public ObservableCollection<RequestModel> OpenRequests { get => openRequests; set => SetProperty(ref openRequests, value); }
+        public ObservableCollection<RequestCollection> Collections { get => collections; set => SetProperty(ref collections, value); }
+        public UIState UIState { get => uIState; set => SetProperty(ref uIState, value); }
 
         public ApplicationViewModel()
         {
@@ -120,7 +124,8 @@ namespace ExploreHttp.Models
                         new SavedEnvironment() { Name = "Test" },
                         new SavedEnvironment() { Name = "Prod" },
                     },
-                    SelectedEnvironmentIndex = 0
+                    SelectedEnvironmentIndex = 0,
+                    IsExpanded = false
                 },
                 new RequestCollection()
                 {
@@ -238,10 +243,16 @@ namespace ExploreHttp.Models
 
     public partial class UIState : ObservableObject
     {
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Width { get; set; }
-        public double Height { get; set; }
-        public WindowState WindowState { get; set; }
+        private double x;
+        private double y;
+        private double width;
+        private double height;
+        private WindowState windowState;
+
+        public double X { get => x; set => SetProperty(ref x, value); }
+        public double Y { get => y; set => SetProperty(ref y, value); }
+        public double Width { get => width; set => SetProperty(ref width, value); }
+        public double Height { get => height; set => SetProperty(ref height, value); }
+        public WindowState WindowState { get => windowState; set => SetProperty(ref windowState, value); }
     }
 }

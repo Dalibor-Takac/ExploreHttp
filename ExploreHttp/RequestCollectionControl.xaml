@@ -11,58 +11,70 @@
              d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=vm:RequestCollection}">
     <UserControl.Resources>
+        <c:BooleanToVisibilityConverter x:Key="BoolToVis" TrueMapping="Visible" FalseMapping="Collapsed"/>
+        <c:BooleanToVisibilityConverter x:Key="BoolToVisReverse" TrueMapping="Collapsed" FalseMapping="Visible"/>
         <c:MethodToColorBrushConverter x:Key="MethodConverter"
                                        IdempotentBrush="{StaticResource IdempotentOperation}"
                                        NonIdempotentBrush="{StaticResource NonIdempotentOperation}"
                                        DangerousBrush="{StaticResource DangerousOperation}"/>
     </UserControl.Resources>
     <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-            BorderBrush="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" BorderThickness="1">
-        <Expander IsExpanded="{Binding IsExpanded}">
-            <Expander.Header>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="24"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="28"/>
-                        <ColumnDefinition Width="28"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="✱"
-                        Style="{StaticResource Icons}"
-                        HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding CollectionName}"
-                        d:Text="Example collection"
-                        VerticalAlignment="Center"
-                        Margin="4,0,4,0"
-                        Grid.Column="1"/>
-                    <ComboBox ItemsSource="{Binding SavedEnvironments}"
-                        SelectedIndex="{Binding SelectedEnvironmentIndex}"
-                        d:ItemsSource="{d:SampleData ItemCount=3}"
-                        d:SelectedIndex="1"
-                        Grid.Column="2">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <Button Grid.Column="3">
-                        <TextBlock Text="&#xE109;" Style="{StaticResource Icons}"/>
-                    </Button>
-                    <Button Grid.Column="4">
-                        <TextBlock Text="&#xE104;"
-                            Style="{StaticResource Icons}"
-                            FontSize="12"/>
-                    </Button>
-                </Grid>
-            </Expander.Header>
-            <StackPanel>
+            BorderBrush="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" BorderThickness="1" Padding="2">
+        <StackPanel Height="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="32"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="32"/>
+                    <ColumnDefinition Width="28"/>
+                </Grid.ColumnDefinitions>
+                <Button Click="Toggle_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="" Style="{StaticResource Icons}" Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisReverse}}" d:Visibility="Collapsed"/>
+                        <TextBlock Text="" Style="{StaticResource Icons}" Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVis}}" d:Visibility="Visible"/>
+                    </StackPanel>
+                </Button>
+                <TextBlock Text="✱"
+                           Grid.Column="1"
+                           Style="{StaticResource Icons}"
+                           Margin="0,0,4,0"
+                           HorizontalAlignment="Center"
+                           Visibility="{Binding UnsavedChangesIndicatorVisibility}"/>
+                <TextBlock Text="{Binding CollectionName}"
+                           d:Text="Example collection"
+                           VerticalAlignment="Center"
+                           Margin="4,0,4,0"
+                           Grid.Column="2"/>
+                <ComboBox ItemsSource="{Binding SavedEnvironments}"
+                          SelectedIndex="{Binding SelectedEnvironmentIndex}"
+                          d:ItemsSource="{d:SampleData ItemCount=3}"
+                          d:SelectedIndex="1"
+                          Grid.Column="3"
+                          VerticalAlignment="Center"
+                          Margin="0,0,4,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Grid.Column="4" Margin="0,0,4,0">
+                    <TextBlock Text="&#xE109;" Style="{StaticResource Icons}"/>
+                </Button>
+                <Button Grid.Column="5">
+                    <TextBlock Text="&#xE104;"
+                               Style="{StaticResource Icons}"
+                               FontSize="12"/>
+                </Button>
+            </Grid>
+            <StackPanel Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVis}}">
                 <ItemsControl ItemsSource="{Binding SavedRequests}"
-                              d:ItemsSource="{d:SampleData ItemCount=5}">
+                  d:ItemsSource="{d:SampleData ItemCount=5}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button HorizontalContentAlignment="Left" Margin="0,0,0,4">
+                            <Button HorizontalContentAlignment="Left" Margin="0,4,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <Border Style="{StaticResource Pill}" Width="50" Background="{Binding Method, Converter={StaticResource MethodConverter}}">
                                         <TextBlock Text="{Binding Method}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
@@ -74,6 +86,6 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
-        </Expander>
+        </StackPanel>
     </Border>
 </UserControl>
