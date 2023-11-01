@@ -18,15 +18,24 @@
             <TextBlock Text="Headers"/>
         </GroupBox.Header>
         <StackPanel>
+            <Grid Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="Header Name" Grid.Column="1" IsEnabled="False" FontWeight="Bold"/>
+                <TextBox Text="Value" Grid.Column="2" IsEnabled="False" FontWeight="Bold"/>
+            </Grid>
             <ItemsControl ItemsSource="{Binding Headers}"
                 d:ItemsSource="{d:SampleData ItemCount=5}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="24" SharedSizeGroup="hSharedEnable"/>
-                                <ColumnDefinition SharedSizeGroup="hSharedName"/>
-                                <ColumnDefinition SharedSizeGroup="hSharedVal"/>
+                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <CheckBox IsChecked="{Binding IsEnabled}"
                                       IsEnabled="{Binding Path=DataContext.IsEditable, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HeaderCollectionControl}}}"/>
