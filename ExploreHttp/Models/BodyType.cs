@@ -1,8 +1,7 @@
-﻿namespace ExploreHttp.Models
+﻿namespace ExploreHttp.Models;
+
+public enum BodyType
 {
-    public enum BodyType
-    {
-        Text,
-        FileStream
-    }
+    Text,
+    FileStream
 }

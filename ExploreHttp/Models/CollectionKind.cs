@@ -1,8 +1,7 @@
-﻿namespace ExploreHttp.Models
+﻿namespace ExploreHttp.Models;
+
+public enum CollectionKind
 {
-    public enum CollectionKind
-    {
-        Manual,
-        OpenApi
-    }
+    Manual,
+    OpenApi
 }

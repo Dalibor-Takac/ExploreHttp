@@ -1,19 +1,9 @@
 ﻿using ExploreHttp.Models;
+using ExploreHttp.Services;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Specialized;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ExploreHttp
 {
@@ -25,6 +15,9 @@ namespace ExploreHttp
         public ApplicationViewModel Vm { get; set; }
         public MainWindow()
         {
+            if (SavedState.Default.KnownCollections is null)
+                SavedState.Default.KnownCollections = new StringCollection();
+
             Vm = new ApplicationViewModel(SavedState.Default);
             DataContext = Vm;
             InitializeComponent();
@@ -69,7 +62,19 @@ namespace ExploreHttp
             dlg.CheckPathExists = true;
             if (dlg.ShowDialog(this).GetValueOrDefault())
             {
-                //TODO open json file and add it to known collections
+                if (File.Exists(dlg.FileName) && !SavedState.Default.KnownCollections.Contains(dlg.FileName))
+                {
+                    SavedState.Default.KnownCollections.Add(dlg.FileName);
+                    SavedState.Default.Save();
+
+                    var loader = new CollectionLoader(dlg.FileName);
+
+                    var metadata = loader.ReadMetadata();
+                    var requestCollection = ModelConverter.FromStorage(metadata);
+                    requestCollection.Loader = loader;
+
+                    Vm.Collections.Add(requestCollection);
+                }
             }
         }
     }

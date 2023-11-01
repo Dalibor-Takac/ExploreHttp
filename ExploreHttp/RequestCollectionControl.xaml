@@ -63,15 +63,15 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Grid.Column="4" Margin="0,0,4,0" ToolTip="New Request">
+                <Button Grid.Column="4" Margin="0,0,4,0" ToolTip="New Request" Click="NewRequest_Click">
                     <TextBlock Text="{StaticResource FileIcon}" Style="{StaticResource Icons}"/>
                 </Button>
-                <Button Grid.Column="5" Margin="0,0,4,0" ToolTip="Collection Settings">
+                <Button Grid.Column="5" Margin="0,0,4,0" ToolTip="Collection Settings" Click="EditCollection_Click">
                     <TextBlock Text="{StaticResource EditIcon}"
                                Style="{StaticResource Icons}"
                                FontSize="12"/>
                 </Button>
-                <Button Grid.Column="6" ToolTip="Save Changes">
+                <Button Grid.Column="6" ToolTip="Save Changes" Click="SaveCollection_Click">
                     <TextBlock Text="{StaticResource SaveIcon}"
                                Style="{StaticResource Icons}"
                                FontSize="12"/>

@@ -1,19 +1,8 @@
 ﻿using ExploreHttp.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ExploreHttp.Services;
+using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ExploreHttp
 {
@@ -29,9 +18,54 @@ namespace ExploreHttp
 
         private RequestCollection Vm => (RequestCollection)DataContext;
 
+        private void SaveCollection()
+        {
+            if (Vm.Loader is null)
+            {
+                var saveDlg = new SaveFileDialog();
+                saveDlg.CheckPathExists = true;
+                saveDlg.AddExtension = true;
+                saveDlg.DefaultExt = "*.reqcol";
+                saveDlg.Filter = "Request Collection|*.reqcol";
+                if (saveDlg.ShowDialog().GetValueOrDefault() && !SavedState.Default.KnownCollections.Contains(saveDlg.FileName))
+                {
+                    var loader = new CollectionLoader(saveDlg.FileName);
+                    Vm.Loader = loader;
+
+                    SavedState.Default.KnownCollections.Add(saveDlg.FileName);
+                }
+            }
+            var metadata = ModelConverter.ToStorage(Vm);
+            Vm.Loader.UpdateMetadata(metadata);
+        }
+
+        private Window GetParentWindow()
+        {
+            return Window.GetWindow(this);
+        }
+
         private void Toggle_Click(object sender, RoutedEventArgs e)
         {
             Vm.IsExpanded = !Vm.IsExpanded;
+        }
+
+        private void SaveCollection_Click(object sender, RoutedEventArgs e)
+        {
+            SaveCollection();
+        }
+
+        private void EditCollection_Click(object sender, RoutedEventArgs e)
+        {
+            var result = CollectionEditorWindow.OpenModal(GetParentWindow(), Vm);
+            if (result != null)
+            {
+                SaveCollection();
+            }
+        }
+
+        private void NewRequest_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

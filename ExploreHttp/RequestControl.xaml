@@ -158,7 +158,7 @@
             <StatusBarItem>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Received:"/>
-                    <TextBlock Text="{Binding ResponseBody.Size, Converter={StaticResource HumanDataSize}}"/>
+                    <TextBlock Text="{Binding ResponseSize, Converter={StaticResource HumanDataSize}}"/>
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem>

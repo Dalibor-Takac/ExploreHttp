@@ -1,13 +1,12 @@
-﻿namespace ExploreHttp.Models
+﻿namespace ExploreHttp.Models;
+
+public enum RequestMethod
 {
-    public enum RequestMethod
-    {
-        Get,
-        Post,
-        Put,
-        Patch,
-        Delete,
-        Options,
-        Head
-    }
+    Get,
+    Post,
+    Put,
+    Patch,
+    Delete,
+    Options,
+    Head
 }

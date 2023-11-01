@@ -44,6 +44,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -86,12 +88,17 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>SavedState.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\CollectionLoader.cs" />
+    <Compile Include="Services\ModelConverter.cs" />
+    <Compile Include="Services\PersistanceModels\EndpointCollection.cs" />
+    <Compile Include="Services\PersistanceModels\Request.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextBoxWithPlaceholder.xaml.cs">
       <DependentUpon>TextBoxWithPlaceholder.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Usings.cs" />
     <Compile Include="Utilities\BooleanToVisibilityConverter.cs" />
     <Compile Include="Utilities\HumanDataSizeFormatter.cs" />
     <Compile Include="Utilities\HumanTimeFormatter.cs" />
@@ -187,6 +194,9 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm">
       <Version>8.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
