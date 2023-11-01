@@ -65,7 +65,7 @@ namespace ExploreHttp
             dlg.Owner = parent;
             dlg.DataContext = vm;
             if (editingInstance != null)
-                dlg.Title = "Edit Collection";
+                dlg.Title = "Explore HTTP - Edit Collection";
 
             if (dlg.ShowDialog().GetValueOrDefault())
                 return vm;

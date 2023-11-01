@@ -26,5 +26,14 @@
     <Setting Name="SeparatorPosition" Type="System.Double" Scope="User">
       <Value Profile="(Default)">300</Value>
     </Setting>
+    <Setting Name="RequireValidServerCert" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AreLogsDetailed" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="UserAgentString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Explore HTTP (v0.1)</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

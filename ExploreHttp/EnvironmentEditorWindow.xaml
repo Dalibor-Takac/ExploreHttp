@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ExploreHttp"
         xmlns:vm="clr-namespace:ExploreHttp.Models"
         mc:Ignorable="d"
-        Title="New Environment"
+        Title="Explore HTTP - New Environment"
         Height="350"
         Width="550"
         WindowStartupLocation="CenterOwner"

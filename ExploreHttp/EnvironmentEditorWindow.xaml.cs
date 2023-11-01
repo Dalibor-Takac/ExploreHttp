@@ -35,7 +35,7 @@ namespace ExploreHttp
             dlg.DataContext = vm;
             dlg.Owner = parent;
             if (editingInstance != null)
-                dlg.Title = "Edit Environment";
+                dlg.Title = "Explore HTTP - Edit Environment";
 
             if (dlg.ShowDialog().GetValueOrDefault())
                 return vm;

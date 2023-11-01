@@ -45,7 +45,9 @@ namespace ExploreHttp
 
         private void OpenSettings_Click(object sender, RoutedEventArgs e)
         {
-
+            var newSettings = SettingsWindow.OpenModal(this, Vm.AppSettings.Clone());
+            if (newSettings != null)
+                Vm.AppSettings = newSettings;
         }
 
         private void CloseRequest_Click(object sender, RoutedEventArgs e)
@@ -56,7 +58,7 @@ namespace ExploreHttp
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-
+            AboutWindow.OpenDialog(this);
         }
 
         private void OpenCollection_Click(object sender, RoutedEventArgs e)

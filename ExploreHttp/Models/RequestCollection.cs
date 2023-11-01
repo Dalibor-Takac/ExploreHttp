@@ -74,11 +74,11 @@ namespace ExploreHttp.Models
     public partial class EnvironmentVariable : ObservableObject
     {
         private string name;
-        private string value;
+        private string _value;
         private bool isEnabled;
 
         public string Name { get => name; set => SetProperty(ref name, value); }
-        public string Value { get => value; set => SetProperty(ref value, value); }
+        public string Value { get => _value; set => SetProperty(ref _value, value); }
         public bool IsEnabled { get => isEnabled; set => SetProperty(ref isEnabled, value); }
     }
 }

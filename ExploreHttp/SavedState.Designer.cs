@@ -116,5 +116,41 @@ namespace ExploreHttp {
                 this["SeparatorPosition"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RequireValidServerCert {
+            get {
+                return ((bool)(this["RequireValidServerCert"]));
+            }
+            set {
+                this["RequireValidServerCert"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AreLogsDetailed {
+            get {
+                return ((bool)(this["AreLogsDetailed"]));
+            }
+            set {
+                this["AreLogsDetailed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Explore HTTP (v0.1)")]
+        public string UserAgentString {
+            get {
+                return ((string)(this["UserAgentString"]));
+            }
+            set {
+                this["UserAgentString"] = value;
+            }
+        }
     }
 }
