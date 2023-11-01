@@ -25,7 +25,7 @@
             <vm:BodyType>FileStream</vm:BodyType>
         </x:Array>
         <DataTemplate DataType="vm:BodyProvider" x:Key="TextEditorBody">
-            <GroupBox Header="Body">
+            <GroupBox Header="Request Body">
                 <TextBox Text="{Binding Source}" AcceptsReturn="True" MinHeight="60"/>
             </GroupBox>
         </DataTemplate>
@@ -52,64 +52,126 @@
         <c:HumanDataSizeFormatter x:Key="HumanDataSize"/>
         <c:HumanTimeFormatter x:Key="HumanTime"/>
     </UserControl.Resources>
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Auto" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
-        <StackPanel>
-            <local:TextBoxWithPlaceholder Text="{Binding Name}" Placeholder="Name" Height="24" VerticalAlignment="Center"/>
-            <Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="60"/>
+        </Grid.ColumnDefinitions>
+        <local:TextBoxWithPlaceholder Text="{Binding Name}"
+                                      Placeholder="Name"
+                                      ToolTip="Name"
+                                      Grid.ColumnSpan="2"
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,4,0"/>
+        <Button VerticalAlignment="Center"
+                Grid.Column="2">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{StaticResource SaveIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                <TextBlock Text="Save" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Button>
+        <ComboBox ItemsSource="{StaticResource AllMethods}"
+                  Grid.Row="1"
+                  SelectedItem="{Binding Method}"
+                  VerticalAlignment="Center"/>
+        <local:TextBoxWithPlaceholder Text="{Binding Url}"
+                                      Placeholder="Url"
+                                      VerticalAlignment="Center"
+                                      Grid.Row="1"
+                                      Grid.Column="1"
+                                      Margin="4,0"/>
+        <Button VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.Column="2"
+                Margin="0,4">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{StaticResource RunIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                <TextBlock Text="Run" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Button>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+              VerticalScrollBarVisibility="Auto"
+              Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+              Grid.Row="2"
+              Grid.ColumnSpan="3">
+            <Grid Margin="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="60"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox ItemsSource="{StaticResource AllMethods}" SelectedValue="{Binding Method}" VerticalAlignment="Center"/>
-                <local:TextBoxWithPlaceholder Text="{Binding Url}" Placeholder="Url" Grid.Column="1" Height="24" VerticalAlignment="Center"/>
-                <Button Height="24" Grid.Column="2" VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{StaticResource RunIcon}" Style="{StaticResource Icons}" Margin="0,0,2,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Run" VerticalAlignment="Center"/>
-                    </StackPanel>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <local:HeaderCollectionControl DataContext="{Binding RequestHeaders}"
+                                       Label="Request Headers"
+                                       Grid.ColumnSpan="3"/>
+                <TextBlock Text="Body Kind:"
+                           Grid.Row="1"
+                           VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{StaticResource AllBodies}"
+                          SelectedItem="{Binding RequestBody.Type}"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="2"
+                          Grid.Row="1"
+                          Margin="0,4"
+                          VerticalAlignment="Center"/>
+                <ContentPresenter Content="{Binding RequestBody}"
+                          Style="{StaticResource BodyChoice}"
+                          Grid.Row="2"
+                          Grid.ColumnSpan="3"/>
+                <TextBlock Text="Response:"
+                           Grid.Row="3"/>
+                <TextBlock Text="{Binding ResponseStatus}"
+                           d:Text="HTTP 1.1 200 OK"
+                           FontWeight="Bold"
+                           FontSize="10"
+                           VerticalAlignment="Center"
+                           Grid.Row="3"
+                           Grid.Column="1"
+                           Grid.ColumnSpan="2"/>
+                <local:HeaderCollectionControl DataContext="{Binding ResponseHeaders}"
+                                       Label="Response Headers"
+                                       Grid.Row="4"
+                                       Grid.ColumnSpan="3"/>
+                <TextBox IsEnabled="False"
+                         MinHeight="60"
+                         Text="{Binding ResponseBody.Source}"
+                         Grid.Row="5"
+                         Grid.ColumnSpan="3"/>
+            </Grid>
+        </ScrollViewer>
+        <StatusBar Grid.Row="3"
+                   Grid.ColumnSpan="3">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Received:"/>
+                    <TextBlock Text="{Binding ResponseBody.Size, Converter={StaticResource HumanDataSize}}"/>
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Took:"/>
+                    <TextBlock Text="{Binding ResponseDuration, Converter={StaticResource HumanTime}}"/>
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <Button>
+                    <TextBlock Text="Logs"/>
                 </Button>
-            </Grid>
-            <local:HeaderCollectionControl DataContext="{Binding RequestHeaders}"/>
-            <Separator/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Body Kind:"/>
-                <ComboBox Grid.Column="1"
-                          ItemsSource="{StaticResource AllBodies}"
-                          SelectedValue="{Binding RequestBody.Type}"/>
-            </Grid>
-            <ContentPresenter Content="{Binding RequestBody}" Style="{StaticResource BodyChoice}"/>
-            <Separator/>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Response:" VerticalAlignment="Center" Margin="4, 0"/>
-                <TextBlock Text="{Binding ResponseStatus}" FontWeight="Bold" FontSize="10" VerticalAlignment="Bottom"/>
-            </StackPanel>
-            <local:HeaderCollectionControl DataContext="{Binding ResponseHeaders}"/>
-            <TextBox IsEnabled="False" MinHeight="60" Text="{Binding ResponseBody.Source}"/>
-            <StatusBar>
-                <StatusBarItem>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Received:"/>
-                        <TextBlock Text="{Binding ResponseBody.Size, Converter={StaticResource HumanDataSize}}"/>
-                    </StackPanel>
-                </StatusBarItem>
-                <StatusBarItem>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Took:"/>
-                        <TextBlock Text="{Binding ResponseDuration, Converter={StaticResource HumanTime}}"/>
-                    </StackPanel>
-                </StatusBarItem>
-                <StatusBarItem HorizontalAlignment="Right">
-                    <Button>
-                        <TextBlock Text="Logs"/>
-                    </Button>
-                </StatusBarItem>
-            </StatusBar>
-        </StackPanel>
-    </ScrollViewer>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
 </UserControl>

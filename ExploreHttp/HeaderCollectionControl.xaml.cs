@@ -41,30 +41,31 @@ namespace ExploreHttp
             typeof(string),
             typeof(HeaderCollectionControl),
             new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.Journal));
+        private static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
+            nameof(Label),
+            typeof(string),
+            typeof(HeaderCollectionControl),
+            new FrameworkPropertyMetadata("Headers", FrameworkPropertyMetadataOptions.Journal));
 
         public bool IsCheckedPhantomHeader
         {
             get => (bool)GetValue(IsChechedPhantomHeaderProperty);
-            set
-            {
-                SetValue(IsChechedPhantomHeaderProperty, value);
-            }
+            set => SetValue(IsChechedPhantomHeaderProperty, value);
         }
         public string NamePhantomHeader
         {
             get => (string)GetValue(NamePhantomHeaderProperty);
-            set
-            {
-                SetValue(NamePhantomHeaderProperty, value);
-            }
+            set => SetValue(NamePhantomHeaderProperty, value);
         }
         public string ValuePhantomHeader
         {
             get => (string)GetValue(ValuePhantomHeaderProperty);
-            set
-            {
-                SetValue(ValuePhantomHeaderProperty, value);
-            }
+            set => SetValue(ValuePhantomHeaderProperty, value);
+        }
+        public string Label
+        {
+            get => (string)GetValue(LabelProperty);
+            set => SetValue(LabelProperty, value);
         }
 
         public HeaderCollection Vm => (HeaderCollection)DataContext;

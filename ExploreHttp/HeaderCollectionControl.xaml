@@ -15,7 +15,7 @@
     </UserControl.Resources>
     <GroupBox>
         <GroupBox.Header>
-            <TextBlock Text="Headers"/>
+            <TextBlock Text="{Binding Label, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HeaderCollectionControl}}}"/>
         </GroupBox.Header>
         <StackPanel>
             <Grid Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}">

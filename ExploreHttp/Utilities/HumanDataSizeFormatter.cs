@@ -14,17 +14,17 @@ namespace ExploreHttp.Utilities
             if (v > 1024 * 1024 * 1024)
             {
                 var gb = v * 1.0 / (1024 * 1024 * 1024);
-                return $"{gb}GB";
+                return $"{gb:0.##}GB";
             }
             else if (v > 1024 * 1024)
             {
                 var mb = v * 1.0 / (1024 * 1024);
-                return $"{mb}MB";
+                return $"{mb:0.##}MB";
             }
             else if (v > 1024)
             {
                 var kb = v * 1.0 / 1024;
-                return $"{kb}kB";
+                return $"{kb:0.##}kB";
             }
             else
             {

@@ -12,11 +12,11 @@ namespace ExploreHttp.Utilities
             var ts = (TimeSpan)value;
 
             if (ts.TotalSeconds < 1)
-                return $"{ts.TotalMilliseconds}ms";
+                return $"{ts.TotalMilliseconds:0.##}ms";
             else if (ts.TotalSeconds < 60)
-                return $"{ts.TotalSeconds}s";
+                return $"{ts.TotalSeconds:0.##}s";
             else if (ts.TotalMinutes < 60)
-                return $"{ts.Minutes}m {ts.Seconds}s";
+                return $"{ts.Minutes}m {ts.Seconds:0.##}s";
             else
                 return ts.ToString();
         }
