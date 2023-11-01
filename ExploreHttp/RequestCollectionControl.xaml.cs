@@ -32,7 +32,6 @@ namespace ExploreHttp
         private void Toggle_Click(object sender, RoutedEventArgs e)
         {
             Vm.IsExpanded = !Vm.IsExpanded;
-            Debug.WriteLine($"Toggle clicked, new expanded value is {Vm.IsExpanded}");
         }
     }
 }
