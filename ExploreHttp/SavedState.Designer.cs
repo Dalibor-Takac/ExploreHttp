@@ -104,5 +104,17 @@ namespace ExploreHttp {
                 this["OpenRequestIds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        public double SeparatorPosition {
+            get {
+                return ((double)(this["SeparatorPosition"]));
+            }
+            set {
+                this["SeparatorPosition"] = value;
+            }
+        }
     }
 }

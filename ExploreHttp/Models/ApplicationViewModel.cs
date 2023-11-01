@@ -29,7 +29,8 @@ namespace ExploreHttp.Models
                 X = state.X,
                 Y = state.Y,
                 Width = state.Width,
-                Height = state.Height
+                Height = state.Height,
+                SeparatorPosition = new GridLength(state.SeparatorPosition)
             };
 
             if (Enum.TryParse<WindowState>(state.WindowState, out var result))
@@ -238,6 +239,7 @@ namespace ExploreHttp.Models
             state.Width = UIState.Width;
             state.Height = UIState.Height;
             state.WindowState = UIState.WindowState.ToString();
+            state.SeparatorPosition = UIState.SeparatorPosition.Value;
         }
     }
 
@@ -248,11 +250,13 @@ namespace ExploreHttp.Models
         private double width;
         private double height;
         private WindowState windowState;
+        private GridLength separatorPosition;
 
         public double X { get => x; set => SetProperty(ref x, value); }
         public double Y { get => y; set => SetProperty(ref y, value); }
         public double Width { get => width; set => SetProperty(ref width, value); }
         public double Height { get => height; set => SetProperty(ref height, value); }
         public WindowState WindowState { get => windowState; set => SetProperty(ref windowState, value); }
+        public GridLength SeparatorPosition { get => separatorPosition; set => SetProperty(ref separatorPosition, value); }
     }
 }

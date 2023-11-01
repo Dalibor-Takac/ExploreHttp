@@ -19,7 +19,7 @@
         Icon="/icon.png">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" MinWidth="300"/>
+            <ColumnDefinition Width="{Binding UIState.SeparatorPosition, Mode=TwoWay}" MinWidth="300"/>
             <ColumnDefinition Width="8"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -33,6 +33,12 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{StaticResource AddFolderIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                         <TextBlock Text="New collection" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Click="OpenCollection_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{StaticResource FolderIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Open Collection" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
                 <Separator/>

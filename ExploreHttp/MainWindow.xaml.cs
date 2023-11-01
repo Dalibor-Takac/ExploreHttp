@@ -1,4 +1,5 @@
 ﻿using ExploreHttp.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,18 @@ namespace ExploreHttp
         private void About_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void OpenCollection_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog();
+            dlg.Filter = "Request Collection|*.reqcol|All Files|*.*";
+            dlg.CheckFileExists = true;
+            dlg.CheckPathExists = true;
+            if (dlg.ShowDialog(this).GetValueOrDefault())
+            {
+                //TODO open json file and add it to known collections
+            }
         }
     }
 }

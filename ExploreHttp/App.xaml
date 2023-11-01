@@ -35,6 +35,9 @@
             <sys:String x:Key="LogIcon">&#xE1D5;</sys:String>
             <sys:String x:Key="InfoIcon">&#xE2C0;</sys:String>
             <sys:String x:Key="ElipsisIcon">&#xE0C2;</sys:String>
+            <sys:String x:Key="OpenIcon">&#xE188;</sys:String>
+            <sys:String x:Key="ToggleDownIcon">&#x25BC;</sys:String>
+            <sys:String x:Key="SaveIcon">&#xE105;</sys:String>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
