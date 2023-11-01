@@ -29,9 +29,9 @@
             <ColumnDefinition Width="409*"/>
             <ColumnDefinition Width="80"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Name" VerticalAlignment="Center"/>
+        <TextBlock Text="Name:" VerticalAlignment="Center"/>
         <TextBox Grid.Column="1" Text="{Binding CollectionName}" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-        <TextBlock Text="Kind" VerticalAlignment="Center" Grid.Row="1"/>
+        <TextBlock Text="Kind:" VerticalAlignment="Center" Grid.Row="1"/>
         <ComboBox ItemsSource="{StaticResource AllKinds}" SelectedItem="{Binding Kind}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -53,7 +53,7 @@
                                     <StatusBarItem HorizontalAlignment="Right">
                                         <StackPanel Orientation="Horizontal">
                                             <Button Click="EditEnvironment_Click">
-                                                <TextBlock Text="" Style="{StaticResource Icons}"/>
+                                                <TextBlock Text="{StaticResource EditIcon}" Style="{StaticResource Icons}"/>
                                             </Button>
                                         </StackPanel>
                                     </StatusBarItem>
@@ -62,20 +62,20 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                     <Button HorizontalAlignment="Left" Margin="4" Click="AddEnvironment_Click">
-                        <TextBlock Text="" Style="{StaticResource Icons}"/>
+                        <TextBlock Text="{StaticResource AddIcon}" Style="{StaticResource Icons}"/>
                     </Button>
                 </StackPanel>
             </ScrollViewer>
         </GroupBox>
-        <Button Click="Confirm_Click" Grid.Row="3">
+        <Button Click="Confirm_Click" Grid.Row="3" IsDefault="True">
             <StackPanel Orientation="Horizontal" Margin="4">
-                <TextBlock Text="" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                <TextBlock Text="{StaticResource OkIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Ok" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
-        <Button Click="Cancel_Click" Grid.Row="3" Grid.Column="2">
+        <Button Click="Cancel_Click" Grid.Row="3" Grid.Column="2" IsCancel="True">
             <StackPanel Orientation="Horizontal" Margin="4">
-                <TextBlock Text="" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                <TextBlock Text="{StaticResource CloseIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Cancel" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>

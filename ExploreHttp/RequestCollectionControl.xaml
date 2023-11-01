@@ -32,11 +32,11 @@
                 </Grid.ColumnDefinitions>
                 <Button Click="Toggle_Click">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="" Style="{StaticResource Icons}" Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisReverse}}" d:Visibility="Collapsed"/>
-                        <TextBlock Text="" Style="{StaticResource Icons}" Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVis}}" d:Visibility="Visible"/>
+                        <TextBlock Text="{StaticResource CollapsedIcon}" Style="{StaticResource Icons}" Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisReverse}}" d:Visibility="Collapsed"/>
+                        <TextBlock Text="{StaticResource ExpandedIcon}" Style="{StaticResource Icons}" Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVis}}" d:Visibility="Visible"/>
                     </StackPanel>
                 </Button>
-                <TextBlock Text="✱"
+                <TextBlock Text="{StaticResource PendingChangesIcon}"
                            Grid.Column="1"
                            Style="{StaticResource Icons}"
                            Margin="0,0,4,0"
@@ -61,10 +61,10 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button Grid.Column="4" Margin="0,0,4,0">
-                    <TextBlock Text="&#xE109;" Style="{StaticResource Icons}"/>
+                    <TextBlock Text="{StaticResource FileIcon}" Style="{StaticResource Icons}"/>
                 </Button>
                 <Button Grid.Column="5">
-                    <TextBlock Text="&#xE104;"
+                    <TextBlock Text="{StaticResource EditIcon}"
                                Style="{StaticResource Icons}"
                                FontSize="12"/>
                 </Button>

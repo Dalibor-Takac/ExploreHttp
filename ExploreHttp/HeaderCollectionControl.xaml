@@ -51,7 +51,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Visibility="{Binding IsEditable, Converter={StaticResource BoolToVisPositive}}"
                         Click="OnAddHeader">
-                    <TextBlock Text="" Style="{StaticResource Icons}" FontSize="10"/>
+                    <TextBlock Text="{StaticResource AddIcon}" Style="{StaticResource Icons}" FontSize="10"/>
                 </Button>
             </Grid>
         </StackPanel>

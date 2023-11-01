@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ExploreHttp"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary x:Uid="Styles">
@@ -18,6 +19,22 @@
             <SolidColorBrush x:Key="IdempotentOperation" Color="#74d971"/>
             <SolidColorBrush x:Key="NonIdempotentOperation" Color="#f2bf3f"/>
             <SolidColorBrush x:Key="DangerousOperation" Color="#f24b3f"/>
+            <sys:String x:Key="CloseIcon">&#xE10A;</sys:String>
+            <sys:String x:Key="EditIcon">&#xE104;</sys:String>
+            <sys:String x:Key="AddIcon">&#xE109;</sys:String>
+            <sys:String x:Key="PendingChangesIcon">&#x2731;</sys:String>
+            <sys:String x:Key="SettingsIcon">&#xE115;</sys:String>
+            <sys:String x:Key="FileIcon">&#xE132;</sys:String>
+            <sys:String x:Key="ImportantIcon">&#xE171;</sys:String>
+            <sys:String x:Key="FolderIcon">&#xE1C1;</sys:String>
+            <sys:String x:Key="AddFolderIcon">&#xE1DA;</sys:String>
+            <sys:String x:Key="RunIcon">&#xE29B;</sys:String>
+            <sys:String x:Key="OkIcon">&#xE10B;</sys:String>
+            <sys:String x:Key="ExpandedIcon">&#xE019;</sys:String>
+            <sys:String x:Key="CollapsedIcon">&#xE017;</sys:String>
+            <sys:String x:Key="LogIcon">&#xE1D5;</sys:String>
+            <sys:String x:Key="InfoIcon">&#xE2C0;</sys:String>
+            <sys:String x:Key="ElipsisIcon">&#xE0C2;</sys:String>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

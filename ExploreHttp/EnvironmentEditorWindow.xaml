@@ -45,20 +45,20 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                     <Button HorizontalAlignment="Left" Margin="4" Click="AddVariable_Click">
-                        <TextBlock Text="" Style="{StaticResource Icons}"/>
+                        <TextBlock Text="{StaticResource AddIcon}" Style="{StaticResource Icons}"/>
                     </Button>
                 </StackPanel>
             </ScrollViewer>
         </GroupBox>
-        <Button Grid.Row="2" Click="Confirm_Click">
+        <Button Grid.Row="2" Click="Confirm_Click" IsDefault="True">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                <TextBlock Text="{StaticResource OkIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Ok" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
-        <Button Grid.Row="2" Grid.Column="2" Click="Cancel_Click">
+        <Button Grid.Row="2" Grid.Column="2" Click="Cancel_Click" IsCancel="True">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                <TextBlock Text="{StaticResource CloseIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Cancel" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>

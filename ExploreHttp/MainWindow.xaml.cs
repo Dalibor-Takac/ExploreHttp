@@ -49,7 +49,8 @@ namespace ExploreHttp
 
         private void CloseRequest_Click(object sender, RoutedEventArgs e)
         {
-
+            var request = (sender as FrameworkElement).DataContext as RequestModel;
+            Vm.OpenRequests.Remove(request);
         }
 
         private void About_Click(object sender, RoutedEventArgs e)

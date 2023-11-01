@@ -57,7 +57,7 @@ namespace ExploreHttp
 
         private void AddVariable_Click(object sender, RoutedEventArgs e)
         {
-            Vm.Variables.Add(new EnvironmentVariable());
+            Vm.Variables.Add(new EnvironmentVariable() { IsEnabled = true });
         }
     }
 }
