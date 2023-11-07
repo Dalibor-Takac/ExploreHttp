@@ -35,5 +35,8 @@
     <Setting Name="UserAgentString" Type="System.String" Scope="User">
       <Value Profile="(Default)">Explore HTTP (v0.1)</Value>
     </Setting>
+    <Setting Name="RequestPoolSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

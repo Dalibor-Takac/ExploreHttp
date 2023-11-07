@@ -39,6 +39,7 @@
             <sys:String x:Key="ToggleDownIcon">&#x25BC;</sys:String>
             <sys:String x:Key="SaveIcon">&#xE105;</sys:String>
             <sys:String x:Key="TrashIcon">&#xE107;</sys:String>
+            <sys:String x:Key="UpArrowIcon">&#xE1FE;</sys:String>
 
             <RoutedCommand x:Key="{x:Static local:CommandNames.NewCollectionCommandName}"/>
             <RoutedCommand x:Key="{x:Static local:CommandNames.OpenCollectionCommandName}"/>

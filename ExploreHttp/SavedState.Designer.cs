@@ -152,5 +152,17 @@ namespace ExploreHttp {
                 this["UserAgentString"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int RequestPoolSize {
+            get {
+                return ((int)(this["RequestPoolSize"]));
+            }
+            set {
+                this["RequestPoolSize"] = value;
+            }
+        }
     }
 }

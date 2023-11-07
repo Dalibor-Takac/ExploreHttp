@@ -93,8 +93,10 @@
     </Compile>
     <Compile Include="Services\CollectionLoader.cs" />
     <Compile Include="Services\ModelConverter.cs" />
+    <Compile Include="Services\ObjectPool.cs" />
     <Compile Include="Services\PersistanceModels\EndpointCollection.cs" />
     <Compile Include="Services\PersistanceModels\Request.cs" />
+    <Compile Include="Services\RequestRunner.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -107,6 +109,7 @@
     <Compile Include="Utilities\HumanTimeFormatter.cs" />
     <Compile Include="Utilities\MethodToColorBrushConverter.cs" />
     <Compile Include="Utilities\NoContentToVisibilityConverter.cs" />
+    <Compile Include="Utilities\NumericValidationRule.cs" />
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

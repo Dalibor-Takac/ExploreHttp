@@ -47,7 +47,8 @@ public partial class ApplicationViewModel : ObservableObject
         {
             RequireValidServerCert = state.RequireValidServerCert,
             AreLogsDetailed = state.AreLogsDetailed,
-            UserAgentString = state.UserAgentString
+            UserAgentString = state.UserAgentString,
+            RequestPoolSize = state.RequestPoolSize
         };
 
         Collections = new ObservableCollection<RequestCollection>(EnumerateKnownCollections(state.KnownCollections));
@@ -81,6 +82,7 @@ public partial class ApplicationViewModel : ObservableObject
         state.AreLogsDetailed = AppSettings.AreLogsDetailed;
         state.RequireValidServerCert = AppSettings.RequireValidServerCert;
         state.UserAgentString = AppSettings.UserAgentString;
+        state.RequestPoolSize = AppSettings.RequestPoolSize;
 
         state.KnownCollections.Clear();
         foreach (var col in Collections)
@@ -112,10 +114,12 @@ public partial class AppSettings : ObservableObject
     private bool requireValidServerCert;
     private bool areLogsDetailed;
     private string userAgentString;
+    private int requestPoolSize;
 
     public bool RequireValidServerCert { get => requireValidServerCert; set => SetProperty(ref requireValidServerCert, value); }
     public bool AreLogsDetailed { get => areLogsDetailed; set => SetProperty(ref areLogsDetailed, value); }
     public string UserAgentString { get => userAgentString; set => SetProperty(ref userAgentString, value); }
+    public int RequestPoolSize { get => requestPoolSize; set => SetProperty(ref requestPoolSize, value); }
 
     public AppSettings Clone()
     {
@@ -123,7 +127,8 @@ public partial class AppSettings : ObservableObject
         {
             RequireValidServerCert = this.RequireValidServerCert,
             AreLogsDetailed = this.AreLogsDetailed,
-            UserAgentString = this.UserAgentString
+            UserAgentString = this.UserAgentString,
+            RequestPoolSize = this.RequestPoolSize
         };
 
         return clone;

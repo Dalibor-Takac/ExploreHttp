@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExploreHttp"
         xmlns:vm="clr-namespace:ExploreHttp.Models"
+        xmlns:c="clr-namespace:ExploreHttp.Utilities"
         mc:Ignorable="d"
         Title="Explore HTTP - Settings"
         Height="450"
@@ -13,6 +14,7 @@
         d:DataContext="{d:DesignInstance Type=vm:AppSettings}">
     <Grid Margin="4">
         <Grid.RowDefinitions>
+            <RowDefinition Height="24"/>
             <RowDefinition Height="24"/>
             <RowDefinition Height="24"/>
             <RowDefinition Height="24"/>
@@ -32,13 +34,45 @@
         </CheckBox>
         <TextBlock Text="User agent heder:" Grid.Row="2" VerticalAlignment="Center"/>
         <TextBox Text="{Binding UserAgentString}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
-        <Button Grid.Row="4" IsDefault="True" Click="Ok_Click" Width="80" HorizontalAlignment="Left">
+        <TextBlock Text="Request pool size:" Grid.Row="3" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center">
+            <TextBox.Text>
+                <Binding Path="RequestPoolSize" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <c:NumericValidationRule AllowFloatingPoint="False" MaximumValue="100" MinimumValue="1"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Margin="4,0" Foreground="{StaticResource DangerousOperation}" Text="*"/>
+                        <Border Grid.Column="1" BorderBrush="{StaticResource DangerousOperation}" BorderThickness="1">
+                            <AdornedElementPlaceholder Name="txtPoolSizeAdorner"/>
+                        </Border>
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                            <TextBlock Text="{StaticResource UpArrowIcon}" Style="{StaticResource Icons}" FontSize="10"/>
+                            <TextBlock Text="{Binding ElementName=txtPoolSizeAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+                        </StackPanel>
+                    </Grid>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+        <Button Grid.Row="5" IsDefault="True" Click="Ok_Click" Width="80" HorizontalAlignment="Left">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{StaticResource OkIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Ok" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
-        <Button Grid.Row="4" Grid.Column="2" IsCancel="True" Click="Cancel_Click">
+        <Button Grid.Row="5" Grid.Column="2" IsCancel="True" Click="Cancel_Click">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{StaticResource CloseIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Cancel" VerticalAlignment="Center"/>
