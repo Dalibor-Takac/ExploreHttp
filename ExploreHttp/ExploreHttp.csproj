@@ -71,12 +71,15 @@
     <Compile Include="CollectionEditorWindow.xaml.cs">
       <DependentUpon>CollectionEditorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CommandNames.cs" />
     <Compile Include="EnvironmentEditorWindow.xaml.cs">
       <DependentUpon>EnvironmentEditorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="HeaderCollectionControl.xaml.cs">
       <DependentUpon>HeaderCollectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\RequestCollectionCommandsHandler.cs" />
+    <Compile Include="Models\RequestModelCommandsHandler.cs" />
     <Compile Include="RequestCollectionControl.xaml.cs">
       <DependentUpon>RequestCollectionControl.xaml</DependentUpon>
     </Compile>

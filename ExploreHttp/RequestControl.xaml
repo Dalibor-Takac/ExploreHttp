@@ -71,7 +71,9 @@
                                       VerticalAlignment="Center"
                                       Margin="0,0,4,0"/>
         <Button VerticalAlignment="Center"
-                Grid.Column="2">
+                Grid.Column="2"
+                Command="{StaticResource {x:Static local:CommandNames.SaveRequestCommandName}}"
+                CommandParameter="{Binding}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{StaticResource SaveIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Save" VerticalAlignment="Center"/>
@@ -90,7 +92,9 @@
         <Button VerticalAlignment="Center"
                 Grid.Row="1"
                 Grid.Column="2"
-                Margin="0,4">
+                Margin="0,4"
+                Command="{StaticResource {x:Static local:CommandNames.RunRequestCommandName}}"
+                CommandParameter="{Binding}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{StaticResource RunIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Run" VerticalAlignment="Center"/>
@@ -168,7 +172,8 @@
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <Button>
+                <Button Command="{StaticResource {x:Static local:CommandNames.ViewRequestLogsCommandName}}"
+                        CommandParameter="{Binding}">
                     <TextBlock Text="Logs"/>
                 </Button>
             </StatusBarItem>

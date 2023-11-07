@@ -29,26 +29,26 @@
         </Grid.RowDefinitions>
         <ToolBarPanel>
             <ToolBar>
-                <Button Click="NewCollection_Click">
+                <Button Command="{StaticResource {x:Static local:CommandNames.NewCollectionCommandName}}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{StaticResource AddFolderIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                         <TextBlock Text="New collection" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Click="OpenCollection_Click">
+                <Button Command="{StaticResource {x:Static local:CommandNames.OpenCollectionCommandName}}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{StaticResource FolderIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                         <TextBlock Text="Open Collection" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
                 <Separator/>
-                <Button Click="OpenSettings_Click">
+                <Button Command="{StaticResource {x:Static local:CommandNames.OpenSettingsCommandName}}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{StaticResource SettingsIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                         <TextBlock Text="Settings" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Click="About_Click">
+                <Button Command="{StaticResource {x:Static local:CommandNames.AboutCommandName}}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{StaticResource InfoIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                         <TextBlock Text="About" VerticalAlignment="Center"/>
@@ -72,9 +72,9 @@
             </StackPanel>
         </ScrollViewer>
         <GridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Stretch"/>
-        <TabControl Grid.Column="2" Grid.RowSpan="2"
+        <TabControl x:Name="mainTabs" Grid.Column="2" Grid.RowSpan="2"
                     ItemsSource="{Binding OpenRequests}"
-                    d:ItemsSource="{d:SampleData ItemCount=3}">
+                    d:ItemsSource="{d:SampleData ItemCount=3}"> 
             <TabControl.ItemContainerStyle>
                 <Style TargetType="TabItem">
                     <Setter Property="HeaderTemplate">
@@ -90,7 +90,10 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Margin="4,0,4,0"/>
-                                    <Button HorizontalAlignment="Center" VerticalAlignment="Center" Click="CloseRequest_Click">
+                                    <Button HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Command="{StaticResource {x:Static local:CommandNames.CloseRequestCommandName}}"
+                                            CommandParameter="{Binding}">
                                         <TextBlock Text="{StaticResource CloseIcon}" Style="{StaticResource Icons}" FontSize="12"/>
                                     </Button>
                                 </StackPanel>

@@ -6,21 +6,23 @@
         xmlns:local="clr-namespace:ExploreHttp"
         mc:Ignorable="d"
         Title="Explore HTTP - About"
-        Height="200"
+        Height="250"
         Width="400"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
     <Grid Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
         <TextBlock TextWrapping="WrapWithOverflow"
+                   Margin="0,8"
+                   TextAlignment="Justify"
                    Text="This program is a result of desire to move away from popular heavy tools for simple http request experiments and API tests. Design goals for it are to remain simple and easy to adopt and tinker with while keeping everything in local file system. This tool is not designed to be a performance testing tool. For that use case use some other solution."/>
         <TextBlock Text="Copyright © 2023 - Dalibor Takač, released under MIT licence" Grid.Row="1" VerticalAlignment="Center"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Center" Margin="0,8">
             <TextBlock Text="Source available at: "/>
             <TextBlock>
                 <Hyperlink Click="OpenGithub_Click">

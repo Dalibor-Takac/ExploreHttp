@@ -50,6 +50,23 @@ public partial class RequestCollection : ObservableObject
         };
         return result;
     }
+
+    public void SyncWithOther(RequestCollection collection)
+    {
+        CollectionName = collection.CollectionName;
+        Kind = collection.Kind;
+        Source = collection.Source;
+        UnsavedChangesIndicatorVisibility = collection.UnsavedChangesIndicatorVisibility;
+        SavedRequests.Clear();
+        foreach (var r in collection.SavedRequests)
+            SavedRequests.Add(r);
+        SavedEnvironments.Clear();
+        foreach (var env in collection.SavedEnvironments)
+            SavedEnvironments.Add(env);
+        SelectedEnvironmentIndex = collection.SelectedEnvironmentIndex;
+        IsExpanded = collection.IsExpanded;
+        Loader = collection.Loader;
+    }
 }
 
 public partial class SavedRequest : ObservableObject
@@ -58,15 +75,18 @@ public partial class SavedRequest : ObservableObject
     private string name;
     private RequestMethod method;
     private string url;
+    private RequestCollection parentCollection;
 
     public Guid Id { get => id; set => SetProperty(ref id, value); }
     public string Name { get => name; set => SetProperty(ref name, value); }
     public RequestMethod Method { get => method; set => SetProperty(ref method, value); }
     public string Url { get => url; set => SetProperty(ref url, value); }
+    public RequestCollection ParentCollection { get => parentCollection; set => SetProperty(ref parentCollection, value); }
 
-    public SavedRequest()
+    public SavedRequest(RequestCollection parentCollection)
     {
         id = Guid.NewGuid();
+        this.parentCollection = parentCollection;
     }
 }
 

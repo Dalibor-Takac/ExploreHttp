@@ -24,7 +24,10 @@ public class CollectionLoader
             return ZipFile.Open(filename, ZipArchiveMode.Update);
         else
         {
-            using (var zip = ZipFile.Open(filename, ZipArchiveMode.Create)) ;
+            using (var zip = ZipFile.Open(filename, ZipArchiveMode.Create))
+            {
+                //nothing to do here, just to create file contents and let it be disposed saving it in the process
+            }
 
             return ZipFile.Open(filename, ZipArchiveMode.Update);
         }
@@ -63,6 +66,9 @@ public class CollectionLoader
     {
         using var localFile = NewOrOpenForUpdate(_fileName);
         var archiveEntry = localFile.GetEntry(string.Format(REQUESTS_FILE_FORMAT, requestId));
+        if (archiveEntry is null)
+            return null;
+
         using var stream = archiveEntry.Open();
         using var reader = new StreamReader(stream);
         using var jsonReader = new JsonTextReader(reader);

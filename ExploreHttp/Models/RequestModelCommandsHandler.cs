@@ -1,0 +1,129 @@
+﻿using ExploreHttp.Services;
+using System.Windows;
+using System.Windows.Input;
+
+namespace ExploreHttp.Models;
+public class RequestModelCommandsHandler
+{
+    private readonly Window _hostWindow;
+    private readonly ApplicationViewModel _vm;
+    private readonly Action<int> _selectTabByIndex;
+
+    public RequestModelCommandsHandler(Window hostWindow, ApplicationViewModel vm, Action<int> selectTabByIndex)
+    {
+        _hostWindow = hostWindow;
+        _vm = vm;
+        _selectTabByIndex = selectTabByIndex;
+    }
+
+    public void NewRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
+    {
+        var collection = e.Parameter as RequestCollection;
+        var savedRequest = new SavedRequest(collection)
+        {
+            Name = "New Request",
+            Method = RequestMethod.Get,
+            Url = string.Empty
+        };
+        collection.SavedRequests.Add(savedRequest);
+        collection.UnsavedChangesIndicatorVisibility = Visibility.Visible;
+        var request = new RequestModel(savedRequest)
+        {
+            Id = savedRequest.Id,
+            Name = savedRequest.Name,
+            Method = savedRequest.Method,
+            Url = savedRequest.Url,
+            UnsavedChangesIndicatorVisibility = Visibility.Visible
+        };
+        _vm.OpenRequests.Add(request);
+        _selectTabByIndex(_vm.OpenRequests.Count - 1);
+    }
+
+    public void CloseRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
+    {
+        var request = e.Parameter as RequestModel;
+        if (request.UnsavedChangesIndicatorVisibility == Visibility.Visible)
+        {
+            if (MessageBox.Show(_hostWindow,
+                                "Are you sure you wish to close this unsaved request?",
+                                "There are unsaved changes",
+                                MessageBoxButton.OKCancel,
+                                MessageBoxImage.Exclamation) == MessageBoxResult.Cancel)
+            {
+                return;
+            }
+        }
+
+        _vm.OpenRequests.Remove(request);
+    }
+
+    public void OpenSavedRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
+    {
+        var savedRequest = e.Parameter as SavedRequest;
+        var loadedRequestModel = savedRequest.ParentCollection.Loader?.LoadRequest(savedRequest.Id);
+        if (loadedRequestModel is null)
+        {
+            var request = new RequestModel(savedRequest)
+            {
+                Id = savedRequest.Id,
+                Name = savedRequest.Name,
+                Method = savedRequest.Method,
+                Url = savedRequest.Url,
+                UnsavedChangesIndicatorVisibility = Visibility.Visible
+            };
+            _vm.OpenRequests.Add(request);
+            _selectTabByIndex(_vm.OpenRequests.Count - 1);
+            return;
+        }
+
+        var loadedRequest = ModelConverter.FromStorage(loadedRequestModel, savedRequest);
+        _vm.OpenRequests.Add(loadedRequest);
+        _selectTabByIndex(_vm.OpenRequests.Count - 1);
+    }
+
+    public void SaveRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
+    {
+        var request = e.Parameter as RequestModel;
+
+        request.SavedRequest.Name = request.Name;
+        request.SavedRequest.Url = request.Url;
+        request.SavedRequest.Method = request.Method;
+        request.SavedRequest.ParentCollection.UnsavedChangesIndicatorVisibility = Visibility.Collapsed;
+
+        var requestToStore = ModelConverter.ToStorage(request);
+        var metadata = ModelConverter.ToStorage(request.SavedRequest.ParentCollection);
+        request.SavedRequest.ParentCollection.Loader.UpdateMetadata(metadata);
+        request.SavedRequest.ParentCollection.Loader.SaveRequest(requestToStore);
+        request.UnsavedChangesIndicatorVisibility = Visibility.Collapsed;
+    }
+
+    public void DeleteRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
+    {
+        var savedRequest = e.Parameter as SavedRequest;
+        savedRequest.ParentCollection.SavedRequests.Remove(savedRequest);
+        savedRequest.ParentCollection.UnsavedChangesIndicatorVisibility = Visibility.Visible;
+    }
+
+
+    public void RunRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
+    {
+
+    }
+
+    public void ViewLogsCommandHandler(object sender, ExecutedRoutedEventArgs e)
+    {
+
+    }
+
+    public void BindAllCommands(CommandBindingCollection bindings)
+    {
+        bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.NewRequestCommandName) as ICommand, NewRequestCommandHandler));
+        bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.CloseRequestCommandName) as ICommand, CloseRequestCommandHandler));
+        bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.OpenRequestFromCollectionCommandName) as ICommand, OpenSavedRequestCommandHandler));
+        bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.SaveRequestCommandName) as ICommand, SaveRequestCommandHandler));
+        bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.DeleteRequestCommandName) as ICommand, DeleteRequestCommandHandler));
+
+        bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.RunRequestCommandName) as ICommand, RunRequestCommandHandler));
+        bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.ViewRequestLogsCommandName) as ICommand, ViewLogsCommandHandler));
+    }
+}

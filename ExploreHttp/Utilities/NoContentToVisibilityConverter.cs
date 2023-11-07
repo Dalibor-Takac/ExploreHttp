@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
@@ -30,6 +31,12 @@ public class NoContentToVisibilityConverter : IValueConverter
         if (value is string v)
         {
             if (string.IsNullOrEmpty(v))
+                return DefaultOrSimilarMap;
+        }
+
+        if (value is IEnumerable enumerable)
+        {
+            if (!enumerable.Cast<object>().Any())
                 return DefaultOrSimilarMap;
         }
 

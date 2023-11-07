@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using System.Collections.Specialized;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ExploreHttp
 {
@@ -12,70 +13,58 @@ namespace ExploreHttp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ApplicationViewModel Vm { get; set; }
+        public ApplicationViewModel Vm { get; }
+        private readonly RequestCollectionCommandsHandler collectionCommandHandlers;
+        private readonly RequestModelCommandsHandler requestCommandHandlers;
         public MainWindow()
         {
             if (SavedState.Default.KnownCollections is null)
                 SavedState.Default.KnownCollections = new StringCollection();
 
             Vm = new ApplicationViewModel(SavedState.Default);
+
+            collectionCommandHandlers = new RequestCollectionCommandsHandler(this, Vm);
+            collectionCommandHandlers.BindAllCommands(CommandBindings);
+
+            requestCommandHandlers = new RequestModelCommandsHandler(this, Vm, selectedTabIndex => mainTabs.SelectedIndex = selectedTabIndex);
+            requestCommandHandlers.BindAllCommands(CommandBindings);
+            
+            CommandBindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.OpenSettingsCommandName) as ICommand, OpenSettingsCommandHandler));
+            CommandBindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.AboutCommandName) as ICommand, AboutCommandHandler));
+
             DataContext = Vm;
             InitializeComponent();
         }
 
         private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (Vm.Collections.Any(x => x.UnsavedChangesIndicatorVisibility == Visibility.Visible))
+            {
+                if (MessageBox.Show(this,
+                                    "Are you sure you want to quit with unsaved changes?",
+                                    "There are unsaved changes!",
+                                    MessageBoxButton.OKCancel,
+                                    MessageBoxImage.Exclamation) == MessageBoxResult.Cancel)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
             Vm.ToSettings(SavedState.Default);
             SavedState.Default.Save();
         }
 
-        private void NewCollection_Click(object sender, RoutedEventArgs e)
-        {
-            var newCollection = CollectionEditorWindow.OpenModal(this);
-            if (newCollection != null)
-                Vm.Collections.Add(newCollection);
-        }
-
-        private void OpenSettings_Click(object sender, RoutedEventArgs e)
+        private void OpenSettingsCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
             var newSettings = SettingsWindow.OpenModal(this, Vm.AppSettings.Clone());
             if (newSettings != null)
                 Vm.AppSettings = newSettings;
         }
 
-        private void CloseRequest_Click(object sender, RoutedEventArgs e)
-        {
-            var request = (sender as FrameworkElement).DataContext as RequestModel;
-            Vm.OpenRequests.Remove(request);
-        }
 
-        private void About_Click(object sender, RoutedEventArgs e)
+        private void AboutCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
             AboutWindow.OpenDialog(this);
-        }
-
-        private void OpenCollection_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new OpenFileDialog();
-            dlg.Filter = "Request Collection|*.reqcol|All Files|*.*";
-            dlg.CheckFileExists = true;
-            dlg.CheckPathExists = true;
-            if (dlg.ShowDialog(this).GetValueOrDefault())
-            {
-                if (File.Exists(dlg.FileName) && !SavedState.Default.KnownCollections.Contains(dlg.FileName))
-                {
-                    SavedState.Default.KnownCollections.Add(dlg.FileName);
-                    SavedState.Default.Save();
-
-                    var loader = new CollectionLoader(dlg.FileName);
-
-                    var metadata = loader.ReadMetadata();
-                    var requestCollection = ModelConverter.FromStorage(metadata);
-                    requestCollection.Loader = loader;
-
-                    Vm.Collections.Add(requestCollection);
-                }
-            }
         }
     }
 }

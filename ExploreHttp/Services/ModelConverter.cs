@@ -14,13 +14,6 @@ public class ModelConverter
             Kind = collection.Kind,
             Source = collection.Source,
             UnsavedChangesIndicatorVisibility = System.Windows.Visibility.Collapsed,
-            SavedRequests = new ObservableCollection<SavedRequest>(collection.Requests.Select(x => new SavedRequest()
-            {
-                Id = x.Id,
-                Method = x.Method,
-                Name = x.Name,
-                Url = x.Url
-            })),
             SavedEnvironments = new ObservableCollection<SavedEnvironment>(collection.Environments.Select(x => new SavedEnvironment()
             {
                 Id = x.Id,
@@ -34,6 +27,14 @@ public class ModelConverter
             })),
             SelectedEnvironmentIndex = collection.SelectedEnvironmentIndex
         };
+
+        result.SavedRequests = new ObservableCollection<SavedRequest>(collection.Requests.Select(x => new SavedRequest(result)
+        {
+            Id = x.Id,
+            Method = x.Method,
+            Name = x.Name,
+            Url = x.Url
+        }));
 
         return result;
     }
@@ -64,9 +65,9 @@ public class ModelConverter
         return result;
     }
 
-    public static RequestModel FromStorage(Request request)
+    public static RequestModel FromStorage(Request request, SavedRequest savedRequest)
     {
-        var result = new RequestModel()
+        var result = new RequestModel(savedRequest)
         {
             Id = request.Id,
             Name = request.Name,

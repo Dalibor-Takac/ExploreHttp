@@ -19,6 +19,7 @@ public partial class RequestModel : ObservableObject
     private HeaderCollection responseHeaders;
     private BodyProvider responseBody;
     private ObservableCollection<LogRecord> logs;
+    private SavedRequest savedRequest;
 
     public Guid Id { get => id; set => SetProperty(ref id, value); }
     public string Name { get => name; set => SetProperty(ref name, value); }
@@ -33,14 +34,23 @@ public partial class RequestModel : ObservableObject
     public HeaderCollection ResponseHeaders { get => responseHeaders; set => SetProperty(ref responseHeaders, value); }
     public BodyProvider ResponseBody { get => responseBody; set => SetProperty(ref responseBody, value); }
     public ObservableCollection<LogRecord> Logs { get => logs; set => SetProperty(ref logs, value); }
+    public SavedRequest SavedRequest { get => savedRequest; set => SetProperty(ref savedRequest, value); }
 
-    public RequestModel()
+    public RequestModel(SavedRequest req)
     {
         Id = Guid.NewGuid();
         RequestHeaders = new HeaderCollection();
         RequestBody = new BodyProvider();
+        ResponseBody = new BodyProvider();
         ResponseHeaders = new HeaderCollection();
         Logs = new ObservableCollection<LogRecord>();
+        SavedRequest = req;
+
+        PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName != nameof(UnsavedChangesIndicatorVisibility))
+                UnsavedChangesIndicatorVisibility = Visibility.Visible;
+        };
     }
 }
 
