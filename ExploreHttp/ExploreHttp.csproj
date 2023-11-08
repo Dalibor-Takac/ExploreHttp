@@ -92,6 +92,8 @@
       <DependentUpon>SavedState.settings</DependentUpon>
     </Compile>
     <Compile Include="Services\CollectionLoader.cs" />
+    <Compile Include="Services\HttpHeadersExtensions.cs" />
+    <Compile Include="Services\LoggingHttpMessageHandler.cs" />
     <Compile Include="Services\ModelConverter.cs" />
     <Compile Include="Services\ObjectPool.cs" />
     <Compile Include="Services\PersistanceModels\EndpointCollection.cs" />
@@ -200,6 +202,9 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm">
       <Version>8.2.2</Version>
+    </PackageReference>
+    <PackageReference Include="DotLiquid">
+      <Version>2.2.692</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.3</Version>

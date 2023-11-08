@@ -8,12 +8,14 @@ public class RequestModelCommandsHandler
     private readonly Window _hostWindow;
     private readonly ApplicationViewModel _vm;
     private readonly Action<int> _selectTabByIndex;
+    private readonly RequestRunner _runner;
 
     public RequestModelCommandsHandler(Window hostWindow, ApplicationViewModel vm, Action<int> selectTabByIndex)
     {
         _hostWindow = hostWindow;
         _vm = vm;
         _selectTabByIndex = selectTabByIndex;
+        _runner = new RequestRunner(vm.AppSettings);
     }
 
     public void NewRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
@@ -77,6 +79,7 @@ public class RequestModelCommandsHandler
         }
 
         var loadedRequest = ModelConverter.FromStorage(loadedRequestModel, savedRequest);
+        loadedRequest.UnsavedChangesIndicatorVisibility = Visibility.Collapsed;
         _vm.OpenRequests.Add(loadedRequest);
         _selectTabByIndex(_vm.OpenRequests.Count - 1);
     }
@@ -105,13 +108,15 @@ public class RequestModelCommandsHandler
     }
 
 
-    public void RunRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
+    public async void RunRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
     {
-
+        var requestModel = e.Parameter as RequestModel;
+        await _runner.RunRequest(requestModel);
     }
 
     public void ViewLogsCommandHandler(object sender, ExecutedRoutedEventArgs e)
     {
+        var requestModel = e.Parameter as RequestModel;
 
     }
 

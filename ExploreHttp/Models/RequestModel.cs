@@ -39,7 +39,7 @@ public partial class RequestModel : ObservableObject
     public RequestModel(SavedRequest req)
     {
         Id = Guid.NewGuid();
-        RequestHeaders = new HeaderCollection();
+        RequestHeaders = new HeaderCollection() { IsEditable = true };
         RequestBody = new BodyProvider();
         ResponseBody = new BodyProvider();
         ResponseHeaders = new HeaderCollection();
