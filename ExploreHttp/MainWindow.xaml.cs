@@ -38,7 +38,8 @@ namespace ExploreHttp
 
         private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (Vm.Collections.Any(x => x.UnsavedChangesIndicatorVisibility == Visibility.Visible))
+            if (Vm.Collections.Any(x => x.UnsavedChangesIndicatorVisibility == Visibility.Visible)
+                || Vm.OpenRequests.Any(x => x.UnsavedChangesIndicatorVisibility == Visibility.Visible))
             {
                 if (MessageBox.Show(this,
                                     "Are you sure you want to quit with unsaved changes?",
