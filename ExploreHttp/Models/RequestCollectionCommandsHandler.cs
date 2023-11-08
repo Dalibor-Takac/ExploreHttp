@@ -41,6 +41,7 @@ public class RequestCollectionCommandsHandler
                 var metadata = loader.ReadMetadata();
                 var requestCollection = ModelConverter.FromStorage(metadata);
                 requestCollection.Loader = loader;
+                requestCollection.Source = loader.FileName;
 
                 _vm.Collections.Add(requestCollection);
             }

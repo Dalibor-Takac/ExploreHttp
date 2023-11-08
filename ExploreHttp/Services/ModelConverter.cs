@@ -10,7 +10,7 @@ public class ModelConverter
         var result = new RequestCollection()
         {
             CollectionName = collection.Name,
-            IsExpanded = false,
+            IsExpanded = collection.IsExpanded,
             Kind = collection.Kind,
             Source = collection.Source,
             UnsavedChangesIndicatorVisibility = System.Windows.Visibility.Collapsed,
@@ -59,7 +59,8 @@ public class ModelConverter
                 Name = x.Name,
                 Variables = x.Variables.Select(v => new Variable() { IsEnabled = v.IsEnabled, Name = v.Name, Value = v.Value }).ToList()
             }).ToList(),
-            SelectedEnvironmentIndex = collection.SelectedEnvironmentIndex
+            SelectedEnvironmentIndex = collection.SelectedEnvironmentIndex,
+            IsExpanded = collection.IsExpanded
         };
 
         return result;

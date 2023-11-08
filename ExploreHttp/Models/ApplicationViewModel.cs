@@ -52,7 +52,7 @@ public partial class ApplicationViewModel : ObservableObject
         };
 
         Collections = new ObservableCollection<RequestCollection>(EnumerateKnownCollections(state.KnownCollections));
-        OpenRequests = new ObservableCollection<RequestModel>();
+        OpenRequests = new ObservableCollection<RequestModel>(EnumerateOpenRequests(state.OpenRequests, Collections));
     }
 
     private IEnumerable<RequestCollection> EnumerateKnownCollections(StringCollection knownCollections)
@@ -65,8 +65,38 @@ public partial class ApplicationViewModel : ObservableObject
                 var metadata = loader.ReadMetadata();
                 var collection = ModelConverter.FromStorage(metadata);
                 collection.Loader = loader;
+                collection.Source = loader.FileName;
                 yield return collection;
             }
+        }
+    }
+
+    private IEnumerable<RequestModel> EnumerateOpenRequests(StringCollection openRequests, IEnumerable<RequestCollection> collections)
+    {
+        foreach (var request in openRequests)
+        {
+            var splitCharacterIndex = request.LastIndexOf(':');
+            if (splitCharacterIndex == -1 || splitCharacterIndex >= request.Length - 1)
+                continue;
+
+            var collectionNamePart = request.Substring(0, splitCharacterIndex);
+            var requestIdPart = request.Substring(splitCharacterIndex + 1);
+
+            var foundCollection = collections.FirstOrDefault(x => x.Loader?.FileName == collectionNamePart);
+            if (foundCollection is null)
+                continue;
+
+            var foundSavedRequest = foundCollection.SavedRequests.FirstOrDefault(x => x.Id.ToString() == requestIdPart);
+            if (foundSavedRequest is null)
+                continue;
+
+            var storedRequest = foundCollection.Loader.LoadRequest(foundSavedRequest.Id);
+            if (storedRequest is null)
+                continue;
+
+            var openModel = ModelConverter.FromStorage(storedRequest, foundSavedRequest);
+            openModel.UnsavedChangesIndicatorVisibility = Visibility.Collapsed;
+            yield return openModel;
         }
     }
 
@@ -88,6 +118,12 @@ public partial class ApplicationViewModel : ObservableObject
         foreach (var col in Collections)
         {
             state.KnownCollections.Add(col.Loader.FileName);
+        }
+
+        state.OpenRequests.Clear();
+        foreach(var openReq in OpenRequests)
+        {
+            state.OpenRequests.Add($"{openReq.SavedRequest.ParentCollection.Loader.FileName}:{openReq.Id}");
         }
     }
 }

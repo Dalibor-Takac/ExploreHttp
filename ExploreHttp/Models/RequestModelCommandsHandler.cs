@@ -63,6 +63,13 @@ public class RequestModelCommandsHandler
     public void OpenSavedRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
     {
         var savedRequest = e.Parameter as SavedRequest;
+        var alreadyOpenRequest = _vm.OpenRequests.FirstOrDefault(x => x.Id == savedRequest.Id);
+        if (alreadyOpenRequest is not null)
+        {
+            _selectTabByIndex(_vm.OpenRequests.IndexOf(alreadyOpenRequest));
+            return;
+        }
+
         var loadedRequestModel = savedRequest.ParentCollection.Loader?.LoadRequest(savedRequest.Id);
         if (loadedRequestModel is null)
         {

@@ -10,6 +10,7 @@ public class EndpointCollection
     public List<RequestInfo> Requests { get; set; }
     public List<CollectionEnvironment> Environments { get; set; }
     public int SelectedEnvironmentIndex { get; set; }
+    public bool IsExpanded { get; set; }
 }
 
 public class RequestInfo

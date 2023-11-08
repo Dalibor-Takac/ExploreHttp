@@ -17,6 +17,8 @@ namespace ExploreHttp
         {
             if (SavedState.Default.KnownCollections is null)
                 SavedState.Default.KnownCollections = new StringCollection();
+            if (SavedState.Default.OpenRequests is null)
+                SavedState.Default.OpenRequests = new StringCollection();
 
             Vm = new ApplicationViewModel(SavedState.Default);
 

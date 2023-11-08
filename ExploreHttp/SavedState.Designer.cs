@@ -96,17 +96,6 @@ namespace ExploreHttp {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection OpenRequestIds {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["OpenRequestIds"]));
-            }
-            set {
-                this["OpenRequestIds"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("300")]
         public double SeparatorPosition {
             get {
@@ -162,6 +151,17 @@ namespace ExploreHttp {
             }
             set {
                 this["RequestPoolSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection OpenRequests {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["OpenRequests"]));
+            }
+            set {
+                this["OpenRequests"] = value;
             }
         }
     }

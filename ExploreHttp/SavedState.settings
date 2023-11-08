@@ -20,9 +20,6 @@
     <Setting Name="KnownCollections" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="OpenRequestIds" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="SeparatorPosition" Type="System.Double" Scope="User">
       <Value Profile="(Default)">300</Value>
     </Setting>
@@ -37,6 +34,9 @@
     </Setting>
     <Setting Name="RequestPoolSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="OpenRequests" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
