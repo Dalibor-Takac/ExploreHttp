@@ -1,8 +1,5 @@
 ﻿using ExploreHttp.Models;
-using ExploreHttp.Services;
-using Microsoft.Win32;
 using System.Collections.Specialized;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
