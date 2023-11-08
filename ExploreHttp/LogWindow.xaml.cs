@@ -32,7 +32,7 @@ public partial class LogWindow : Window
         dlg.ShowDialog();
     }
 
-    private void Close_Click(object sender, ContextMenuEventArgs e)
+    private void Close_Click(object sender, RoutedEventArgs e)
     {
         this.DialogResult = true;
         Close();

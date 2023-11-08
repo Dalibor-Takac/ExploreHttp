@@ -75,7 +75,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        <Button Grid.Row="1" Width="80">
+        <Button Grid.Row="1" Width="80" Click="Close_Click">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{StaticResource CloseIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Close" VerticalAlignment="Center"/>
