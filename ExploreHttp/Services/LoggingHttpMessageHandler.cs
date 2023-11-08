@@ -82,6 +82,8 @@ public class LoggingHttpMessageHandler: DelegatingHandler
         var response = await base.SendAsync(request, cancellationToken);
 
         stopwatch.Stop();
+
+        requestModel.ResponseDuration = stopwatch.Elapsed;
         
         requestModel.Logs.Add(new LogRecord()
         {

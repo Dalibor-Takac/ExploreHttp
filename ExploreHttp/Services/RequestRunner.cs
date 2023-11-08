@@ -1,7 +1,6 @@
 ﻿using DotLiquid;
 using ExploreHttp.Models;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 
@@ -121,13 +120,8 @@ public class RequestRunner : IDisposable
 
             var requestMessage = ConstructRequest(requestModel);
 
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             var response = await pooledClient.SendAsync(requestMessage);
-            stopwatch.Stop();
 
-            requestModel.ResponseDuration = stopwatch.Elapsed;
             await ParseResponseIntoModel(response, requestModel);
         }
         catch (Exception ex)
