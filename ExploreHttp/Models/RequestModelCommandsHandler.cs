@@ -35,8 +35,9 @@ public class RequestModelCommandsHandler
             Name = savedRequest.Name,
             Method = savedRequest.Method,
             Url = savedRequest.Url,
-            UnsavedChangesIndicatorVisibility = Visibility.Visible
+            UnsavedChangesIndicatorVisibility = Visibility.Visible,
         };
+        request.RequestHeaders.Headers.Add(new HeaderItemModel("User-Agent", _vm.AppSettings.UserAgentString));
         _vm.OpenRequests.Add(request);
         _selectTabByIndex(_vm.OpenRequests.Count - 1);
     }
@@ -73,6 +74,7 @@ public class RequestModelCommandsHandler
                 Url = savedRequest.Url,
                 UnsavedChangesIndicatorVisibility = Visibility.Visible
             };
+            request.RequestHeaders.Headers.Add(new HeaderItemModel("User-Agent", _vm.AppSettings.UserAgentString));
             _vm.OpenRequests.Add(request);
             _selectTabByIndex(_vm.OpenRequests.Count - 1);
             return;

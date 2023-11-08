@@ -143,7 +143,7 @@ namespace ExploreHttp {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Explore HTTP (v0.1)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ExploreHTTP/0.1")]
         public string UserAgentString {
             get {
                 return ((string)(this["UserAgentString"]));
