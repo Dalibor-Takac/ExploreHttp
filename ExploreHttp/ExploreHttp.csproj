@@ -78,6 +78,9 @@
     <Compile Include="HeaderCollectionControl.xaml.cs">
       <DependentUpon>HeaderCollectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LogWindow.xaml.cs">
+      <DependentUpon>LogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\RequestCollectionCommandsHandler.cs" />
     <Compile Include="Models\RequestModelCommandsHandler.cs" />
     <Compile Include="RequestCollectionControl.xaml.cs">
@@ -109,6 +112,7 @@
     <Compile Include="Utilities\BooleanToVisibilityConverter.cs" />
     <Compile Include="Utilities\HumanDataSizeFormatter.cs" />
     <Compile Include="Utilities\HumanTimeFormatter.cs" />
+    <Compile Include="Utilities\LogLevelToBrushConverter.cs" />
     <Compile Include="Utilities\MethodToColorBrushConverter.cs" />
     <Compile Include="Utilities\NoContentToVisibilityConverter.cs" />
     <Compile Include="Utilities\NumericValidationRule.cs" />
@@ -125,6 +129,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HeaderCollectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -13,39 +13,51 @@ public class ObjectPool<T> : IDisposable
     private readonly Func<T> _factory;
     private readonly Action<T> _cleanup;
 
+    private readonly object _lockObj;
+
     public ObjectPool(int capacity, Func<T> factory, Action<T> cleanup)
     {
         _poolWithStatuses = new Dictionary<T, PoolStatus>(capacity);
         _capacity = capacity;
         _factory = factory;
         _cleanup = cleanup;
+        _lockObj = new object();
     }
 
     public T LeaseItem()
     {
-        var freeItem = _poolWithStatuses.FirstOrDefault(x => x.Value == PoolStatus.Available);
-        if (freeItem.Key is not null)
-            return freeItem.Key;
-
-        var newItem = _factory();
-        if (_poolWithStatuses.Count < _capacity)
+        lock(_lockObj)
         {
-            _poolWithStatuses.Add(newItem, PoolStatus.Occupied);
-        }
+            var freeItem = _poolWithStatuses.FirstOrDefault(x => x.Value == PoolStatus.Available);
+            if (freeItem.Key is not null)
+            {
+                _poolWithStatuses[freeItem.Key] = PoolStatus.Occupied;
+                return freeItem.Key;
+            }
 
-        return newItem;
+            var newItem = _factory();
+            if (_poolWithStatuses.Count < _capacity)
+            {
+                _poolWithStatuses.Add(newItem, PoolStatus.Occupied);
+            }
+
+            return newItem;
+        }
     }
 
     public void ReturnItem(T item)
     {
-        if (_poolWithStatuses.TryGetValue(item, out var status) && status == PoolStatus.Occupied)
+        lock (_lockObj)
         {
-            _cleanup(item);
-            _poolWithStatuses[item] = PoolStatus.Available;
-        }
-        else
-        {
-            throw new InvalidOperationException("Attempting to return item to pool that is not managed by the pool. This is not allowed!");
+            if (_poolWithStatuses.TryGetValue(item, out var status) && status == PoolStatus.Occupied)
+            {
+                _cleanup(item);
+                _poolWithStatuses[item] = PoolStatus.Available;
+            }
+            else
+            {
+                throw new InvalidOperationException("Attempting to return item to pool that is not managed by the pool. This is not allowed!");
+            }
         }
     }
 

@@ -117,7 +117,7 @@ public class RequestModelCommandsHandler
     public void ViewLogsCommandHandler(object sender, ExecutedRoutedEventArgs e)
     {
         var requestModel = e.Parameter as RequestModel;
-
+        LogWindow.OpenDialog(_hostWindow, requestModel);
     }
 
     public void BindAllCommands(CommandBindingCollection bindings)

@@ -118,11 +118,15 @@ public class RequestRunner : IDisposable
         {
             var pooledClient = _clientPool.LeaseItem();
 
+            requestModel.Logs.Clear();
+
             var requestMessage = ConstructRequest(requestModel);
 
             var response = await pooledClient.SendAsync(requestMessage);
 
             await ParseResponseIntoModel(response, requestModel);
+
+            _clientPool.ReturnItem(pooledClient);
         }
         catch (Exception ex)
         {
@@ -147,7 +151,8 @@ public class RequestRunner : IDisposable
                         PropertyName = "Source",
                         PropertyValue = ex.Source,
                     },
-                }
+                },
+                Timestamp = DateTimeOffset.UtcNow
             });
             requestModel.ResponseStatus = "Error fetching response";
         }
