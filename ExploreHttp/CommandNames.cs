@@ -7,6 +7,7 @@
         public static string SaveCollectionCommandName = "SaveCollection";
         public static string EditCollectionCommandName = "EditCollection";
         public static string CloseCollectionCommandName = "CloseCollection";
+        public static string ImportCollectionCommandName = "ImportCollection";
 
         public static string OpenRequestFromCollectionCommandName = "OpenRequestFromCollection";
         public static string CloseRequestCommandName = "CloseRequest";

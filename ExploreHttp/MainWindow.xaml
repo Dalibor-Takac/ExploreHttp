@@ -41,6 +41,12 @@
                         <TextBlock Text="Open Collection" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
+                <Button Command="{StaticResource {x:Static local:CommandNames.ImportCollectionCommandName}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{StaticResource ImportIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Import OpenAPI" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
                 <Separator/>
                 <Button Command="{StaticResource {x:Static local:CommandNames.OpenSettingsCommandName}}">
                     <StackPanel Orientation="Horizontal">

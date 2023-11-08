@@ -20,7 +20,7 @@
             <SolidColorBrush x:Key="NonIdempotentOperation" Color="#f2bf3f"/>
             <SolidColorBrush x:Key="DangerousOperation" Color="#f24b3f"/>
             <sys:String x:Key="CloseIcon">&#xE10A;</sys:String>
-            <sys:String x:Key="EditIcon">&#xE104;</sys:String>
+            <sys:String x:Key="EditIcon">&#xE193;</sys:String>
             <sys:String x:Key="AddIcon">&#xE109;</sys:String>
             <sys:String x:Key="PendingChangesIcon">&#x2731;</sys:String>
             <sys:String x:Key="SettingsIcon">&#xE115;</sys:String>
@@ -33,19 +33,21 @@
             <sys:String x:Key="ExpandedIcon">&#xE019;</sys:String>
             <sys:String x:Key="CollapsedIcon">&#xE017;</sys:String>
             <sys:String x:Key="LogIcon">&#xE1D5;</sys:String>
-            <sys:String x:Key="InfoIcon">&#xE2C0;</sys:String>
+            <sys:String x:Key="InfoIcon">&#x2754;</sys:String>
             <sys:String x:Key="ElipsisIcon">&#xE0C2;</sys:String>
             <sys:String x:Key="OpenIcon">&#xE188;</sys:String>
             <sys:String x:Key="ToggleDownIcon">&#x25BC;</sys:String>
             <sys:String x:Key="SaveIcon">&#xE105;</sys:String>
             <sys:String x:Key="TrashIcon">&#xE107;</sys:String>
             <sys:String x:Key="UpArrowIcon">&#xE1FE;</sys:String>
+            <sys:String x:Key="ImportIcon">&#xE118;</sys:String>
 
             <RoutedCommand x:Key="{x:Static local:CommandNames.NewCollectionCommandName}"/>
             <RoutedCommand x:Key="{x:Static local:CommandNames.OpenCollectionCommandName}"/>
             <RoutedCommand x:Key="{x:Static local:CommandNames.SaveCollectionCommandName}"/>
             <RoutedCommand x:Key="{x:Static local:CommandNames.EditCollectionCommandName}"/>
             <RoutedCommand x:Key="{x:Static local:CommandNames.CloseCollectionCommandName}"/>
+            <RoutedCommand x:Key="{x:Static local:CommandNames.ImportCollectionCommandName}"/>
 
             <RoutedCommand x:Key="{x:Static local:CommandNames.OpenRequestFromCollectionCommandName}"/>
             <RoutedCommand x:Key="{x:Static local:CommandNames.CloseRequestCommandName}"/>

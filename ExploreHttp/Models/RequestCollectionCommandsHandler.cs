@@ -58,7 +58,7 @@ public class RequestCollectionCommandsHandler
             saveDlg.AddExtension = true;
             saveDlg.DefaultExt = "*.reqcol";
             saveDlg.Filter = "Request Collection|*.reqcol";
-            if (saveDlg.ShowDialog().GetValueOrDefault() && !SavedState.Default.KnownCollections.Contains(saveDlg.FileName))
+            if (saveDlg.ShowDialog(_hostWindow).GetValueOrDefault() && !SavedState.Default.KnownCollections.Contains(saveDlg.FileName))
             {
                 var loader = new CollectionLoader(saveDlg.FileName);
                 collection.Loader = loader;
@@ -95,9 +95,18 @@ public class RequestCollectionCommandsHandler
             {
                 return;
             }
-
-            _vm.Collections.Remove(collection);
         }
+        
+        _vm.Collections.Remove(collection);
+    }
+
+    public async void ImportOpenAPIIntoCollectionHandler(object sender, ExecutedRoutedEventArgs e)
+    {
+        var importResult = await ImportOpenApiWindow.OpenDialog(_hostWindow, _vm.AppSettings);
+        if (importResult is null)
+            return;
+
+        _vm.Collections.Add(importResult);
     }
 
     public void BindAllCommands(CommandBindingCollection bindings)
@@ -107,5 +116,6 @@ public class RequestCollectionCommandsHandler
         bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.EditCollectionCommandName) as ICommand, EditCollectionCommandHandler));
         bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.SaveCollectionCommandName) as ICommand, SaveCollectionCommandHandler));
         bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.CloseCollectionCommandName) as ICommand, CloseCollectionCommandHandler));
+        bindings.Add(new CommandBinding(Application.Current.FindResource(CommandNames.ImportCollectionCommandName) as ICommand, ImportOpenAPIIntoCollectionHandler));
     }
 }
