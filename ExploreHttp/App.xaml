@@ -41,6 +41,8 @@
             <sys:String x:Key="TrashIcon">&#xE107;</sys:String>
             <sys:String x:Key="UpArrowIcon">&#xE1FE;</sys:String>
             <sys:String x:Key="ImportIcon">&#xE118;</sys:String>
+            <sys:String x:Key="DuplicateIcon">&#xE11E;</sys:String>
+            <sys:String x:Key="RefreshIcon">&#xE1CA;</sys:String>
 
             <RoutedCommand x:Key="{x:Static local:CommandNames.NewCollectionCommandName}"/>
             <RoutedCommand x:Key="{x:Static local:CommandNames.OpenCollectionCommandName}"/>

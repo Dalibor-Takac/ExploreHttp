@@ -131,6 +131,12 @@ public class OpenApiImporter
             }
         }
     }
+
+    public Task RefreshImport(RequestCollection vm)
+    {
+        //TODO figure out what to do to refresh existing endpoints, how to identify them, perhaps operation id?
+        throw new NotImplementedException();
+    }
 }
 
 public static class OpenApiExtensions

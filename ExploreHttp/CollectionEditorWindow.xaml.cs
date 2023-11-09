@@ -1,17 +1,9 @@
 ﻿using ExploreHttp.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ExploreHttp.Services;
+using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ExploreHttp
 {
@@ -58,12 +50,72 @@ namespace ExploreHttp
                 Vm.SavedEnvironments.Add(newEnvironment);
         }
 
-        public static RequestCollection OpenModal(Window parent, RequestCollection editingInstance = default)
+        private void ChangeSource_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog();
+            dlg.CheckFileExists = true;
+            dlg.CheckPathExists = true;
+            dlg.Filter = "OpenAPI specs (JSON)|*.json|OpenAPI specs (YAML)|*.yml;*.yaml|All Files|*.*";
+            dlg.FilterIndex = 1;
+            dlg.Multiselect = false;
+            dlg.Title = "Open local OpenAPI spec file";
+            if (dlg.ShowDialog(this).GetValueOrDefault())
+            {
+                Vm.Source = dlg.FileName;
+                RefreshEndpoints_Click(sender, e);
+            }
+        }
+
+        private async void RefreshEndpoints_Click(object sender, RoutedEventArgs e)
+        {
+            var openApiImporter = new OpenApiImporter(Vm.Source, AppSettings);
+            await openApiImporter.RefreshImport(Vm);
+        }
+
+        private void DuplicateEnvironment_Click(object sender, RoutedEventArgs e)
+        {
+            var sourceEnvironment = (sender as Button).DataContext as SavedEnvironment;
+            var newEnvironment = new SavedEnvironment()
+            {
+                Name = sourceEnvironment.Name + " Copy",
+                Variables = new ObservableCollection<EnvironmentVariable>(sourceEnvironment.Variables
+                    .Select(x => new EnvironmentVariable()
+                    {
+                        IsEnabled = x.IsEnabled,
+                        Name = x.Name,
+                        Value = x.Value
+                    }))
+            };
+            Vm.SavedEnvironments.Add(newEnvironment);
+        }
+
+        private void DeleteEnvironment_Click(object sender, RoutedEventArgs e)
+        {
+            var sourceEnvironment = (sender as Button).DataContext as SavedEnvironment;
+
+            if (Vm.SelectedEnvironmentIndex < Vm.SavedEnvironments.Count)
+            {
+                var selectedEnvironment = Vm.SavedEnvironments[Vm.SelectedEnvironmentIndex];
+                Vm.SavedEnvironments.Remove(sourceEnvironment);
+                Vm.SelectedEnvironmentIndex = Vm.SavedEnvironments.IndexOf(selectedEnvironment);
+                if (Vm.SelectedEnvironmentIndex < 0)
+                    Vm.SelectedEnvironmentIndex = 0;
+            }
+            else
+            {
+                Vm.SavedEnvironments.Remove(sourceEnvironment);
+            }
+        }
+
+        public AppSettings AppSettings { get; set; }
+
+        public static RequestCollection OpenModal(Window parent, AppSettings settings, RequestCollection editingInstance = default)
         {
             var vm = editingInstance ?? new RequestCollection();
             var dlg = new CollectionEditorWindow();
             dlg.Owner = parent;
             dlg.DataContext = vm;
+            dlg.AppSettings = settings;
             if (editingInstance != null)
                 dlg.Title = "Explore HTTP - Edit Collection";
 

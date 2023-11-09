@@ -65,7 +65,6 @@ public partial class ApplicationViewModel : ObservableObject
                 var metadata = loader.ReadMetadata();
                 var collection = ModelConverter.FromStorage(metadata);
                 collection.Loader = loader;
-                collection.Source = loader.FileName;
                 yield return collection;
             }
         }

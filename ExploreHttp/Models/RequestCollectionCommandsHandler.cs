@@ -18,7 +18,7 @@ public class RequestCollectionCommandsHandler
 
     public void NewCollectionCommandHandler(object sender, ExecutedRoutedEventArgs e)
     {
-        var newCollection = CollectionEditorWindow.OpenModal(_hostWindow);
+        var newCollection = CollectionEditorWindow.OpenModal(_hostWindow, _vm.AppSettings);
         if (newCollection != null)
             _vm.Collections.Add(newCollection);
     }
@@ -74,7 +74,7 @@ public class RequestCollectionCommandsHandler
     public void EditCollectionCommandHandler(object sender, ExecutedRoutedEventArgs e)
     {
         var collection = e.Parameter as RequestCollection;
-        var result = CollectionEditorWindow.OpenModal(_hostWindow, collection.Clone());
+        var result = CollectionEditorWindow.OpenModal(_hostWindow, _vm.AppSettings, collection.Clone());
         if (result != null)
         {
             collection.SyncWithOther(result);
