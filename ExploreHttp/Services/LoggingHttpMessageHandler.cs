@@ -36,7 +36,7 @@ public class LoggingHttpMessageHandler: DelegatingHandler
         requestModel.Logs.Add(new LogRecord()
         {
             Level = LogLevel.Info,
-            Message = "Starting request log",
+            Message = $"Starting request [{request.Method}] {request.RequestUri} HTTP{request.Version}",
             Timestamp = DateTimeOffset.UtcNow,
         });
 
