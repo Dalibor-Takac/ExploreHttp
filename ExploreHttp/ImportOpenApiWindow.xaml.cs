@@ -17,7 +17,7 @@ public partial class ImportOpenApiWindow : Window
 
     OpenApiImportResult Vm => (OpenApiImportResult)DataContext;
 
-    private void OpenLocalFile_Click(object sender, RoutedEventArgs e)
+    private async void OpenLocalFile_Click(object sender, RoutedEventArgs e)
     {
         var dlg = new OpenFileDialog();
         dlg.CheckFileExists = true;
@@ -29,6 +29,11 @@ public partial class ImportOpenApiWindow : Window
         if (dlg.ShowDialog(this).GetValueOrDefault())
         {
             Vm.DocumentLocation = dlg.FileName;
+            if (!string.IsNullOrEmpty(Vm.DocumentLocation))
+            {
+                var importer = new OpenApiImporter(Vm.DocumentLocation, AppSettings);
+                await importer.ImportPreview(Vm.Collection.SavedRequests);
+            }
         }
     }
 

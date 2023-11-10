@@ -75,12 +75,14 @@ public partial class SavedRequest : ObservableObject
     private string name;
     private RequestMethod method;
     private string url;
+    private string operationId;
     private RequestCollection parentCollection;
 
     public Guid Id { get => id; set => SetProperty(ref id, value); }
     public string Name { get => name; set => SetProperty(ref name, value); }
     public RequestMethod Method { get => method; set => SetProperty(ref method, value); }
     public string Url { get => url; set => SetProperty(ref url, value); }
+    public string OperationId { get => operationId; set => SetProperty(ref operationId, value); }
     public RequestCollection ParentCollection { get => parentCollection; set => SetProperty(ref parentCollection, value); }
 
     public SavedRequest(RequestCollection parentCollection)

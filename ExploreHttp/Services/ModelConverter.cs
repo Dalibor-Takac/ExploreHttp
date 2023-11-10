@@ -33,7 +33,8 @@ public class ModelConverter
             Id = x.Id,
             Method = x.Method,
             Name = x.Name,
-            Url = x.Url
+            Url = x.Url,
+            OperationId = x.OperationId
         }));
 
         return result;
@@ -51,7 +52,8 @@ public class ModelConverter
                 Id = x.Id,
                 Method = x.Method,
                 Name = x.Name,
-                Url = x.Url
+                Url = x.Url,
+                OperationId = x.OperationId
             }).ToList(),
             Environments = collection.SavedEnvironments.Select(x => new CollectionEnvironment()
             {

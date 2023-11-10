@@ -17,6 +17,44 @@ public class OpenApiImporter
         _appSettings = appSettings;
     }
 
+    private IEnumerable<(SavedRequest savedRequest, RequestModel requestModel)> ImportEndpoints(OpenApiDocument document, RequestCollection result)
+    {
+        foreach (var path in document.Paths)
+        {
+            foreach (var operation in path.Value.Operations)
+            {
+                var savedRequest = new SavedRequest(result)
+                {
+                    Method = operation.Key.ToRequestMethod(),
+                    Name = operation.Value.Summary ?? operation.Value.OperationId,
+                    Url = "{{baseAddress}}" + path.Key
+                };
+                var requestModel = new RequestModel(savedRequest);
+                var firstBodyContent = operation.Value.RequestBody?.Content.FirstOrDefault();
+                if (firstBodyContent is not null)
+                {
+                    var schema = firstBodyContent.Value.Value.Schema.GetEffective(document);
+                    requestModel.RequestHeaders.Headers.Add(new HeaderItemModel("Content-Type", firstBodyContent.Value.Key));
+                    var bodyBuilder = new StringBuilder();
+                    bodyBuilder.AppendLine("{");
+                    bool isFirst = true;
+                    foreach (var prop in schema.Properties)
+                    {
+                        if (isFirst)
+                            isFirst = false;
+                        else
+                            bodyBuilder.AppendLine(",");
+                        bodyBuilder.AppendFormat("\t\"{0}\": \"{1}\"", prop.Key, prop.Value.Type);
+                    }
+                    bodyBuilder.AppendLine("\n}");
+                    requestModel.RequestBody.Source = bodyBuilder.ToString();
+                }
+                requestModel.RequestHeaders.Headers.Add(new HeaderItemModel("User-Agent", _appSettings.UserAgentString));
+                yield return (savedRequest, requestModel);
+            }
+        }
+    }
+
     public async Task<RequestCollection> ImportAndSave(string fileName)
     {
         var document = await ImportDocument();
@@ -44,54 +82,19 @@ public class OpenApiImporter
         }
         result.SelectedEnvironmentIndex = 0;
 
-        var convertedRequests = new List<RequestModel>();
-
-        foreach (var path in document.Paths)
-        {
-            foreach (var operation in path.Value.Operations)
-            {
-                var savedRequest = new SavedRequest(result)
-                {
-                    Method = operation.Key.ToRequestMethod(),
-                    Name = operation.Value.Summary ?? operation.Value.OperationId,
-                    Url = "{{baseAddress}}" + path.Key
-                };
-                result.SavedRequests.Add(savedRequest);
-                var requestModel = new RequestModel(savedRequest);
-                var firstBodyContent = operation.Value.RequestBody?.Content.FirstOrDefault();
-                if (firstBodyContent is not null)
-                {
-                    var schema = firstBodyContent.Value.Value.Schema.GetEffective(document);
-                    requestModel.RequestHeaders.Headers.Add(new HeaderItemModel("Content-Type", firstBodyContent.Value.Key));
-                    var bodyBuilder = new StringBuilder();
-                    bodyBuilder.AppendLine("{");
-                    bool isFirst = true;
-                    foreach (var prop in schema.Properties)
-                    {
-                        if (isFirst)
-                            isFirst = false;
-                        else
-                            bodyBuilder.AppendLine(",");
-                        bodyBuilder.AppendFormat("\t\"{0}\": \"{1}\"", prop.Key, prop.Value.Type);
-                    }
-                    bodyBuilder.AppendLine("\n}");
-                    requestModel.RequestBody.Source = bodyBuilder.ToString();
-                }
-                requestModel.RequestHeaders.Headers.Add(new HeaderItemModel("User-Agent", _appSettings.UserAgentString));
-                convertedRequests.Add(requestModel);
-            }
-        }
+        var importedEndpointResult = ImportEndpoints(document, result).ToArray();
 
         result.Loader = new CollectionLoader(fileName);
+        foreach (var item in importedEndpointResult)
+        {
+            var storageRequest = ModelConverter.ToStorage(item.requestModel);
+            result.Loader.SaveRequest(storageRequest);
+            result.SavedRequests.Add(item.savedRequest);
+        }
         var metadata = ModelConverter.ToStorage(result);
         result.Loader.UpdateMetadata(metadata);
-        foreach (var item in convertedRequests)
-        {
-            var storageRequest = ModelConverter.ToStorage(item);
-            result.Loader.SaveRequest(storageRequest);
-        }
 
-        result.UnsavedChangesIndicatorVisibility = System.Windows.Visibility.Hidden;
+        result.UnsavedChangesIndicatorVisibility = System.Windows.Visibility.Collapsed;
 
         return result;
     }
