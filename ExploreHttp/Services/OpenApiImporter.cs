@@ -132,7 +132,7 @@ public class OpenApiImporter
         }
     }
 
-    public Task RefreshImport(RequestCollection vm)
+    public Task RefreshImport(RequestCollection vm, string documentLocation, OpenApiImportAction importOptions)
     {
         //TODO figure out what to do to refresh existing endpoints, how to identify them, perhaps operation id?
         throw new NotImplementedException();

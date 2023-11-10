@@ -77,8 +77,16 @@ public partial class ImportOpenApiWindow : Window
             if (saveDlg.ShowDialog(parent).GetValueOrDefault())
             {
                 var importer = new OpenApiImporter(dlg.Vm.DocumentLocation, appSettings);
-                var result = await importer.ImportAndSave(saveDlg.FileName);
-                return result;
+                if (dlg.Vm.OriginalCollection is not null)
+                {
+                    await importer.RefreshImport(dlg.Vm.OriginalCollection, dlg.Vm.DocumentLocation, dlg.Vm.ImportOptions);
+                    return dlg.Vm.OriginalCollection;
+                }
+                else
+                {
+                    var result = await importer.ImportAndSave(saveDlg.FileName);
+                    return result;
+                }
             }
         }
 

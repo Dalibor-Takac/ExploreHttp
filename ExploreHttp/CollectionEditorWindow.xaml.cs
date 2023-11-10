@@ -1,6 +1,4 @@
 ﻿using ExploreHttp.Models;
-using ExploreHttp.Services;
-using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -50,26 +48,9 @@ namespace ExploreHttp
                 Vm.SavedEnvironments.Add(newEnvironment);
         }
 
-        private void ChangeSource_Click(object sender, RoutedEventArgs e)
+        private async void EditOpenApiImport_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new OpenFileDialog();
-            dlg.CheckFileExists = true;
-            dlg.CheckPathExists = true;
-            dlg.Filter = "OpenAPI specs (JSON)|*.json|OpenAPI specs (YAML)|*.yml;*.yaml|All Files|*.*";
-            dlg.FilterIndex = 1;
-            dlg.Multiselect = false;
-            dlg.Title = "Open local OpenAPI spec file";
-            if (dlg.ShowDialog(this).GetValueOrDefault())
-            {
-                Vm.Source = dlg.FileName;
-                RefreshEndpoints_Click(sender, e);
-            }
-        }
-
-        private async void RefreshEndpoints_Click(object sender, RoutedEventArgs e)
-        {
-            var openApiImporter = new OpenApiImporter(Vm.Source, AppSettings);
-            await openApiImporter.RefreshImport(Vm);
+            DataContext = await ImportOpenApiWindow.OpenDialog(this, this.AppSettings, Vm);
         }
 
         private void DuplicateEnvironment_Click(object sender, RoutedEventArgs e)

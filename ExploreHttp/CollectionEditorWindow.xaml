@@ -20,13 +20,6 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-            <Style x:Key="DisableWhenNotOpenApi" TargetType="TextBox">
-                <Style.Triggers>
-                    <DataTrigger Value="Manual" Binding="{Binding DataContext.Kind, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CollectionEditorWindow}}}">
-                        <Setter Property="IsEnabled" Value="False"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="4">
@@ -44,17 +37,14 @@
         <TextBlock Text="Name:" VerticalAlignment="Center"/>
         <TextBox Grid.Column="1" Text="{Binding CollectionName}" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
         <TextBlock Text="Source:" VerticalAlignment="Center" Grid.Row="1"/>
-        <TextBox Text="{Binding Source}" Style="{StaticResource DisableWhenNotOpenApi}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
+        <TextBox Text="{Binding Source}" IsEnabled="False" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Grid.Column="2" Grid.Row="1"
                     VerticalAlignment="Center"
                     Style="{StaticResource HideWhenNotOpenApi}">
-            <Button Margin="4,0" Click="ChangeSource_Click">
-                <TextBlock Text="{StaticResource ElipsisIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
-            </Button>
-            <Button Click="RefreshEndpoints_Click">
-                <TextBlock Text="{StaticResource RefreshIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
+            <Button Click="EditOpenApiImport_Click">
+                <TextBlock Text="{StaticResource EditIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
             </Button>
         </StackPanel>
         <GroupBox Header="Environments" Grid.Row="2" Grid.ColumnSpan="3">
