@@ -1,6 +1,7 @@
 ﻿using ExploreHttp.Models;
 using ExploreHttp.Services;
 using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace ExploreHttp;
@@ -31,8 +32,15 @@ public partial class ImportOpenApiWindow : Window
             Vm.DocumentLocation = dlg.FileName;
             if (!string.IsNullOrEmpty(Vm.DocumentLocation))
             {
-                var importer = new OpenApiImporter(Vm.DocumentLocation, AppSettings);
-                await importer.ImportPreview(Vm.Collection.SavedRequests);
+                try
+                {
+                    var importer = new OpenApiImporter(Vm.DocumentLocation, AppSettings);
+                    await importer.ImportPreview(Vm.Endpoints);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
@@ -41,8 +49,15 @@ public partial class ImportOpenApiWindow : Window
     {
         if (!string.IsNullOrEmpty(Vm.DocumentLocation))
         {
-            var importer = new OpenApiImporter(Vm.DocumentLocation, AppSettings);
-            await importer.ImportPreview(Vm.Collection.SavedRequests);
+            try
+            {
+                var importer = new OpenApiImporter(Vm.DocumentLocation, AppSettings);
+                await importer.ImportPreview(Vm.Endpoints);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 
@@ -65,7 +80,7 @@ public partial class ImportOpenApiWindow : Window
         dlg.AppSettings = appSettings;
         dlg.DataContext = new OpenApiImportResult()
         {
-            Collection = new RequestCollection(),
+            Endpoints = new ObservableCollection<SelectableSavedRequest>(),
             DocumentLocation = collectionToOverride?.Source,
             OriginalCollection = collectionToOverride,
             ImportOptions = OpenApiImportAction.All
@@ -79,18 +94,26 @@ public partial class ImportOpenApiWindow : Window
             saveDlg.DefaultExt = "*.reqcol";
             saveDlg.Filter = "Request Collection|*.reqcol";
 
-            if (saveDlg.ShowDialog(parent).GetValueOrDefault())
+            if (dlg.Vm.OriginalCollection != null || saveDlg.ShowDialog(parent).GetValueOrDefault())
             {
-                var importer = new OpenApiImporter(dlg.Vm.DocumentLocation, appSettings);
-                if (dlg.Vm.OriginalCollection is not null)
+                try
                 {
-                    await importer.RefreshImport(dlg.Vm.OriginalCollection, dlg.Vm.DocumentLocation, dlg.Vm.ImportOptions);
-                    return dlg.Vm.OriginalCollection;
+                    var importer = new OpenApiImporter(dlg.Vm.DocumentLocation, appSettings);
+                    if (dlg.Vm.OriginalCollection is not null)
+                    {
+                        var selectedOperationIds = dlg.Vm.Endpoints.Where(x => x.Selected).Select(x => x.OperationId);
+                        await importer.RefreshImport(dlg.Vm.OriginalCollection, dlg.Vm.ImportOptions, selectedOperationIds);
+                        return dlg.Vm.OriginalCollection;
+                    }
+                    else
+                    {
+                        var result = await importer.ImportAndSave(saveDlg.FileName);
+                        return result;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    var result = await importer.ImportAndSave(saveDlg.FileName);
-                    return result;
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

@@ -27,7 +27,8 @@ public class OpenApiImporter
                 {
                     Method = operation.Key.ToRequestMethod(),
                     Name = operation.Value.Summary ?? operation.Value.OperationId,
-                    Url = "{{baseAddress}}" + path.Key
+                    Url = "{{baseAddress}}" + path.Key,
+                    OperationId = operation.Value.OperationId
                 };
                 var requestModel = new RequestModel(savedRequest);
                 var firstBodyContent = operation.Value.RequestBody?.Content.FirstOrDefault();
@@ -117,7 +118,7 @@ public class OpenApiImporter
         }
     }
 
-    public async Task ImportPreview(ObservableCollection<SavedRequest> endpoints)
+    public async Task ImportPreview(ObservableCollection<SelectableSavedRequest> endpoints)
     {
         var document = await ImportDocument();
         endpoints.Clear();
@@ -125,20 +126,65 @@ public class OpenApiImporter
         {
             foreach (var operation in path.Value.Operations)
             {
-                endpoints.Add(new SavedRequest(null)
+                endpoints.Add(new SelectableSavedRequest(null)
                 {
                     Method = operation.Key.ToRequestMethod(),
                     Name = operation.Value.Summary ?? operation.Value.OperationId,
-                    Url = $"{document.Servers.FirstOrDefault().Url}/{path.Key}"
+                    Url = $"{document.Servers.First().Url}{path.Key}",
+                    OperationId = operation.Value.OperationId,
+                    Selected = true
                 });
             }
         }
     }
 
-    public Task RefreshImport(RequestCollection vm, string documentLocation, OpenApiImportAction importOptions)
+    public async Task RefreshImport(RequestCollection collection,
+                                    OpenApiImportAction importOptions,
+                                    IEnumerable<string> selectedOperationIds)
     {
-        //TODO figure out what to do to refresh existing endpoints, how to identify them, perhaps operation id?
-        throw new NotImplementedException();
+        var document = await ImportDocument();
+        var importedEndpoints = ImportEndpoints(document, collection).ToArray();
+
+        var filteredEndpointsToMerge = importedEndpoints.Where(x => ImportOptionsFilter(importOptions, x.savedRequest, collection.SavedRequests, selectedOperationIds));
+
+        foreach (var item in filteredEndpointsToMerge)
+        {
+            var existingRequest = collection.SavedRequests.FirstOrDefault(x => x.OperationId == item.savedRequest.OperationId);
+            if (existingRequest is not null)
+            {
+                // override existing, make sure ids are correct (take new from import)
+                existingRequest.Url = item.savedRequest.Url;
+                collection.Loader.RemoveRequest(existingRequest.Id);
+                existingRequest.Id = item.savedRequest.Id;
+                var toSave = ModelConverter.ToStorage(item.requestModel);
+                collection.Loader.SaveRequest(toSave);
+            }
+            else
+            {
+                // add new request
+                collection.SavedRequests.Add(item.savedRequest);
+                var toSave = ModelConverter.ToStorage(item.requestModel);
+                collection.Loader.SaveRequest(toSave);
+            }
+        }
+        var metadata = ModelConverter.ToStorage(collection);
+        collection.Loader.UpdateMetadata(metadata);
+
+        collection.UnsavedChangesIndicatorVisibility = System.Windows.Visibility.Collapsed;
+    }
+
+    private bool ImportOptionsFilter(OpenApiImportAction importOptions,
+                                     SavedRequest importedRequest,
+                                     IEnumerable<SavedRequest> existingRequests,
+                                     IEnumerable<string> selectedoperationIds)
+    {
+        return importOptions switch
+        {
+            OpenApiImportAction.All => true,
+            OpenApiImportAction.New => !existingRequests.Any(x => x.OperationId == importedRequest.OperationId),
+            OpenApiImportAction.Custom => selectedoperationIds.Any(x => x == importedRequest.OperationId),
+            _ => false
+        };
     }
 }
 

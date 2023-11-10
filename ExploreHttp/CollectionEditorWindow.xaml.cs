@@ -50,7 +50,7 @@ namespace ExploreHttp
 
         private async void EditOpenApiImport_Click(object sender, RoutedEventArgs e)
         {
-            DataContext = await ImportOpenApiWindow.OpenDialog(this, this.AppSettings, Vm);
+            DataContext = await ImportOpenApiWindow.OpenDialog(this, AppSettings, Vm);
         }
 
         private void DuplicateEnvironment_Click(object sender, RoutedEventArgs e)

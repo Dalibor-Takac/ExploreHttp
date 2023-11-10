@@ -78,7 +78,8 @@ public class RequestCollectionCommandsHandler
         if (result != null)
         {
             collection.SyncWithOther(result);
-            collection.UnsavedChangesIndicatorVisibility = Visibility.Visible;
+            if (collection.Loader is null)
+                collection.UnsavedChangesIndicatorVisibility = Visibility.Visible;
         }
     }
 

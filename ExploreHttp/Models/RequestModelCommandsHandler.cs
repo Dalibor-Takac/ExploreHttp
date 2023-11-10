@@ -112,8 +112,20 @@ public class RequestModelCommandsHandler
     public void DeleteRequestCommandHandler(object sender, ExecutedRoutedEventArgs e)
     {
         var savedRequest = e.Parameter as SavedRequest;
-        savedRequest.ParentCollection.SavedRequests.Remove(savedRequest);
-        savedRequest.ParentCollection.UnsavedChangesIndicatorVisibility = Visibility.Visible;
+
+        if (MessageBox.Show(_hostWindow,
+            "Are you sure you want to remove this request from collection?",
+            "Confirm reqest removal",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question) == MessageBoxResult.Yes)
+        {
+            savedRequest.ParentCollection.SavedRequests.Remove(savedRequest);
+            savedRequest.ParentCollection.Loader.RemoveRequest(savedRequest.Id);
+            var metadata = ModelConverter.ToStorage(savedRequest.ParentCollection);
+            savedRequest.ParentCollection.Loader.UpdateMetadata(metadata);
+
+            savedRequest.ParentCollection.UnsavedChangesIndicatorVisibility = Visibility.Collapsed;
+        }
     }
 
 

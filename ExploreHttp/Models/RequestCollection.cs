@@ -56,7 +56,6 @@ public partial class RequestCollection : ObservableObject
         CollectionName = collection.CollectionName;
         Kind = collection.Kind;
         Source = collection.Source;
-        UnsavedChangesIndicatorVisibility = collection.UnsavedChangesIndicatorVisibility;
         SavedRequests.Clear();
         foreach (var r in collection.SavedRequests)
             SavedRequests.Add(r);
@@ -66,6 +65,7 @@ public partial class RequestCollection : ObservableObject
         SelectedEnvironmentIndex = collection.SelectedEnvironmentIndex;
         IsExpanded = collection.IsExpanded;
         Loader = collection.Loader;
+        UnsavedChangesIndicatorVisibility = collection.UnsavedChangesIndicatorVisibility;
     }
 }
 

@@ -88,6 +88,7 @@
     <Compile Include="Models\OpenApiImportResult.cs" />
     <Compile Include="Models\RequestCollectionCommandsHandler.cs" />
     <Compile Include="Models\RequestModelCommandsHandler.cs" />
+    <Compile Include="Models\SelectableSavedRequest.cs" />
     <Compile Include="RequestCollectionControl.xaml.cs">
       <DependentUpon>RequestCollectionControl.xaml</DependentUpon>
     </Compile>

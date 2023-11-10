@@ -24,6 +24,16 @@
                 <vm:OpenApiImportAction>Custom</vm:OpenApiImportAction>
             </x:Array>
             <c:NoContentToVisibilityConverter x:Key="HideImportOptionsWhenNotOverriding" DefaultOrSimilarMap="Collapsed" NonDefaultOrSimilarMap="Visible"/>
+            <Style x:Key="EnabledWhenCustomImportOptions" TargetType="CheckBox">
+                <Style.Setters>
+                    <Setter Property="IsEnabled" Value="False"/>
+                </Style.Setters>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding DataContext.ImportOptions, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ImportOpenApiWindow}}}" Value="Custom">
+                        <Setter Property="IsEnabled" Value="True"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="8">
@@ -69,12 +79,13 @@
             <ScrollViewer
                 HorizontalScrollBarVisibility="Disabled">
                 <ItemsControl
-                    ItemsSource="{Binding Collection.SavedRequests}"
+                    ItemsSource="{Binding Endpoints}"
                     d:ItemsSource="{d:SampleData ItemCount=5}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal">
+                                    <CheckBox IsChecked="{Binding Selected}" VerticalAlignment="Center" Margin="4" Style="{StaticResource EnabledWhenCustomImportOptions}"/>
                                     <Border Style="{StaticResource Pill}"
                                         Background="{Binding Method, Converter={StaticResource MethodConverter}}"
                                         VerticalAlignment="Center"
