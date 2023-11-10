@@ -31,17 +31,13 @@ public class RequestCollectionCommandsHandler
         dlg.CheckPathExists = true;
         if (dlg.ShowDialog(_hostWindow).GetValueOrDefault())
         {
-            if (File.Exists(dlg.FileName) && !SavedState.Default.KnownCollections.Contains(dlg.FileName))
+            if (File.Exists(dlg.FileName) && _vm.Collections.All(x => x.Loader?.FileName != dlg.FileName))
             {
-                SavedState.Default.KnownCollections.Add(dlg.FileName);
-                SavedState.Default.Save();
-
                 var loader = new CollectionLoader(dlg.FileName);
 
                 var metadata = loader.ReadMetadata();
                 var requestCollection = ModelConverter.FromStorage(metadata);
                 requestCollection.Loader = loader;
-                requestCollection.Source = loader.FileName;
 
                 _vm.Collections.Add(requestCollection);
             }
