@@ -92,6 +92,7 @@ public class ModelConverter
             },
             ResponseStatus = request.ResponseStatus,
             ResponseDuration = request.ResponseDuration,
+            ResponseSize = request.ResponseSize,
             ResponseHeaders = new HeaderCollection()
             {
                 Headers = new ObservableCollection<HeaderItemModel>(request.ResponseHeaders.Select(x => new HeaderItemModel()

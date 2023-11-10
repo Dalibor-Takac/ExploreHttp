@@ -1,7 +1,6 @@
 ﻿using ExploreHttp.Models;
 using ExploreHttp.Services;
 using Microsoft.Win32;
-using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace ExploreHttp;
@@ -16,29 +15,7 @@ public partial class ImportOpenApiWindow : Window
         InitializeComponent();
     }
 
-    private static DependencyProperty ApiLocationProperty = DependencyProperty.Register(
-        nameof(ApiLocation),
-        typeof(string),
-        typeof(ImportOpenApiWindow),
-        new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.Journal | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-    public string ApiLocation
-    {
-        get => GetValue(ApiLocationProperty) as string;
-        set => SetValue(ApiLocationProperty, value);
-    }
-
-    private static DependencyProperty EndpointsProperty = DependencyProperty.Register(
-        nameof(Endpoints),
-        typeof(ObservableCollection<SavedRequest>),
-        typeof(ImportOpenApiWindow),
-        new FrameworkPropertyMetadata(new ObservableCollection<SavedRequest>(), FrameworkPropertyMetadataOptions.Journal | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-    public ObservableCollection<SavedRequest> Endpoints
-    {
-        get => GetValue(EndpointsProperty) as ObservableCollection<SavedRequest>;
-        set => SetValue(EndpointsProperty, value);
-    }
+    OpenApiImportResult Vm => (OpenApiImportResult)DataContext;
 
     private void OpenLocalFile_Click(object sender, RoutedEventArgs e)
     {
@@ -51,16 +28,16 @@ public partial class ImportOpenApiWindow : Window
         dlg.Title = "Open local OpenAPI spec file";
         if (dlg.ShowDialog(this).GetValueOrDefault())
         {
-            ApiLocation = dlg.FileName;
+            Vm.DocumentLocation = dlg.FileName;
         }
     }
 
     private async void RunImportPreview_Click(object sender, RoutedEventArgs e)
     {
-        if (!string.IsNullOrEmpty(ApiLocation))
+        if (!string.IsNullOrEmpty(Vm.DocumentLocation))
         {
-            var importer = new OpenApiImporter(ApiLocation, AppSettings);
-            await importer.ImportPreview(Endpoints);
+            var importer = new OpenApiImporter(Vm.DocumentLocation, AppSettings);
+            await importer.ImportPreview(Vm.Collection.SavedRequests);
         }
     }
 
@@ -76,13 +53,20 @@ public partial class ImportOpenApiWindow : Window
         Close();
     }
 
-    public static async Task<RequestCollection> OpenDialog(Window parent, AppSettings appSettings)
+    public static async Task<RequestCollection> OpenDialog(Window parent, AppSettings appSettings, RequestCollection collectionToOverride = default)
     {
         var dlg = new ImportOpenApiWindow();
         dlg.Owner = parent;
         dlg.AppSettings = appSettings;
+        dlg.DataContext = new OpenApiImportResult()
+        {
+            Collection = new RequestCollection(),
+            DocumentLocation = collectionToOverride?.Source,
+            OriginalCollection = collectionToOverride,
+            ImportOptions = OpenApiImportAction.All
+        };
         
-        if (dlg.ShowDialog().GetValueOrDefault() && !string.IsNullOrEmpty(dlg.ApiLocation))
+        if (dlg.ShowDialog().GetValueOrDefault() && !string.IsNullOrEmpty(dlg.Vm.DocumentLocation))
         {
             var saveDlg = new SaveFileDialog();
             saveDlg.CheckPathExists = true;
@@ -92,7 +76,7 @@ public partial class ImportOpenApiWindow : Window
 
             if (saveDlg.ShowDialog(parent).GetValueOrDefault())
             {
-                var importer = new OpenApiImporter(dlg.ApiLocation, appSettings);
+                var importer = new OpenApiImporter(dlg.Vm.DocumentLocation, appSettings);
                 var result = await importer.ImportAndSave(saveDlg.FileName);
                 return result;
             }

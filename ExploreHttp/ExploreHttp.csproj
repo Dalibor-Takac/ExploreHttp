@@ -84,6 +84,8 @@
     <Compile Include="LogWindow.xaml.cs">
       <DependentUpon>LogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\OpenApiImportAction.cs" />
+    <Compile Include="Models\OpenApiImportResult.cs" />
     <Compile Include="Models\RequestCollectionCommandsHandler.cs" />
     <Compile Include="Models\RequestModelCommandsHandler.cs" />
     <Compile Include="RequestCollectionControl.xaml.cs">
