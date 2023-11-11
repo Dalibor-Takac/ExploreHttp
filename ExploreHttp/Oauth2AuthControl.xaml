@@ -19,7 +19,7 @@
             <Style x:Key="DisableWhenNotPassword" TargetType="TextBox">
                 <Setter Property="IsEnabled" Value="False"/>
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding GrantType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+                    <DataTrigger Binding="{Binding AuthParameters[oauth2.grantType]}"
                                  Value="password">
                         <Setter Property="IsEnabled" Value="True"/>
                     </DataTrigger>
@@ -46,23 +46,23 @@
         <ComboBox ItemsSource="{StaticResource AllGrantTypes}"
                   Grid.Column="1"
                   Margin="0,4"
-                  SelectedValue="{Binding GrantType, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"/>
+                  SelectedValue="{Binding AuthParameters[oauth2.grantType]}"/>
         <TextBlock Text="Client Id: " Grid.Row="1" Margin="0,4"/>
-        <TextBox Text="{Binding ClientId, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+        <TextBox Text="{Binding AuthParameters[oauth2.clientId]}"
                  Grid.Row="1"
                  Grid.Column="1"
                  Margin="0,4"/>
         <TextBlock Text="Client Secret: "
                    Grid.Row="2"
                    Margin="0,4"/>
-        <TextBox Text="{Binding ClientSecret, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+        <TextBox Text="{Binding AuthParameters[oauth2.clientSecret]}"
                  Grid.Row="2"
                  Grid.Column="1"
                  Margin="0,4"/>
         <TextBlock Text="Username: "
                    Grid.Row="3"
                    Margin="0,4"/>
-        <TextBox Text="{Binding Username, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+        <TextBox Text="{Binding AuthParameters[oauth2.username]}"
                  Grid.Row="3"
                  Grid.Column="1"
                  Margin="0,4"
@@ -70,7 +70,7 @@
         <TextBlock Text="Password: "
                    Grid.Row="4"
                    Margin="0,4"/>
-        <TextBox Text="{Binding Password, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+        <TextBox Text="{Binding AuthParameters[oauth2.password]}"
                  Grid.Row="4"
                  Grid.Column="1"
                  Margin="0,4"
@@ -78,14 +78,14 @@
         <TextBlock Text="Scope: "
                    Grid.Row="5"
                    Margin="0,4"/>
-        <TextBox Text="{Binding Scope, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+        <TextBox Text="{Binding AuthParameters[oauth2.scope]}"
                  Grid.Row="5"
                  Grid.Column="1"
                  Margin="0,4"/>
         <TextBlock Text="Audience"
                    Grid.Row="6"
                    Margin="0,4"/>
-        <TextBox Text="{Binding Audience, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+        <TextBox Text="{Binding AuthParameters[oauth2.audience]}"
                  Grid.Row="6"
                  Grid.Column="1"
                  Margin="0,4"/>

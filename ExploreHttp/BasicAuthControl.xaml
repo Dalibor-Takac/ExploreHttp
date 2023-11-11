@@ -19,10 +19,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Username: " Margin="0,4"/>
-        <TextBox Text="{Binding AuthParameters[x:Static vm:AuthenticationParameterNames.BasicUsername]}"
+        <TextBox Text="{Binding AuthParameters[basic.username]}"
                  Grid.Column="1"
                  Margin="0,4"/>
         <TextBlock Text="Password: " Grid.Row="1"/>
-        <TextBox Text="{Binding AuthParameters[x:Static vm:AuthenticationParameterNames.BasicPassword]}" Grid.Row="1" Grid.Column="1"/>
+        <TextBox Text="{Binding AuthParameters[basic.password]}"
+                 Grid.Row="1"
+                 Grid.Column="1"/>
     </Grid>
 </UserControl>

@@ -19,10 +19,10 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Scheme: " Margin="0,4"/>
-        <TextBox Text="{Binding AuthParameters[x:Static vm:AuthenticationParameterNames.BearerScheme]}"
+        <TextBox Text="{Binding AuthParameters[bearer.scheme]}"
                  Grid.Column="1"
                  Margin="0,4"/>
         <TextBlock Text="Token: " Grid.Row="1"/>
-        <TextBox Text="{Binding AuthParameters[x:Static vm:AuthenticationParameterNames.BearerToken]}" Grid.Row="1" Grid.Column="1"/>
+        <TextBox Text="{Binding AuthParameters[bearer.token]}" Grid.Row="1" Grid.Column="1"/>
     </Grid>
 </UserControl>
