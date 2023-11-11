@@ -19,6 +19,7 @@
             <Style x:Key="DisableWhenNotPassword" TargetType="TextBox">
                 <Setter Property="IsEnabled" Value="False"/>
                 <Style.Triggers>
+                    <!--this does not work because dictionary does nor implement INotifyPropertyChange-->
                     <DataTrigger Binding="{Binding AuthParameters[oauth2.grantType]}"
                                  Value="password">
                         <Setter Property="IsEnabled" Value="True"/>
