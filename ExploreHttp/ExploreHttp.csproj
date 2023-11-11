@@ -68,6 +68,15 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AuthenticationControl.xaml.cs">
+      <DependentUpon>AuthenticationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BasicAuthControl.xaml.cs">
+      <DependentUpon>BasicAuthControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BearerAuthControl.xaml.cs">
+      <DependentUpon>BearerAuthControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CollectionEditorWindow.xaml.cs">
       <DependentUpon>CollectionEditorWindow.xaml</DependentUpon>
     </Compile>
@@ -84,11 +93,19 @@
     <Compile Include="LogWindow.xaml.cs">
       <DependentUpon>LogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuthenticationProvider.cs" />
     <Compile Include="Models\OpenApiImportAction.cs" />
     <Compile Include="Models\OpenApiImportResult.cs" />
+    <Compile Include="Models\QueryStringModel.cs" />
     <Compile Include="Models\RequestCollectionCommandsHandler.cs" />
     <Compile Include="Models\RequestModelCommandsHandler.cs" />
     <Compile Include="Models\SelectableSavedRequest.cs" />
+    <Compile Include="Oauth2AuthControl.xaml.cs">
+      <DependentUpon>Oauth2AuthControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="QueryStringInput.xaml.cs">
+      <DependentUpon>QueryStringInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RequestCollectionControl.xaml.cs">
       <DependentUpon>RequestCollectionControl.xaml</DependentUpon>
     </Compile>
@@ -127,6 +144,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AuthenticationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BasicAuthControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BearerAuthControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CollectionEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -159,6 +188,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Oauth2AuthControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="QueryStringInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="RequestCollectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

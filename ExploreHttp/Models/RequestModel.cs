@@ -10,7 +10,9 @@ public partial class RequestModel : ObservableObject
     private string name;
     private RequestMethod method;
     private string url;
+    private QueryStringModel queryString;
     private HeaderCollection requestHeaders;
+    private AuthenticationProvider authProvider;
     private BodyProvider requestBody;
     private Visibility unsavedChangesIndicatorVisibility;
     private string responseStatus;
@@ -25,7 +27,9 @@ public partial class RequestModel : ObservableObject
     public string Name { get => name; set => SetProperty(ref name, value); }
     public RequestMethod Method { get => method; set => SetProperty(ref method, value); }
     public string Url { get => url; set => SetProperty(ref url, value); }
+    public QueryStringModel QueryString { get => queryString; set => SetProperty(ref queryString, value); }
     public HeaderCollection RequestHeaders { get => requestHeaders; set => SetProperty(ref requestHeaders, value); }
+    public AuthenticationProvider AuthProvider { get => authProvider; set => SetProperty(ref authProvider, value); }
     public BodyProvider RequestBody { get => requestBody; set => SetProperty(ref requestBody, value); }
     public Visibility UnsavedChangesIndicatorVisibility { get => unsavedChangesIndicatorVisibility; set => SetProperty(ref unsavedChangesIndicatorVisibility, value); }
     public string ResponseStatus { get => responseStatus; set => SetProperty(ref responseStatus, value); }
@@ -42,7 +46,9 @@ public partial class RequestModel : ObservableObject
         Name = req.Name;
         Method = req.Method;
         Url = req.Url;
+        QueryString = new QueryStringModel();
         RequestHeaders = new HeaderCollection() { IsEditable = true };
+        AuthProvider = new AuthenticationProvider();
         RequestBody = new BodyProvider();
         ResponseBody = new BodyProvider();
         ResponseHeaders = new HeaderCollection();
@@ -54,6 +60,13 @@ public partial class RequestModel : ObservableObject
             if (args.PropertyName != nameof(UnsavedChangesIndicatorVisibility))
                 UnsavedChangesIndicatorVisibility = Visibility.Visible;
         };
+        QueryString.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
+        RequestHeaders.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
+        AuthProvider.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
+        RequestBody.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
+        ResponseHeaders.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
+        ResponseBody.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
+        Logs.CollectionChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
     }
 }
 

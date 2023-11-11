@@ -41,11 +41,6 @@ namespace ExploreHttp
             typeof(string),
             typeof(HeaderCollectionControl),
             new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.Journal));
-        private static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
-            nameof(Label),
-            typeof(string),
-            typeof(HeaderCollectionControl),
-            new FrameworkPropertyMetadata("Headers", FrameworkPropertyMetadataOptions.Journal));
 
         public bool IsCheckedPhantomHeader
         {
@@ -61,11 +56,6 @@ namespace ExploreHttp
         {
             get => (string)GetValue(ValuePhantomHeaderProperty);
             set => SetValue(ValuePhantomHeaderProperty, value);
-        }
-        public string Label
-        {
-            get => (string)GetValue(LabelProperty);
-            set => SetValue(LabelProperty, value);
         }
 
         public HeaderCollection Vm => (HeaderCollection)DataContext;

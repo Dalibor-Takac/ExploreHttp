@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="ExploreHttp.QueryStringInput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExploreHttp"
+             xmlns:vm="clr-namespace:ExploreHttp.Models"
+             mc:Ignorable="d" 
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=vm:QueryStringModel}">
+    <StackPanel Margin="4">
+        <Border Margin="0,4"
+                BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                BorderThickness="1">
+            <TextBlock Text="{Binding RenderedQueryString}"/>
+        </Border>
+        <ItemsControl Margin="0,4"
+                      ItemsSource="{Binding Parameters}"
+                      d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked="{Binding IsEnabled}"/>
+                        <TextBox Text="{Binding ParameterName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
+                        <TextBox Text="{Binding ParameterValue, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button HorizontalAlignment="Left" Click="AddParameter_Click">
+            <TextBlock Text="{StaticResource AddIcon}" Style="{StaticResource Icons}"/>
+        </Button>
+    </StackPanel>
+</UserControl>

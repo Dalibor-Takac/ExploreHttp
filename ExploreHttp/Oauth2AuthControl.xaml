@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="ExploreHttp.Oauth2AuthControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExploreHttp"
+             xmlns:vm="clr-namespace:ExploreHttp.Models"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="200"
+             d:DesignWidth="400"
+             d:DataContext="{d:DesignInstance {x:Type vm:AuthenticationProvider}}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <x:Array x:Key="AllGrantTypes" Type="sys:String">
+                <sys:String>password</sys:String>
+                <sys:String>client_credentials</sys:String>
+            </x:Array>
+            <Style x:Key="DisableWhenNotPassword" TargetType="TextBox">
+                <Setter Property="IsEnabled" Value="False"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding GrantType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+                                 Value="password">
+                        <Setter Property="IsEnabled" Value="True"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Grant Type: "
+                   Margin="0,4"/>
+        <ComboBox ItemsSource="{StaticResource AllGrantTypes}"
+                  Grid.Column="1"
+                  Margin="0,4"
+                  SelectedValue="{Binding GrantType, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"/>
+        <TextBlock Text="Client Id: " Grid.Row="1" Margin="0,4"/>
+        <TextBox Text="{Binding ClientId, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 Margin="0,4"/>
+        <TextBlock Text="Client Secret: "
+                   Grid.Row="2"
+                   Margin="0,4"/>
+        <TextBox Text="{Binding ClientSecret, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+                 Grid.Row="2"
+                 Grid.Column="1"
+                 Margin="0,4"/>
+        <TextBlock Text="Username: "
+                   Grid.Row="3"
+                   Margin="0,4"/>
+        <TextBox Text="{Binding Username, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+                 Grid.Row="3"
+                 Grid.Column="1"
+                 Margin="0,4"
+                 Style="{StaticResource DisableWhenNotPassword}"/>
+        <TextBlock Text="Password: "
+                   Grid.Row="4"
+                   Margin="0,4"/>
+        <TextBox Text="{Binding Password, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+                 Grid.Row="4"
+                 Grid.Column="1"
+                 Margin="0,4"
+                 Style="{StaticResource DisableWhenNotPassword}"/>
+        <TextBlock Text="Scope: "
+                   Grid.Row="5"
+                   Margin="0,4"/>
+        <TextBox Text="{Binding Scope, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+                 Grid.Row="5"
+                 Grid.Column="1"
+                 Margin="0,4"/>
+        <TextBlock Text="Audience"
+                   Grid.Row="6"
+                   Margin="0,4"/>
+        <TextBox Text="{Binding Audience, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+                 Grid.Row="6"
+                 Grid.Column="1"
+                 Margin="0,4"/>
+    </Grid>
+</UserControl>

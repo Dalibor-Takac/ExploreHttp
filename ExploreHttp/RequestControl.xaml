@@ -119,9 +119,17 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <local:HeaderCollectionControl DataContext="{Binding RequestHeaders}"
-                                       Label="Request Headers"
-                                       Grid.ColumnSpan="3"/>
+                <TabControl Grid.ColumnSpan="3">
+                    <TabItem Header="Request Headers">
+                        <local:HeaderCollectionControl DataContext="{Binding RequestHeaders}"/>
+                    </TabItem>
+                    <TabItem Header="Authentication">
+                        <local:AuthenticationControl DataContext="{Binding AuthProvider}"/>
+                    </TabItem>
+                    <TabItem Header="Query String">
+                        <local:QueryStringInput DataContext="{Binding QueryString}"/>
+                    </TabItem>
+                </TabControl>
                 <TextBlock Text="Body Kind:"
                            Grid.Row="1"
                            VerticalAlignment="Center"/>
@@ -147,7 +155,6 @@
                            Grid.Column="1"
                            Grid.ColumnSpan="2"/>
                 <local:HeaderCollectionControl DataContext="{Binding ResponseHeaders}"
-                                       Label="Response Headers"
                                        Grid.Row="4"
                                        Grid.ColumnSpan="3"/>
                 <TextBox IsEnabled="False"
