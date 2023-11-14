@@ -7,21 +7,20 @@
              xmlns:vm="clr-namespace:ExploreHttp.Models"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="200"
+             d:DesignHeight="230"
              d:DesignWidth="400"
-             d:DataContext="{d:DesignInstance {x:Type vm:AuthenticationProvider}}">
+             d:DataContext="{d:DesignInstance {x:Type vm:Oauth2AuthenticationModel}}">
     <UserControl.Resources>
         <ResourceDictionary>
-            <x:Array x:Key="AllGrantTypes" Type="sys:String">
-                <sys:String>password</sys:String>
-                <sys:String>client_credentials</sys:String>
+            <x:Array x:Key="AllGrantTypes" Type="vm:Oauth2GrantType">
+                <vm:Oauth2GrantType>Password</vm:Oauth2GrantType>
+                <vm:Oauth2GrantType>ClientCredentials</vm:Oauth2GrantType>
             </x:Array>
             <Style x:Key="DisableWhenNotPassword" TargetType="TextBox">
                 <Setter Property="IsEnabled" Value="False"/>
                 <Style.Triggers>
-                    <!--this does not work because dictionary does nor implement INotifyPropertyChange-->
-                    <DataTrigger Binding="{Binding AuthParameters[oauth2.grantType]}"
-                                 Value="password">
+                    <DataTrigger Binding="{Binding DataContext.GrantType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:Oauth2AuthControl}}}"
+                                 Value="Password">
                         <Setter Property="IsEnabled" Value="True"/>
                     </DataTrigger>
                 </Style.Triggers>
@@ -41,53 +40,61 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Grant Type: "
+        <TextBlock Text="Authority: "
                    Margin="0,4"/>
+        <TextBox Text="{Binding AuthUrl}"
+                 Margin="0,4"
+                 Grid.Column="1"/>
+        <TextBlock Text="Grant Type: "
+                   Margin="0,4"
+                   Grid.Row="1"/>
         <ComboBox ItemsSource="{StaticResource AllGrantTypes}"
+                  Grid.Row="1"
                   Grid.Column="1"
                   Margin="0,4"
-                  SelectedValue="{Binding AuthParameters[oauth2.grantType]}"/>
-        <TextBlock Text="Client Id: " Grid.Row="1" Margin="0,4"/>
-        <TextBox Text="{Binding AuthParameters[oauth2.clientId]}"
-                 Grid.Row="1"
-                 Grid.Column="1"
-                 Margin="0,4"/>
-        <TextBlock Text="Client Secret: "
-                   Grid.Row="2"
-                   Margin="0,4"/>
-        <TextBox Text="{Binding AuthParameters[oauth2.clientSecret]}"
+                  SelectedValue="{Binding GrantType}"/>
+        <TextBlock Text="Client Id: " Grid.Row="2" Margin="0,4"/>
+        <TextBox Text="{Binding ClientId}"
                  Grid.Row="2"
                  Grid.Column="1"
                  Margin="0,4"/>
-        <TextBlock Text="Username: "
+        <TextBlock Text="Client Secret: "
                    Grid.Row="3"
                    Margin="0,4"/>
-        <TextBox Text="{Binding AuthParameters[oauth2.username]}"
+        <TextBox Text="{Binding ClientSecret}"
                  Grid.Row="3"
                  Grid.Column="1"
-                 Margin="0,4"
-                 Style="{StaticResource DisableWhenNotPassword}"/>
-        <TextBlock Text="Password: "
+                 Margin="0,4"/>
+        <TextBlock Text="Username: "
                    Grid.Row="4"
                    Margin="0,4"/>
-        <TextBox Text="{Binding AuthParameters[oauth2.password]}"
+        <TextBox Text="{Binding Username}"
                  Grid.Row="4"
                  Grid.Column="1"
                  Margin="0,4"
                  Style="{StaticResource DisableWhenNotPassword}"/>
-        <TextBlock Text="Scope: "
+        <TextBlock Text="Password: "
                    Grid.Row="5"
                    Margin="0,4"/>
-        <TextBox Text="{Binding AuthParameters[oauth2.scope]}"
+        <TextBox Text="{Binding Password}"
                  Grid.Row="5"
+                 Grid.Column="1"
+                 Margin="0,4"
+                 Style="{StaticResource DisableWhenNotPassword}"/>
+        <TextBlock Text="Scope: "
+                   Grid.Row="6"
+                   Margin="0,4"/>
+        <TextBox Text="{Binding Scope}"
+                 Grid.Row="6"
                  Grid.Column="1"
                  Margin="0,4"/>
         <TextBlock Text="Audience"
-                   Grid.Row="6"
+                   Grid.Row="7"
                    Margin="0,4"/>
-        <TextBox Text="{Binding AuthParameters[oauth2.audience]}"
-                 Grid.Row="6"
+        <TextBox Text="{Binding Audience}"
+                 Grid.Row="7"
                  Grid.Column="1"
                  Margin="0,4"/>
     </Grid>

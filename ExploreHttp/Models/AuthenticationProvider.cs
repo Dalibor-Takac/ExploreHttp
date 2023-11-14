@@ -4,42 +4,29 @@ namespace ExploreHttp.Models;
 public partial class AuthenticationProvider : ObservableObject
 {
     private AuthenticationKind kind;
-    private Dictionary<string, string> authParameters;
+    private BasicAuthenticationModel basic;
+    private BearerAuthenticationModel bearer;
+    private Oauth2AuthenticationModel oauth2;
 
     public AuthenticationKind Kind { get => kind; set => SetProperty(ref kind, value); }
-    public Dictionary<string, string> AuthParameters { get => authParameters; set => SetProperty(ref authParameters,  value); }
+    public BasicAuthenticationModel Basic { get => basic; set => SetProperty(ref basic, value); }
+    public BearerAuthenticationModel Bearer { get => bearer; set => SetProperty(ref bearer, value); }
+    public Oauth2AuthenticationModel Oauth2 { get => oauth2; set => SetProperty(ref oauth2, value); }
 
     public AuthenticationProvider()
     {
-        Kind = AuthenticationKind.None;
-        AuthParameters = new Dictionary<string, string>
-        {
-            { AuthenticationParameterNames.Oauth2GrantType, "password" }
-        };
+        Kind = AuthenticationKind.Inherit;
+        Basic = new BasicAuthenticationModel();
+        Bearer = new BearerAuthenticationModel();
+        Oauth2 = new Oauth2AuthenticationModel();
     }
 }
 
 public enum AuthenticationKind
 {
+    Inherit,
     None,
     Basic,
     Bearer,
     Oauth2,
-}
-
-public static class AuthenticationParameterNames
-{
-    public static string BasicUsername = "basic.username";
-    public static string BasicPassword = "basic.password";
-
-    public static string BearerScheme = "bearer.scheme";
-    public static string BearerToken = "bearer.token";
-
-    public static string Oauth2GrantType = "oauth2.grantType";
-    public static string Oauth2ClientId = "oauth2.clientId";
-    public static string Oauth2ClientSecret = "oauth2.clientSecret";
-    public static string Oauth2Username = "oauth2.username";
-    public static string Oauth2Password = "oauth2.password";
-    public static string Oauth2Scope = "oauth2.scope";
-    public static string Oauth2Audience = "oauth2.audience";
 }

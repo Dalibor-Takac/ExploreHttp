@@ -15,7 +15,7 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <TextBlock Text="No authentication defined" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Text="No additional configurtion" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -25,7 +25,7 @@
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate DataType="vm:AuthenticationProvider">
-                                <local:BasicAuthControl DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:AuthenticationControl}}}"/>
+                                <local:BasicAuthControl DataContext="{Binding DataContext.Basic, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:AuthenticationControl}}}"/>
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>
@@ -35,7 +35,7 @@
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate DataType="vm:AuthenticationProvider">
-                                <local:BearerAuthControl DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:AuthenticationControl}}}"/>
+                                <local:BearerAuthControl DataContext="{Binding DataContext.Bearer, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:AuthenticationControl}}}"/>
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>
@@ -45,7 +45,7 @@
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate>
-                                <local:Oauth2AuthControl DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:AuthenticationControl}}}"/>
+                                <local:Oauth2AuthControl DataContext="{Binding DataContext.Oauth2, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:AuthenticationControl}}}"/>
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>
@@ -53,6 +53,7 @@
             </Style.Triggers>
         </Style>
         <x:Array x:Key="AllAuthTypes" Type="vm:AuthenticationKind">
+            <vm:AuthenticationKind>Inherit</vm:AuthenticationKind>
             <vm:AuthenticationKind>None</vm:AuthenticationKind>
             <vm:AuthenticationKind>Basic</vm:AuthenticationKind>
             <vm:AuthenticationKind>Bearer</vm:AuthenticationKind>

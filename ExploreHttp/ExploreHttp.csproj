@@ -93,6 +93,7 @@
     <Compile Include="LogWindow.xaml.cs">
       <DependentUpon>LogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\AuthenticationProvider.cs" />
     <Compile Include="Models\OpenApiImportAction.cs" />
     <Compile Include="Models\OpenApiImportResult.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Services\PersistanceModels\EndpointCollection.cs" />
     <Compile Include="Services\PersistanceModels\Request.cs" />
     <Compile Include="Services\RequestRunner.cs" />
+    <Compile Include="Services\TokenHelper.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
