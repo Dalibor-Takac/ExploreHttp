@@ -58,7 +58,7 @@ public class RequestRunner : IDisposable
 
         var uriTemplate = Template.Parse(requestModel.Url);
         var uriBuilder = new UriBuilder(uriTemplate.Render(locals));
-        if (requestModel.QueryString.Parameters.Count > 0)
+        if (requestModel.QueryString.Parameters.Count(x => x.IsEnabled) > 0)
             uriBuilder.Query = RenderQueryString(requestModel.QueryString, locals);
         result.RequestUri = uriBuilder.Uri;
 
@@ -107,7 +107,7 @@ public class RequestRunner : IDisposable
     {
         var sb = new StringBuilder();
         var isFirst = true;
-        foreach (var item in queryString.Parameters)
+        foreach (var item in queryString.Parameters.Where(x => x.IsEnabled))
         {
             if (isFirst)
                 isFirst = false;
