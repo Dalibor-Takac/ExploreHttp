@@ -120,14 +120,14 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TabControl Grid.ColumnSpan="3">
+                    <TabItem Header="Query String">
+                        <local:QueryStringInput DataContext="{Binding QueryString}"/>
+                    </TabItem>
                     <TabItem Header="Request Headers">
                         <local:HeaderCollectionControl DataContext="{Binding RequestHeaders}"/>
                     </TabItem>
                     <TabItem Header="Authentication">
                         <local:AuthenticationControl DataContext="{Binding AuthProvider}"/>
-                    </TabItem>
-                    <TabItem Header="Query String">
-                        <local:QueryStringInput DataContext="{Binding QueryString}"/>
                     </TabItem>
                 </TabControl>
                 <TextBlock Text="Body Kind:"
