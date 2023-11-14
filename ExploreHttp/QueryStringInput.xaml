@@ -11,7 +11,7 @@
              d:DataContext="{d:DesignInstance Type=vm:QueryStringModel}">
     <StackPanel Margin="4">
         <StackPanel Orientation="Horizontal" Margin="0,4">
-            <TextBlock Text="As sent: "/>
+            <TextBlock Text="Will send as: "/>
             <TextBlock Text="{Binding RenderedQueryString}" FontSize="12"/>
         </StackPanel>
         <ItemsControl Margin="0,4"
