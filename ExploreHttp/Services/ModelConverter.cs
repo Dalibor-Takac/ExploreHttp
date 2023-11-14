@@ -171,15 +171,13 @@ public class ModelConverter
             }
         };
 
-        result.QueryString = new QueryStringModel(result)
+        result.QueryString = new QueryStringModel(result, request.QueryString?.Select(x => new QueryStringParameter()
         {
-            Parameters = new ObservableCollection<QueryStringParameter>(request.QueryString?.Select(x => new QueryStringParameter()
-            {
-                IsEnabled = x.IsEnabled,
-                ParameterName = x.Key,
-                ParameterValue = x.Value
-            }) ?? Enumerable.Empty<QueryStringParameter>())
-        };
+            IsEnabled = x.IsEnabled,
+            ParameterName = x.Key,
+            ParameterValue = x.Value
+        }));
+        result.QueryString.PropertyChanged += (sender, args) => { result.UnsavedChangesIndicatorVisibility = System.Windows.Visibility.Visible; };
 
         return result;
     }

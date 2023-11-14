@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:ExploreHttp.Models"
         mc:Ignorable="d"
         Title="Explore HTTP - New Collection"
-        Height="350"
+        Height="550"
         Width="550"
         WindowStartupLocation="CenterOwner"
         d:DataContext="{d:DesignInstance Type=vm:RequestCollection}">
@@ -27,6 +27,7 @@
             <RowDefinition Height="24"/>
             <RowDefinition Height="24"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -81,13 +82,18 @@
                 </StackPanel>
             </ScrollViewer>
         </GroupBox>
-        <Button Click="Confirm_Click" Grid.Row="3" IsDefault="True">
+        <GroupBox Header="Authentication to inherit"
+                  Grid.Row="3"
+                  Grid.ColumnSpan="3">
+            <local:AuthenticationControl DataContext="{Binding AuthProvider}"/>
+        </GroupBox>
+        <Button Click="Confirm_Click" Grid.Row="4" IsDefault="True">
             <StackPanel Orientation="Horizontal" Margin="4">
                 <TextBlock Text="{StaticResource OkIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Ok" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
-        <Button Click="Cancel_Click" Grid.Row="3" Grid.Column="2" IsCancel="True">
+        <Button Click="Cancel_Click" Grid.Row="4" Grid.Column="2" IsCancel="True">
             <StackPanel Orientation="Horizontal" Margin="4">
                 <TextBlock Text="{StaticResource CloseIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center"/>
                 <TextBlock Text="Cancel" VerticalAlignment="Center"/>

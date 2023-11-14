@@ -14,22 +14,34 @@ public partial class QueryStringModel : ObservableObject
     public string RenderedQueryString { get => renderedQueryString; set => SetProperty(ref renderedQueryString, value); }
     public ObservableCollection<QueryStringParameter> Parameters { get => parameters; set => SetProperty(ref parameters, value); }
 
-    public QueryStringModel(RequestModel requestModel)
+    public QueryStringModel(RequestModel requestModel, IEnumerable<QueryStringParameter> initParams = default)
     {
         _parentRequest = requestModel;
-        Parameters = new ObservableCollection<QueryStringParameter>();
+        Parameters = initParams != null
+            ? new ObservableCollection<QueryStringParameter>(initParams)
+            : new ObservableCollection<QueryStringParameter>();
+        foreach (var parm in Parameters)
+        {
+            parm.PropertyChanged += (sender, e) =>
+            {
+                RenderedQueryString = RenderQueryString();
+            };
+        }
         Parameters.CollectionChanged += (sender, e) =>
         {
             RenderedQueryString = RenderQueryString();
         };
+
+        RenderedQueryString = RenderQueryString();
     }
 
     public string RenderQueryString()
     {
         var sb = new StringBuilder();
         var isFirst = true;
-
-        var locals = RequestRunner.EnvironmentToLocals(_parentRequest.SavedRequest.ParentCollection);
+        var locals = new Hash();
+        if (_parentRequest.SavedRequest is not null)
+            locals = RequestRunner.EnvironmentToLocals(_parentRequest.SavedRequest.ParentCollection);
         foreach (var item in Parameters.Where(x => x.IsEnabled && !string.IsNullOrEmpty(x.ParameterName)))
         {
             if (isFirst)
