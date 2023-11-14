@@ -179,6 +179,8 @@ public class ModelConverter
         }));
         result.QueryString.PropertyChanged += (sender, args) => { result.UnsavedChangesIndicatorVisibility = System.Windows.Visibility.Visible; };
 
+        result.RequestHeaders.Headers.CollectionChanged += (sender, args) => { result.UnsavedChangesIndicatorVisibility = System.Windows.Visibility.Visible; };
+
         return result;
     }
 

@@ -64,6 +64,7 @@ public partial class RequestModel : ObservableObject
         };
         QueryString.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
         RequestHeaders.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
+        RequestHeaders.Headers.CollectionChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
         AuthProvider.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
         RequestBody.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };
         ResponseHeaders.PropertyChanged += (sender, args) => { UnsavedChangesIndicatorVisibility = Visibility.Visible; };

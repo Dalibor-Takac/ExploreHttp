@@ -32,6 +32,7 @@
                             <ColumnDefinition Width="24"/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
+                            <ColumnDefinition Width="32"/>
                         </Grid.ColumnDefinitions>
                         <TextBox Text="Name" IsEnabled="False" FontWeight="Bold" FontSize="14" Grid.Column="1" Margin="1,2"/>
                         <TextBox Text="Value" IsEnabled="False" FontWeight="Bold" FontSize="14" Grid.Column="2" Margin="1,2"/>
@@ -45,6 +46,7 @@
                                         <ColumnDefinition Width="24"/>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
+                                        <ColumnDefinition Width="32"/>
                                     </Grid.ColumnDefinitions>
                                     <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
                                             Margin="2">
@@ -52,6 +54,9 @@
                                     </Border>
                                     <TextBox Text="{Binding Name}" Grid.Column="1" Margin="1"/>
                                     <TextBox Text="{Binding Value}" Grid.Column="2" Margin="1"/>
+                                    <Button Grid.Column="3" Margin="1" Click="DeleteVariable_Click">
+                                        <TextBlock Text="{StaticResource TrashIcon}" Style="{StaticResource Icons}"/>
+                                    </Button>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

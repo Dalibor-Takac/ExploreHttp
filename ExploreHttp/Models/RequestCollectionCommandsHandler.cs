@@ -76,6 +76,8 @@ public class RequestCollectionCommandsHandler
             collection.SyncWithOther(result);
             if (collection.Loader is null)
                 collection.UnsavedChangesIndicatorVisibility = Visibility.Visible;
+            else
+                collection.Loader.UpdateMetadata(ModelConverter.ToStorage(collection));
         }
     }
 

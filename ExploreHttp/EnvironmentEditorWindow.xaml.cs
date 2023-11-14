@@ -59,5 +59,12 @@ namespace ExploreHttp
         {
             Vm.Variables.Add(new EnvironmentVariable() { IsEnabled = true });
         }
+
+        private void DeleteVariable_Click(object sender, RoutedEventArgs e)
+        {
+            var variable = (sender as FrameworkElement).DataContext as EnvironmentVariable;
+            if (variable != null)
+                Vm.Variables.Remove(variable);
+        }
     }
 }

@@ -64,5 +64,12 @@ namespace ExploreHttp
         {
             Vm.Headers.Add(new HeaderItemModel(string.Empty, string.Empty));
         }
+
+        private void RemoveHeader_Click(object sender, RoutedEventArgs e)
+        {
+            var toRemove = (sender as FrameworkElement).DataContext as HeaderItemModel;
+            if (toRemove is not null)
+                Vm.Headers.Remove(toRemove);
+        }
     }
 }

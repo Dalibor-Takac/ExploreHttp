@@ -6,18 +6,17 @@
              xmlns:local="clr-namespace:ExploreHttp"
              xmlns:vm="clr-namespace:ExploreHttp.Models"
              mc:Ignorable="d" 
-             d:DesignHeight="450"
-             d:DesignWidth="800"
+             d:DesignHeight="200"
+             d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=vm:QueryStringModel}">
     <StackPanel Margin="4">
-        <Border Margin="0,4"
-                BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
-                BorderThickness="1">
-            <TextBlock Text="{Binding RenderedQueryString}"/>
-        </Border>
+        <StackPanel Orientation="Horizontal" Margin="0,4">
+            <TextBlock Text="As sent: "/>
+            <TextBlock Text="{Binding RenderedQueryString}" FontSize="12"/>
+        </StackPanel>
         <ItemsControl Margin="0,4"
                       ItemsSource="{Binding Parameters}"
-                      d:ItemsSource="{d:SampleData ItemCount=5}">
+                      d:ItemsSource="{d:SampleData ItemCount=3}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -25,16 +24,36 @@
                             <ColumnDefinition Width="24"/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
+                            <ColumnDefinition Width="32"/>
                         </Grid.ColumnDefinitions>
-                        <CheckBox IsChecked="{Binding IsEnabled}"/>
-                        <TextBox Text="{Binding ParameterName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
-                        <TextBox Text="{Binding ParameterValue, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"/>
+                        <CheckBox IsChecked="{Binding IsEnabled}"
+                                  VerticalAlignment="Center"/>
+                        <local:TextBoxWithPlaceholder Text="{Binding ParameterName, UpdateSourceTrigger=PropertyChanged}"
+                                                      Placeholder="Parameter name"
+                                                      Grid.Column="1"
+                                                      VerticalAlignment="Center"/>
+                        <local:TextBoxWithPlaceholder Text="{Binding ParameterValue, UpdateSourceTrigger=PropertyChanged}"
+                                                      Placeholder="Parameter value"
+                                                      Grid.Column="2"
+                                                      VerticalAlignment="Center"/>
+                        <Button Grid.Column="3"
+                                Margin="4,2"
+                                Click="DeleteParameter_Click">
+                            <TextBlock VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Text="{StaticResource TrashIcon}"
+                                       Style="{StaticResource Icons}"
+                                       FontSize="10"/>
+                        </Button>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Button HorizontalAlignment="Left" Click="AddParameter_Click">
-            <TextBlock Text="{StaticResource AddIcon}" Style="{StaticResource Icons}"/>
+        <Separator/>
+        <Button HorizontalAlignment="Left"
+                Width="24"
+                Click="AddParameter_Click">
+            <TextBlock Text="{StaticResource AddIcon}" Style="{StaticResource Icons}" FontSize="10"/>
         </Button>
     </StackPanel>
 </UserControl>
