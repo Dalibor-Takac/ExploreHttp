@@ -22,6 +22,7 @@ public partial class RequestModel : ObservableObject
     private BodyProvider responseBody;
     private ObservableCollection<LogRecord> logs;
     private SavedRequest savedRequest;
+    private string responseStatusShort;
 
     public Guid Id { get => id; set => SetProperty(ref id, value); }
     public string Name { get => name; set => SetProperty(ref name, value); }
@@ -33,6 +34,7 @@ public partial class RequestModel : ObservableObject
     public BodyProvider RequestBody { get => requestBody; set => SetProperty(ref requestBody, value); }
     public Visibility UnsavedChangesIndicatorVisibility { get => unsavedChangesIndicatorVisibility; set => SetProperty(ref unsavedChangesIndicatorVisibility, value); }
     public string ResponseStatus { get => responseStatus; set => SetProperty(ref responseStatus, value); }
+    public string ResponseStatusShort { get => responseStatusShort; set => SetProperty(ref responseStatusShort, value); }
     public TimeSpan ResponseDuration { get => responseDuration; set => SetProperty(ref responseDuration, value); }
     public long ResponseSize { get => responseSize; set => SetProperty(ref responseSize, value); }
     public HeaderCollection ResponseHeaders { get => responseHeaders; set => SetProperty(ref responseHeaders, value); }
@@ -46,7 +48,7 @@ public partial class RequestModel : ObservableObject
         Name = req.Name;
         Method = req.Method;
         Url = req.Url;
-        QueryString = new QueryStringModel();
+        QueryString = new QueryStringModel(this);
         RequestHeaders = new HeaderCollection() { IsEditable = true };
         AuthProvider = new AuthenticationProvider();
         RequestBody = new BodyProvider();

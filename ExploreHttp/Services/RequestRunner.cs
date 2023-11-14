@@ -22,13 +22,13 @@ public class RequestRunner : IDisposable
         _tokenHelper = new TokenHelper(_clientPool);
     }
 
-    private Hash EnvironmentToLocals(RequestModel requestModel)
+    public static Hash EnvironmentToLocals(RequestCollection collection)
     {
         var result = new Hash();
 
-        if (requestModel.SavedRequest.ParentCollection.SavedEnvironments.Count > requestModel.SavedRequest.ParentCollection.SelectedEnvironmentIndex)
+        if (collection.SavedEnvironments.Count > collection.SelectedEnvironmentIndex)
         {
-            var environment = requestModel.SavedRequest.ParentCollection.SavedEnvironments[requestModel.SavedRequest.ParentCollection.SelectedEnvironmentIndex];
+            var environment = collection.SavedEnvironments[collection.SelectedEnvironmentIndex];
 
             foreach (var item in environment.Variables)
             {
@@ -54,7 +54,7 @@ public class RequestRunner : IDisposable
             _ => throw new InvalidOperationException($"Unable to convert value {requestModel.Method} into HttpMethod")
         };
 
-        var locals = EnvironmentToLocals(requestModel);
+        var locals = EnvironmentToLocals(requestModel.SavedRequest.ParentCollection);
 
         var uriTemplate = Template.Parse(requestModel.Url);
         var uriBuilder = new UriBuilder(uriTemplate.Render(locals));
@@ -92,7 +92,7 @@ public class RequestRunner : IDisposable
 
         foreach (var header in renderedHeaders)
         {
-            if (!result.Headers.TryAddWithoutValidation(header.Key, header.Value))
+            if (!result.Headers.TryAddWithoutValidation(header.Key, header.Value) && result.Content is not null)
             {
                 result.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
             }
@@ -179,6 +179,7 @@ public class RequestRunner : IDisposable
     {
         
         requestModel.ResponseStatus = $"HTTP {response.Version} {(int)response.StatusCode} {response.ReasonPhrase}";
+        requestModel.ResponseStatusShort = $"[{response.StatusCode}]";
         var responseBody = await response.Content.ReadAsStringAsync();
         requestModel.ResponseBody.Source = responseBody;
         requestModel.ResponseBody.Type = BodyType.Text;
@@ -236,12 +237,12 @@ public class RequestRunner : IDisposable
                 Timestamp = DateTimeOffset.UtcNow
             });
             requestModel.ResponseStatus = "Error fetching response";
+            requestModel.ResponseStatusShort = "[Error]";
         }
     }
 
     public void Dispose()
     {
-        if (_clientPool is not null)
-            _clientPool.Dispose();
+        _clientPool?.Dispose();
     }
 }

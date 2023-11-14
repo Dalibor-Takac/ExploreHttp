@@ -9,10 +9,11 @@ public class Request
     public string Name { get; set; }
     public RequestMethod Method { get; set; }
     public string Url { get; set; }
-    public List<HeaderItem> RequestHeaders { get; set; }
+    public List<KeyValuePairWithEnable> QueryString { get; set; }
+    public List<KeyValuePairWithEnable> RequestHeaders { get; set; }
     public ContentProvider RequestBody { get; set; }
     public string ResponseStatus { get; set; }
-    public List<HeaderItem> ResponseHeaders { get; set; }
+    public List<KeyValuePairWithEnable> ResponseHeaders { get; set; }
     public ContentProvider ResponseBody { get; set; }
     public TimeSpan ResponseDuration { get; set; }
     public long ResponseSize { get; set; }
@@ -23,11 +24,11 @@ public class Request
     public Oauth2Auth Oauth2 { get; set; }
 }
 
-public class HeaderItem
+public class KeyValuePairWithEnable
 {
     public bool IsEnabled { get; set; }
-    public string HeaderName { get; set; }
-    public string HeaderValue { get; set; }
+    public string Key { get; set; }
+    public string Value { get; set; }
 }
 
 public class ContentProvider

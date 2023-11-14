@@ -113,10 +113,12 @@ public partial class SavedEnvironment : ObservableObject
 
     public SavedEnvironment Clone()
     {
-        var clone = new SavedEnvironment();
-        clone.Id = Id;
-        clone.Name = Name;
-        clone.Variables = new ObservableCollection<EnvironmentVariable>(Variables);
+        var clone = new SavedEnvironment
+        {
+            Id = Id,
+            Name = Name,
+            Variables = new ObservableCollection<EnvironmentVariable>(Variables)
+        };
         return clone;
     }
 }

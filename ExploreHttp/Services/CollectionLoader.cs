@@ -37,10 +37,7 @@ public class CollectionLoader
     {
         using var localFile = NewOrOpenForUpdate(_fileName);
 
-        var archiveEntry = localFile.GetEntry(COLLECTION_METADATA_FILE);
-        if (archiveEntry is null)
-            throw new InvalidOperationException("No collection metadata found in request colection");
-
+        var archiveEntry = localFile.GetEntry(COLLECTION_METADATA_FILE) ?? throw new InvalidOperationException("No collection metadata found in request colection");
         using var stream = archiveEntry.Open();
         using var reader = new StreamReader(stream);
         using var jsonReader = new JsonTextReader(reader);
@@ -95,10 +92,7 @@ public class CollectionLoader
     public void RemoveRequest(Guid requestId)
     {
         var metadata = ReadMetadata();
-        var toRemove = metadata.Requests.FirstOrDefault(x => x.Id == requestId);
-        if (toRemove is null)
-            throw new InvalidOperationException("Request with given id does not exist in metadata, nothing to do");
-
+        var toRemove = metadata.Requests.FirstOrDefault(x => x.Id == requestId) ?? throw new InvalidOperationException("Request with given id does not exist in metadata, nothing to do");
         metadata.Requests.Remove(toRemove);
         UpdateMetadata(metadata);
 

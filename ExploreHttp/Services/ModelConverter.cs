@@ -113,8 +113,8 @@ public class ModelConverter
                 Headers = new ObservableCollection<HeaderItemModel>(request.RequestHeaders.Select(x => new HeaderItemModel()
                 {
                     IsEnabled = x.IsEnabled,
-                    HeaderName = x.HeaderName,
-                    HeaderValue = x.HeaderValue
+                    HeaderName = x.Key,
+                    HeaderValue = x.Value
                 })),
                 IsEditable = true
             },
@@ -131,8 +131,8 @@ public class ModelConverter
                 Headers = new ObservableCollection<HeaderItemModel>(request.ResponseHeaders.Select(x => new HeaderItemModel()
                 {
                     IsEnabled = x.IsEnabled,
-                    HeaderName = x.HeaderName,
-                    HeaderValue = x.HeaderValue
+                    HeaderName = x.Key,
+                    HeaderValue = x.Value
                 })),
                 IsEditable = false,
             },
@@ -171,6 +171,16 @@ public class ModelConverter
             }
         };
 
+        result.QueryString = new QueryStringModel(result)
+        {
+            Parameters = new ObservableCollection<QueryStringParameter>(request.QueryString?.Select(x => new QueryStringParameter()
+            {
+                IsEnabled = x.IsEnabled,
+                ParameterName = x.Key,
+                ParameterValue = x.Value
+            }) ?? Enumerable.Empty<QueryStringParameter>())
+        };
+
         return result;
     }
 
@@ -182,10 +192,16 @@ public class ModelConverter
             Name = request.Name,
             Method = request.Method,
             Url = request.Url,
-            RequestHeaders = request.RequestHeaders.Headers.Select(x => new HeaderItem()
+            QueryString = request.QueryString.Parameters.Select(x => new KeyValuePairWithEnable()
             {
-                HeaderName = x.HeaderName,
-                HeaderValue = x.HeaderValue,
+                IsEnabled = x.IsEnabled,
+                Key = x.ParameterName,
+                Value = x.ParameterValue
+            }).ToList(),
+            RequestHeaders = request.RequestHeaders.Headers.Select(x => new KeyValuePairWithEnable()
+            {
+                Key = x.HeaderName,
+                Value = x.HeaderValue,
                 IsEnabled = x.IsEnabled
             }).ToList(),
             RequestBody = new ContentProvider()
@@ -196,10 +212,10 @@ public class ModelConverter
             ResponseStatus = request.ResponseStatus,
             ResponseDuration = request.ResponseDuration,
             ResponseSize = request.ResponseSize,
-            ResponseHeaders = request.ResponseHeaders.Headers.Select(x => new HeaderItem()
+            ResponseHeaders = request.ResponseHeaders.Headers.Select(x => new KeyValuePairWithEnable()
             {
-                HeaderName = x.HeaderName,
-                HeaderValue = x.HeaderValue,
+                Key = x.HeaderName,
+                Value = x.HeaderValue,
                 IsEnabled = x.IsEnabled
             }).ToList(),
             ResponseBody = new ContentProvider()

@@ -96,6 +96,10 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Margin="4,0,4,0"/>
+                                    <TextBlock Text="{Binding ResponseStatusShort}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Margin="4,0,4,0"/>
                                     <Button HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Command="{StaticResource {x:Static local:CommandNames.CloseRequestCommandName}}"
