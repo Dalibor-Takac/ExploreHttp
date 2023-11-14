@@ -11,6 +11,13 @@ public class OpenApiImporter
     private readonly string _specLocation;
     private readonly AppSettings _appSettings;
 
+    private static readonly IEnumerable<OperationType> NoBodyOperations = new[]
+    {
+        OperationType.Get,
+        OperationType.Head,
+        OperationType.Options
+    };
+
     public OpenApiImporter(string specLocation, AppSettings appSettings)
     {
         _specLocation = specLocation;
@@ -35,20 +42,35 @@ public class OpenApiImporter
                 if (firstBodyContent is not null)
                 {
                     var schema = firstBodyContent.Value.Value.Schema.GetEffective(document);
-                    requestModel.RequestHeaders.Headers.Add(new HeaderItemModel("Content-Type", firstBodyContent.Value.Key));
-                    var bodyBuilder = new StringBuilder();
-                    bodyBuilder.AppendLine("{");
-                    bool isFirst = true;
-                    foreach (var prop in schema.Properties)
+                    if (NoBodyOperations.Contains(operation.Key))
                     {
-                        if (isFirst)
-                            isFirst = false;
-                        else
-                            bodyBuilder.AppendLine(",");
-                        bodyBuilder.AppendFormat("\t\"{0}\": \"{1}\"", prop.Key, prop.Value.Type);
+                        foreach (var prop in schema.Properties)
+                        {
+                            requestModel.QueryString.Parameters.Add(new QueryStringParameter()
+                            {
+                                IsEnabled = true,
+                                ParameterName = prop.Key,
+                                ParameterValue = prop.Value.Type
+                            });
+                        }
                     }
-                    bodyBuilder.AppendLine("\n}");
-                    requestModel.RequestBody.Source = bodyBuilder.ToString();
+                    else
+                    {
+                        requestModel.RequestHeaders.Headers.Add(new HeaderItemModel("Content-Type", firstBodyContent.Value.Key));
+                        var bodyBuilder = new StringBuilder();
+                        bodyBuilder.AppendLine("{");
+                        bool isFirst = true;
+                        foreach (var prop in schema.Properties)
+                        {
+                            if (isFirst)
+                                isFirst = false;
+                            else
+                                bodyBuilder.AppendLine(",");
+                            bodyBuilder.AppendFormat("\t\"{0}\": \"{1}\"", prop.Key, prop.Value.Type);
+                        }
+                        bodyBuilder.AppendLine("\n}");
+                        requestModel.RequestBody.Source = bodyBuilder.ToString();
+                    }
                 }
                 requestModel.RequestHeaders.Headers.Add(new HeaderItemModel("User-Agent", _appSettings.UserAgentString));
                 yield return (savedRequest, requestModel);
