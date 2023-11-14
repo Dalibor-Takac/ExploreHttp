@@ -8,6 +8,31 @@ public class ObjectPool<T> : IDisposable
         Occupied
     }
 
+    public class PooledObject : IDisposable
+    {
+        private readonly ObjectPool<T> _originatingPool;
+        public T Object { get; }
+
+        public PooledObject(ObjectPool<T> originatingPool, T obj)
+        {
+            Object = obj;
+            _originatingPool = originatingPool;
+        }
+
+        public void Dispose()
+        {
+            if (_originatingPool is not null)
+            {
+                _originatingPool.ReturnItem(Object);
+            }
+            else
+            {
+                if (Object is IDisposable d)
+                    d.Dispose();
+            }
+        }
+    }
+
     private readonly Dictionary<T, PoolStatus> _poolWithStatuses;
     private readonly int _capacity;
     private readonly Func<T> _factory;
@@ -24,7 +49,7 @@ public class ObjectPool<T> : IDisposable
         _lockObj = new object();
     }
 
-    public T LeaseItem()
+    public PooledObject LeaseItem()
     {
         lock(_lockObj)
         {
@@ -32,7 +57,7 @@ public class ObjectPool<T> : IDisposable
             if (freeItem.Key is not null)
             {
                 _poolWithStatuses[freeItem.Key] = PoolStatus.Occupied;
-                return freeItem.Key;
+                return new PooledObject(this, freeItem.Key);
             }
 
             var newItem = _factory();
@@ -41,7 +66,7 @@ public class ObjectPool<T> : IDisposable
                 _poolWithStatuses.Add(newItem, PoolStatus.Occupied);
             }
 
-            return newItem;
+            return new PooledObject(null, newItem);
         }
     }
 

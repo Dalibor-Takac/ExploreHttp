@@ -6,19 +6,19 @@ using System.Net.Http;
 namespace ExploreHttp.Services;
 public class TokenHelper
 {
-    private readonly string _authUrl;
-
     private class TokenEntry
     {
         public string Token { get; set; }
         public DateTimeOffset ExpiresAt { get; set; }
     }
 
-    private static readonly ConcurrentDictionary<string, TokenEntry> Cache = new();
+    private readonly ObjectPool<HttpClient> _clientPool;
+    private readonly ConcurrentDictionary<string, TokenEntry> _cache;
 
-    public TokenHelper(string authUrl)
+    public TokenHelper(ObjectPool<HttpClient> clientPool)
     {
-        _authUrl = authUrl;
+        _clientPool = clientPool;
+        _cache = new();
     }
 
     private class TokenResponse
@@ -29,45 +29,45 @@ public class TokenHelper
         public int ExpiresIn { get; set; }
     }
 
-    public async Task<string> GetToken(Oauth2GrantType grantType, string clientId, string clientSecret, string username, string password, string scope, string audience)
+    public async Task<string> GetToken(Oauth2AuthenticationModel model)
     {
-        var cacheKey = GetCacheKey(_authUrl, clientId, clientSecret, username, password, scope, audience, grantType);
-        if (Cache.TryGetValue(cacheKey, out var cached))
+        var cacheKey = GetCacheKey(model);
+        if (_cache.TryGetValue(cacheKey, out var cached))
         {
             if (DateTimeOffset.UtcNow < cached.ExpiresAt)
                 return cached.Token;
         }
 
-        using var tokenClient = new HttpClient();
+        using var tokenClient = _clientPool.LeaseItem();
 
-        var response = await tokenClient.PostAsync(_authUrl, new FormUrlEncodedContent(GetFormData(grantType, clientId, clientSecret, username, password, scope, audience)));
+        var response = await tokenClient.Object.PostAsync(model.AuthUrl, new FormUrlEncodedContent(GetFormData(model)));
         response.EnsureSuccessStatusCode();
 
         var buffer = await response.Content.ReadAsStringAsync();
         var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(buffer);
 
-        Cache[cacheKey] = new TokenEntry() { Token = tokenResponse.AccessToken, ExpiresAt = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(tokenResponse.ExpiresIn) };
+        _cache[cacheKey] = new TokenEntry() { Token = tokenResponse.AccessToken, ExpiresAt = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(tokenResponse.ExpiresIn) };
 
         return tokenResponse.AccessToken;
     }
 
-    private string GetCacheKey(string authUrl, string clientId, string clientSecret, string username, string password, string scope, string audience, Oauth2GrantType grantType)
+    private string GetCacheKey(Oauth2AuthenticationModel model)
     {
-        return $"{authUrl}:{clientId}:{clientSecret}:{username}:{password}:{scope}:{audience}:{grantType}";
+        return $"{model.AuthUrl}:{model.ClientId}:{model.ClientSecret}:{model.Username}:{model.Password}:{model.Scope}:{model.Audience}:{model.GrantType}";
     }
 
-    private IEnumerable<KeyValuePair<string, string>> GetFormData(Oauth2GrantType grantType, string clientId, string clientSecret, string username, string password, string scope, string audience)
+    private IEnumerable<KeyValuePair<string, string>> GetFormData(Oauth2AuthenticationModel model)
     {
-        yield return new KeyValuePair<string, string>("grant_Type", ConvertGrantType(grantType));
-        yield return new KeyValuePair<string, string>("client_id", clientId);
-        yield return new KeyValuePair<string, string>("client_secret", clientSecret);
-        if (grantType == Oauth2GrantType.Password)
+        yield return new KeyValuePair<string, string>("grant_Type", ConvertGrantType(model.GrantType));
+        yield return new KeyValuePair<string, string>("client_id", model.ClientId);
+        yield return new KeyValuePair<string, string>("client_secret", model.ClientSecret);
+        if (model.GrantType == Oauth2GrantType.Password)
         {
-            yield return new KeyValuePair<string, string>("username", username);
-            yield return new KeyValuePair<string, string>("password", password);
+            yield return new KeyValuePair<string, string>("username", model.Username);
+            yield return new KeyValuePair<string, string>("password", model.Password);
         }
-        yield return new KeyValuePair<string, string>("scope", scope);
-        yield return new KeyValuePair<string, string>("audience", audience);
+        yield return new KeyValuePair<string, string>("scope", model.Scope);
+        yield return new KeyValuePair<string, string>("audience", model.Audience);
     }
 
     private string ConvertGrantType(Oauth2GrantType grantType)

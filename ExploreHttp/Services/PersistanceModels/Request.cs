@@ -17,6 +17,10 @@ public class Request
     public TimeSpan ResponseDuration { get; set; }
     public long ResponseSize { get; set; }
     public List<LogEvent> Logs { get; set; }
+    public AuthenticationKind AuthKind { get; set; }
+    public BasicAuth Basic { get; set; }
+    public BearerAuth Bearer { get; set; }
+    public Oauth2Auth Oauth2 { get; set; }
 }
 
 public class HeaderItem

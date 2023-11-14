@@ -3,12 +3,14 @@ using ExploreHttp.Models;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace ExploreHttp.Services;
 public class RequestRunner : IDisposable
 {
     private readonly ObjectPool<HttpClient> _clientPool;
     private readonly AppSettings _settings;
+    private readonly TokenHelper _tokenHelper;
 
     public RequestRunner(AppSettings settings)
     {
@@ -17,6 +19,7 @@ public class RequestRunner : IDisposable
             settings.RequestPoolSize,
             () => new HttpClient(new LoggingHttpMessageHandler(_settings) { InnerHandler = new HttpClientHandler() }),
             client => client.CancelPendingRequests());
+        _tokenHelper = new TokenHelper(_clientPool);
     }
 
     private Hash EnvironmentToLocals(RequestModel requestModel)
@@ -36,7 +39,7 @@ public class RequestRunner : IDisposable
         return result;
     }
 
-    private HttpRequestMessage ConstructRequest(RequestModel requestModel)
+    private async Task<HttpRequestMessage> ConstructRequest(RequestModel requestModel)
     {
         var result = new HttpRequestMessage();
         result.Method = requestModel.Method switch
@@ -55,6 +58,11 @@ public class RequestRunner : IDisposable
 
         var uriTemplate = Template.Parse(requestModel.Url);
         result.RequestUri = new Uri(uriTemplate.Render(locals), UriKind.Absolute);
+
+        if (requestModel.AuthProvider != null && requestModel.AuthProvider.Kind != AuthenticationKind.None)
+        {
+            await AddAuthentication(requestModel, result);
+        }
         
         if (requestModel.RequestBody is not null && !string.IsNullOrEmpty(requestModel.RequestBody.Source))
         {
@@ -92,6 +100,56 @@ public class RequestRunner : IDisposable
         return result;
     }
 
+    private async Task AddAuthentication(RequestModel requestModel, HttpRequestMessage request)
+    {
+        requestModel.Logs.Add(new LogRecord()
+        {
+            Level = LogLevel.Info,
+            Message = "Adding authorization",
+            Timestamp = DateTimeOffset.UtcNow,
+            Properties = new ObservableCollection<LogProperty>()
+            {
+                new LogProperty() { PropertyName = "Kind", PropertyValue = requestModel.AuthProvider.Kind.ToString() }
+            }
+        });
+        switch (requestModel.AuthProvider.Kind)
+        {
+            case AuthenticationKind.Inherit:
+                //TODO add auth on collection level
+                break;
+            case AuthenticationKind.Basic:
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", GetBasicAuthParameter(requestModel.AuthProvider.Basic));
+                break;
+            case AuthenticationKind.Bearer:
+                request.Headers.Authorization = new AuthenticationHeaderValue(requestModel.AuthProvider.Bearer.Scheme, requestModel.AuthProvider.Bearer.Parameter);
+                break;
+            case AuthenticationKind.Oauth2:
+                var token = await _tokenHelper.GetToken(requestModel.AuthProvider.Oauth2);
+                if (_settings.AreLogsDetailed)
+                {
+                    requestModel.Logs.Add(new LogRecord()
+                    {
+                        Level = LogLevel.Debug,
+                        Message = "Oauth2 token added",
+                        Timestamp = DateTimeOffset.UtcNow,
+                        Properties = new ObservableCollection<LogProperty>()
+                        {
+                            new LogProperty() { PropertyName = "token", PropertyValue = token }
+                        }
+                    });
+                }
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                break;
+        }
+    }
+
+    private string GetBasicAuthParameter(BasicAuthenticationModel model)
+    {
+        var concatenatedAndEscaped = $"{Uri.EscapeDataString(model.Username)}:{Uri.EscapeDataString(model.Password)}";
+        var base64Encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(concatenatedAndEscaped));
+        return base64Encoded;
+    }
+
     private async Task ParseResponseIntoModel(HttpResponseMessage response, RequestModel requestModel)
     {
         
@@ -116,17 +174,15 @@ public class RequestRunner : IDisposable
     {
         try
         {
-            var pooledClient = _clientPool.LeaseItem();
+            using var pooledClient = _clientPool.LeaseItem();
 
             requestModel.Logs.Clear();
 
-            var requestMessage = ConstructRequest(requestModel);
+            var requestMessage = await ConstructRequest(requestModel);
 
-            var response = await pooledClient.SendAsync(requestMessage);
+            var response = await pooledClient.Object.SendAsync(requestMessage);
 
             await ParseResponseIntoModel(response, requestModel);
-
-            _clientPool.ReturnItem(pooledClient);
         }
         catch (Exception ex)
         {

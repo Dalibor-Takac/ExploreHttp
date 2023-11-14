@@ -120,7 +120,24 @@ public class ModelConverter
                     PropertyName = p.Key,
                     PropertyValue = p.Value
                 }))
-            }))
+            })),
+            AuthProvider = new AuthenticationProvider()
+            {
+                Kind = request.AuthKind,
+                Basic = new BasicAuthenticationModel() { Username = request.Basic.Username, Password = request.Basic.Password },
+                Bearer = new BearerAuthenticationModel() { Scheme = request.Bearer.Scheme, Parameter = request.Bearer.Parameter },
+                Oauth2 = new Oauth2AuthenticationModel()
+                {
+                    AuthUrl = request.Oauth2.AuthUrl,
+                    GrantType = request.Oauth2.GrantType,
+                    ClientId = request.Oauth2.ClientId,
+                    ClientSecret = request.Oauth2.ClientSecret,
+                    Username = request.Oauth2.Username,
+                    Password = request.Oauth2.Password,
+                    Scope = request.Oauth2.Scope,
+                    Audience = request.Oauth2.Audience
+                }
+            }
         };
 
         return result;
@@ -165,7 +182,21 @@ public class ModelConverter
                 Timestamp = x.Timestamp,
                 Message = x.Message,
                 Properties = x.Properties.ToDictionary(p => p.PropertyName, p => p.PropertyValue)
-            }).ToList()
+            }).ToList(),
+            AuthKind = request.AuthProvider.Kind,
+            Basic = new BasicAuth() { Username = request.AuthProvider.Basic.Username, Password = request.AuthProvider.Basic.Password },
+            Bearer = new BearerAuth() { Scheme = request.AuthProvider.Bearer.Scheme, Parameter = request.AuthProvider.Bearer.Parameter },
+            Oauth2 = new Oauth2Auth()
+            {
+                AuthUrl = request.AuthProvider.Oauth2.AuthUrl,
+                GrantType = request.AuthProvider.Oauth2.GrantType,
+                ClientId = request.AuthProvider.Oauth2.ClientId,
+                ClientSecret = request.AuthProvider.Oauth2.ClientSecret,
+                Username = request.AuthProvider.Oauth2.Username,
+                Password = request.AuthProvider.Oauth2.Password,
+                Scope = request.AuthProvider.Oauth2.Scope,
+                Audience = request.AuthProvider.Oauth2.Audience
+            }
         };
 
         return result;

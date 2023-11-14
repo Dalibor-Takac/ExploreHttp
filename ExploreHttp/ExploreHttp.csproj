@@ -124,6 +124,7 @@
     <Compile Include="Services\ModelConverter.cs" />
     <Compile Include="Services\ObjectPool.cs" />
     <Compile Include="Services\OpenApiImporter.cs" />
+    <Compile Include="Services\PersistanceModels\Auth.cs" />
     <Compile Include="Services\PersistanceModels\EndpointCollection.cs" />
     <Compile Include="Services\PersistanceModels\Request.cs" />
     <Compile Include="Services\RequestRunner.cs" />
