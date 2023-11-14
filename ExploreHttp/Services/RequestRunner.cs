@@ -57,7 +57,10 @@ public class RequestRunner : IDisposable
         var locals = EnvironmentToLocals(requestModel);
 
         var uriTemplate = Template.Parse(requestModel.Url);
-        result.RequestUri = new Uri(uriTemplate.Render(locals), UriKind.Absolute);
+        var uriBuilder = new UriBuilder(uriTemplate.Render(locals));
+        if (requestModel.QueryString.Parameters.Count > 0)
+            uriBuilder.Query = RenderQueryString(requestModel.QueryString, locals);
+        result.RequestUri = uriBuilder.Uri;
 
         if (requestModel.AuthProvider != null && requestModel.AuthProvider.Kind != AuthenticationKind.None)
         {
@@ -98,6 +101,23 @@ public class RequestRunner : IDisposable
         result.Properties.Add(nameof(RequestModel), requestModel);
 
         return result;
+    }
+
+    private string RenderQueryString(QueryStringModel queryString, Hash locals)
+    {
+        var sb = new StringBuilder();
+        var isFirst = true;
+        foreach (var item in queryString.Parameters)
+        {
+            if (isFirst)
+                isFirst = false;
+            else
+                sb.Append("&");
+            var nameTemplate = Template.Parse(item.ParameterName);
+            var valueTemplate = Template.Parse(item.ParameterValue);
+            sb.Append($"{Uri.EscapeDataString(nameTemplate.Render(locals))}={Uri.EscapeDataString(valueTemplate.Render(locals))}");
+        }
+        return sb.ToString();
     }
 
     private Task AddAuthentication(RequestModel requestModel, HttpRequestMessage request)

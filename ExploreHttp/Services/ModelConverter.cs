@@ -29,18 +29,18 @@ public class ModelConverter
             AuthProvider = new AuthenticationProvider()
             {
                 Kind = collection.AuthKind,
-                Basic = new BasicAuthenticationModel() { Username = collection.Basic.Username, Password = collection.Basic.Password },
-                Bearer = new BearerAuthenticationModel() { Scheme = collection.Bearer.Scheme, Parameter = collection.Bearer.Parameter },
+                Basic = new BasicAuthenticationModel() { Username = collection.Basic?.Username, Password = collection.Basic?.Password },
+                Bearer = new BearerAuthenticationModel() { Scheme = collection.Bearer?.Scheme, Parameter = collection.Bearer?.Parameter },
                 Oauth2 = new Oauth2AuthenticationModel()
                 {
-                    AuthUrl = collection.Oauth2.AuthUrl,
-                    GrantType = collection.Oauth2.GrantType,
-                    ClientId = collection.Oauth2.ClientId,
-                    ClientSecret = collection.Oauth2.ClientSecret,
-                    Username = collection.Oauth2.Username,
-                    Password = collection.Oauth2.Password,
-                    Scope = collection.Oauth2.Scope,
-                    Audience = collection.Oauth2.Audience
+                    AuthUrl = collection.Oauth2?.AuthUrl,
+                    GrantType = collection.Oauth2?.GrantType ?? Oauth2GrantType.ClientCredentials,
+                    ClientId = collection.Oauth2?.ClientId,
+                    ClientSecret = collection.Oauth2?.ClientSecret,
+                    Username = collection.Oauth2?.Username,
+                    Password = collection.Oauth2?.Password,
+                    Scope = collection.Oauth2?.Scope,
+                    Audience = collection.Oauth2?.Audience
                 }
             }
         };
@@ -155,18 +155,18 @@ public class ModelConverter
             AuthProvider = new AuthenticationProvider()
             {
                 Kind = request.AuthKind,
-                Basic = new BasicAuthenticationModel() { Username = request.Basic.Username, Password = request.Basic.Password },
-                Bearer = new BearerAuthenticationModel() { Scheme = request.Bearer.Scheme, Parameter = request.Bearer.Parameter },
+                Basic = new BasicAuthenticationModel() { Username = request.Basic?.Username, Password = request.Basic?.Password },
+                Bearer = new BearerAuthenticationModel() { Scheme = request.Bearer?.Scheme, Parameter = request.Bearer?.Parameter },
                 Oauth2 = new Oauth2AuthenticationModel()
                 {
-                    AuthUrl = request.Oauth2.AuthUrl,
-                    GrantType = request.Oauth2.GrantType,
-                    ClientId = request.Oauth2.ClientId,
-                    ClientSecret = request.Oauth2.ClientSecret,
-                    Username = request.Oauth2.Username,
-                    Password = request.Oauth2.Password,
-                    Scope = request.Oauth2.Scope,
-                    Audience = request.Oauth2.Audience
+                    AuthUrl = request.Oauth2?.AuthUrl,
+                    GrantType = request.Oauth2?.GrantType ?? Oauth2GrantType.ClientCredentials,
+                    ClientId = request.Oauth2?.ClientId,
+                    ClientSecret = request.Oauth2?.ClientSecret,
+                    Username = request.Oauth2?.Username,
+                    Password = request.Oauth2?.Password,
+                    Scope = request.Oauth2?.Scope,
+                    Audience = request.Oauth2?.Audience
                 }
             }
         };
