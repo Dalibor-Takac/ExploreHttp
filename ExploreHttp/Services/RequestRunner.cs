@@ -30,7 +30,7 @@ public class RequestRunner : IDisposable
         {
             var environment = collection.SavedEnvironments[collection.SelectedEnvironmentIndex];
 
-            foreach (var item in environment.Variables)
+            foreach (var item in environment.Variables.Where(v => v.IsEnabled))
             {
                 result.Add(item.Name, item.Value);
             }

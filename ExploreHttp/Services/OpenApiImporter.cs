@@ -106,7 +106,7 @@ public class OpenApiImporter
                 {
                     Name = host.Description ?? $"env#{envIndex}"
                 };
-                env.Variables.Add(new EnvironmentVariable() { IsEnabled = true, Name = "baseAddress", Value = host.Url });
+                env.Variables.Add(new EnvironmentVariable() { IsEnabled = true, Name = "baseAddress", Value = host.Url.TrimEnd('/') });
                 foreach (var var in host.Variables)
                 {
                     env.Variables.Add(new EnvironmentVariable() { IsEnabled = true, Name = var.Key, Value = var.Value.Default });
@@ -121,7 +121,17 @@ public class OpenApiImporter
             {
                 Name = "Default"
             };
-            env.Variables.Add(new EnvironmentVariable() { IsEnabled = false, Name = "baseAddress", Value = string.Empty });
+            var heuristicBaseAddress = string.Empty;
+            if (_specLocation.StartsWith("http://") || _specLocation.StartsWith("https://"))
+            {
+                var uriBuilder = new UriBuilder(_specLocation);
+                uriBuilder.Path = string.Empty;
+                uriBuilder.Query = string.Empty;
+                uriBuilder.UserName = string.Empty;
+                uriBuilder.Password = string.Empty;
+                heuristicBaseAddress = uriBuilder.Uri.AbsoluteUri.TrimEnd('/');
+            }
+            env.Variables.Add(new EnvironmentVariable() { IsEnabled = true, Name = "baseAddress", Value = heuristicBaseAddress });
             result.SavedEnvironments.Add(env);
         }
         result.SelectedEnvironmentIndex = 0;
