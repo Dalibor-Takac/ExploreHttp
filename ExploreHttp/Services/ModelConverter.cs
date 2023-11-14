@@ -25,7 +25,24 @@ public class ModelConverter
                     IsEnabled = v.IsEnabled
                 }))
             })),
-            SelectedEnvironmentIndex = collection.SelectedEnvironmentIndex
+            SelectedEnvironmentIndex = collection.SelectedEnvironmentIndex,
+            AuthProvider = new AuthenticationProvider()
+            {
+                Kind = collection.AuthKind,
+                Basic = new BasicAuthenticationModel() { Username = collection.Basic.Username, Password = collection.Basic.Password },
+                Bearer = new BearerAuthenticationModel() { Scheme = collection.Bearer.Scheme, Parameter = collection.Bearer.Parameter },
+                Oauth2 = new Oauth2AuthenticationModel()
+                {
+                    AuthUrl = collection.Oauth2.AuthUrl,
+                    GrantType = collection.Oauth2.GrantType,
+                    ClientId = collection.Oauth2.ClientId,
+                    ClientSecret = collection.Oauth2.ClientSecret,
+                    Username = collection.Oauth2.Username,
+                    Password = collection.Oauth2.Password,
+                    Scope = collection.Oauth2.Scope,
+                    Audience = collection.Oauth2.Audience
+                }
+            }
         };
 
         result.SavedRequests = new ObservableCollection<SavedRequest>(collection.Requests.Select(x => new SavedRequest(result)
@@ -62,7 +79,21 @@ public class ModelConverter
                 Variables = x.Variables.Select(v => new Variable() { IsEnabled = v.IsEnabled, Name = v.Name, Value = v.Value }).ToList()
             }).ToList(),
             SelectedEnvironmentIndex = collection.SelectedEnvironmentIndex,
-            IsExpanded = collection.IsExpanded
+            IsExpanded = collection.IsExpanded,
+            AuthKind = collection.AuthProvider.Kind,
+            Basic = new BasicAuth() { Username = collection.AuthProvider.Basic.Username, Password = collection.AuthProvider.Basic.Password },
+            Bearer = new BearerAuth() { Scheme = collection.AuthProvider.Bearer.Scheme, Parameter = collection.AuthProvider.Bearer.Parameter },
+            Oauth2 = new Oauth2Auth()
+            {
+                AuthUrl = collection.AuthProvider.Oauth2.AuthUrl,
+                GrantType = collection.AuthProvider.Oauth2.GrantType,
+                ClientId = collection.AuthProvider.Oauth2.ClientId,
+                ClientSecret = collection.AuthProvider.Oauth2.ClientSecret,
+                Username = collection.AuthProvider.Oauth2.Username,
+                Password = collection.AuthProvider.Oauth2.Password,
+                Scope = collection.AuthProvider.Oauth2.Scope,
+                Audience = collection.AuthProvider.Oauth2.Audience
+            }
         };
 
         return result;

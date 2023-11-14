@@ -100,34 +100,39 @@ public class RequestRunner : IDisposable
         return result;
     }
 
-    private async Task AddAuthentication(RequestModel requestModel, HttpRequestMessage request)
+    private Task AddAuthentication(RequestModel requestModel, HttpRequestMessage request)
     {
-        requestModel.Logs.Add(new LogRecord()
+        if (requestModel.AuthProvider.Kind == AuthenticationKind.Inherit)
+            return AddAuthenticationCore(requestModel.SavedRequest.ParentCollection.AuthProvider, requestModel.Logs, request);
+        else
+            return AddAuthenticationCore(requestModel.AuthProvider, requestModel.Logs, request);
+    }
+
+    private async Task AddAuthenticationCore(AuthenticationProvider provider, ObservableCollection<LogRecord> logs, HttpRequestMessage request)
+    {
+        logs.Add(new LogRecord()
         {
             Level = LogLevel.Info,
             Message = "Adding authorization",
             Timestamp = DateTimeOffset.UtcNow,
             Properties = new ObservableCollection<LogProperty>()
             {
-                new LogProperty() { PropertyName = "Kind", PropertyValue = requestModel.AuthProvider.Kind.ToString() }
+                new LogProperty() { PropertyName = "Kind", PropertyValue = provider.Kind.ToString() }
             }
         });
-        switch (requestModel.AuthProvider.Kind)
+        switch (provider.Kind)
         {
-            case AuthenticationKind.Inherit:
-                //TODO add auth on collection level
-                break;
             case AuthenticationKind.Basic:
-                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", GetBasicAuthParameter(requestModel.AuthProvider.Basic));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", GetBasicAuthParameter(provider.Basic));
                 break;
             case AuthenticationKind.Bearer:
-                request.Headers.Authorization = new AuthenticationHeaderValue(requestModel.AuthProvider.Bearer.Scheme, requestModel.AuthProvider.Bearer.Parameter);
+                request.Headers.Authorization = new AuthenticationHeaderValue(provider.Bearer.Scheme, provider.Bearer.Parameter);
                 break;
             case AuthenticationKind.Oauth2:
-                var token = await _tokenHelper.GetToken(requestModel.AuthProvider.Oauth2);
+                var token = await _tokenHelper.GetToken(provider.Oauth2);
                 if (_settings.AreLogsDetailed)
                 {
-                    requestModel.Logs.Add(new LogRecord()
+                    logs.Add(new LogRecord()
                     {
                         Level = LogLevel.Debug,
                         Message = "Oauth2 token added",

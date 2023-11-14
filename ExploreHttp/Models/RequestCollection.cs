@@ -15,6 +15,7 @@ public partial class RequestCollection : ObservableObject
     private ObservableCollection<SavedEnvironment> savedEnvironments;
     private int selectedEnvironmentIndex;
     private bool isExpanded;
+    private AuthenticationProvider authProvider;
 
     public string CollectionName { get => collectionName; set => SetProperty(ref collectionName, value); }
     public CollectionKind Kind { get => kind; set => SetProperty(ref kind, value); }
@@ -24,12 +25,14 @@ public partial class RequestCollection : ObservableObject
     public ObservableCollection<SavedEnvironment> SavedEnvironments { get => savedEnvironments; set => SetProperty(ref savedEnvironments, value); }
     public int SelectedEnvironmentIndex { get => selectedEnvironmentIndex; set => SetProperty(ref selectedEnvironmentIndex, value); }
     public bool IsExpanded { get => isExpanded; set => SetProperty(ref isExpanded, value); }
+    public AuthenticationProvider AuthProvider { get => authProvider; set => SetProperty(ref authProvider, value); }
 
     public RequestCollection()
     {
         SavedRequests = new ObservableCollection<SavedRequest>();
         SavedEnvironments = new ObservableCollection<SavedEnvironment>();
         IsExpanded = true;
+        AuthProvider = new AuthenticationProvider();
     }
 
     public CollectionLoader Loader { get; set; }
