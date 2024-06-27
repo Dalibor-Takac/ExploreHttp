@@ -101,6 +101,7 @@
     <Compile Include="Models\RequestCollectionCommandsHandler.cs" />
     <Compile Include="Models\RequestModelCommandsHandler.cs" />
     <Compile Include="Models\SelectableSavedRequest.cs" />
+    <Compile Include="Models\TreeNodeModel.cs" />
     <Compile Include="Oauth2AuthControl.xaml.cs">
       <DependentUpon>Oauth2AuthControl.xaml</DependentUpon>
     </Compile>
@@ -112,6 +113,9 @@
     </Compile>
     <Compile Include="RequestControl.xaml.cs">
       <DependentUpon>RequestControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ResponseBodyControl.xaml.cs">
+      <DependentUpon>ResponseBodyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SavedState.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -204,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RequestControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResponseBodyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

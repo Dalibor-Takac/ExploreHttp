@@ -114,9 +114,11 @@ public partial class BodyProvider : ObservableObject
 {
     private BodyType type;
     private string source;
+    private TreeNodeModel treeRepresentation;
 
     public BodyType Type { get => type; set => SetProperty(ref type, value); }
     public string Source { get => source; set => SetProperty(ref source, value); }
+    public TreeNodeModel TreeRepresentation { get => treeRepresentation; set => SetProperty(ref treeRepresentation, value); }
 }
 
 public partial class LogRecord : ObservableObject

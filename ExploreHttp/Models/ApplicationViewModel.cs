@@ -116,13 +116,15 @@ public partial class ApplicationViewModel : ObservableObject
         state.KnownCollections.Clear();
         foreach (var col in Collections)
         {
-            state.KnownCollections.Add(col.Loader.FileName);
+            if (col.Loader != null)
+                state.KnownCollections.Add(col.Loader.FileName);
         }
 
         state.OpenRequests.Clear();
         foreach(var openReq in OpenRequests)
         {
-            state.OpenRequests.Add($"{openReq.SavedRequest.ParentCollection.Loader.FileName}:{openReq.Id}");
+            if (openReq.SavedRequest.ParentCollection.Loader != null)
+                state.OpenRequests.Add($"{openReq.SavedRequest.ParentCollection.Loader.FileName}:{openReq.Id}");
         }
     }
 }

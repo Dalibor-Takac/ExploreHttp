@@ -1,5 +1,7 @@
 ﻿using DotLiquid;
 using ExploreHttp.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
@@ -183,6 +185,7 @@ public class RequestRunner : IDisposable
         var responseBody = await response.Content.ReadAsStringAsync();
         requestModel.ResponseBody.Source = responseBody;
         requestModel.ResponseBody.Type = BodyType.Text;
+        requestModel.ResponseBody.TreeRepresentation = TryParseTreeRepresentation(responseBody, response.Content.Headers.ContentType);
         requestModel.ResponseSize = Encoding.UTF8.GetBytes(responseBody).LongLength;
         requestModel.UnsavedChangesIndicatorVisibility = System.Windows.Visibility.Visible;
         requestModel.ResponseHeaders.Headers.Clear();
@@ -194,6 +197,60 @@ public class RequestRunner : IDisposable
         {
             requestModel.ResponseHeaders.Headers.Add(new HeaderItemModel(item.Key, string.Join(";", item.Value)));
         }
+    }
+
+    private TreeNodeModel TryParseTreeRepresentation(string responseBody, MediaTypeHeaderValue contentType)
+    {
+        if (contentType.MediaType.Equals("application/json", StringComparison.OrdinalIgnoreCase))
+        {
+            var parsed = JToken.Parse(responseBody);
+            return VisitJObject(parsed);
+        }
+        else if (contentType.MediaType.Equals("text/xml", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new NotImplementedException();
+        }
+
+        return null;
+    }
+
+    private TreeNodeModel VisitJObject(JToken obj)
+    {
+        var result = new TreeNodeModel();
+        switch (obj.Type)
+        {
+            case JTokenType.Array:
+                var array = (JArray)obj;
+                result.NodeName = obj.Path;
+                foreach (var item in array)
+                {
+                    result.SubNodes.Add(VisitJObject(item));
+                }
+                break;
+            case JTokenType.Object:
+                var o = (JObject)obj;
+                result.NodeName = obj.Path;
+                foreach (var item in o.Properties())
+                {
+                    result.SubNodes.Add(VisitJObject(item));
+                }
+                break;
+            case JTokenType.Property:
+                var prop = (JProperty)obj;
+                result.NodeName = prop.Name;
+                if (prop.Value.Type == JTokenType.Object
+                    || prop.Value.Type == JTokenType.Array)
+                {
+                    result.SubNodes.Add(VisitJObject(prop));
+                }
+                else
+                {
+                    result.NodeValue = prop.Value.ToString();
+                }
+                break;
+        }
+
+        return result;
     }
 
     public async Task RunRequest(RequestModel requestModel)

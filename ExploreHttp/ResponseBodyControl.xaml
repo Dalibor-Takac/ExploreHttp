@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="ExploreHttp.ResponseBodyControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExploreHttp"
+             xmlns:vm="clr-namespace:ExploreHttp.Models"
+             mc:Ignorable="d" 
+             d:DesignHeight="350"
+             d:DesignWidth="550"
+             d:DataContext="{d:DesignInstance Type=vm:BodyProvider}">
+    <TabControl>
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{StaticResource PlainIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center" />
+                    <TextBlock Text="Plain Text" Margin="5 0 0 0" VerticalAlignment="Center" />
+                </StackPanel>
+            </TabItem.Header>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+                <TextBox IsReadOnly="True"
+                         MinHeight="60"
+                         d:Text="[{}, {}, {}]"
+                         Text="{Binding Source}"
+                         />
+            </ScrollViewer>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{StaticResource TreeIcon}" Style="{StaticResource Icons}" VerticalAlignment="Center" />
+                    <TextBlock Text="Tree Representation" Margin="5 0 0 0" VerticalAlignment="Center" />
+                </StackPanel>
+            </TabItem.Header>
+            <TreeView ItemsSource="{Binding TreeRepresentation.SubNodes}"
+                      d:ItemsSource="{d:SampleData ItemCount=5}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding SubNodes}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding NodeName}" />
+                            <TextBlock Text=" : "/>
+                            <TextBlock Text="{Binding NodeValue}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </TabItem>
+    </TabControl>
+</UserControl>

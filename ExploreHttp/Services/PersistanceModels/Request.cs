@@ -35,6 +35,14 @@ public class ContentProvider
 {
     public BodyType Kind { get; set; }
     public string Source { get; set; }
+    public TreeRepresentation TreeRepresentation { get; set; }
+}
+
+public class TreeRepresentation
+{
+    public string NodeName { get; set; }
+    public string NodeValue { get; set; }
+    public List<TreeRepresentation> SubNodes { get; set; }
 }
 
 public class LogEvent

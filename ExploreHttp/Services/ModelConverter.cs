@@ -1,6 +1,8 @@
-﻿using ExploreHttp.Models;
+﻿using DotLiquid.Util;
+using ExploreHttp.Models;
 using ExploreHttp.Services.PersistanceModels;
 using System.Collections.ObjectModel;
+using System.Net.Http.Headers;
 
 namespace ExploreHttp.Services;
 public class ModelConverter
@@ -139,7 +141,8 @@ public class ModelConverter
             ResponseBody = new BodyProvider()
             {
                 Type = request.ResponseBody.Kind,
-                Source = request.ResponseBody.Source
+                Source = request.ResponseBody.Source,
+                TreeRepresentation = FromStorage(request.ResponseBody.TreeRepresentation)
             },
             Logs = new ObservableCollection<LogRecord>(request.Logs.Select(x => new LogRecord()
             {
@@ -207,7 +210,7 @@ public class ModelConverter
             RequestBody = new ContentProvider()
             {
                 Kind = request.RequestBody.Type,
-                Source = request.RequestBody.Source
+                Source = request.RequestBody.Source,
             },
             ResponseStatus = request.ResponseStatus,
             ResponseDuration = request.ResponseDuration,
@@ -221,7 +224,8 @@ public class ModelConverter
             ResponseBody = new ContentProvider()
             {
                 Kind = request.ResponseBody.Type,
-                Source = request.ResponseBody.Source
+                Source = request.ResponseBody.Source,
+                TreeRepresentation = ToStorage(request.ResponseBody.TreeRepresentation)
             },
             Logs = request.Logs.Select(x => new LogEvent()
             {
@@ -247,5 +251,31 @@ public class ModelConverter
         };
 
         return result;
+    }
+
+    public static TreeNodeModel FromStorage(TreeRepresentation tree)
+    {
+        if (tree is null)
+            return new TreeNodeModel();
+
+        return new TreeNodeModel()
+        {
+            NodeName = tree.NodeName,
+            NodeValue = tree.NodeValue,
+            SubNodes = new ObservableCollection<TreeNodeModel>(tree.SubNodes?.Select(x => FromStorage(x)) ?? Enumerable.Empty<TreeNodeModel>())
+        };
+    }
+
+    public static TreeRepresentation ToStorage(TreeNodeModel tree)
+    {
+        if (tree is null)
+            return new TreeRepresentation();
+
+        return new TreeRepresentation()
+        {
+            NodeName = tree.NodeName,
+            NodeValue = tree.NodeValue,
+            SubNodes = new List<TreeRepresentation>(tree.SubNodes?.Select(x => ToStorage(x)) ?? Enumerable.Empty<TreeRepresentation>())
+        };
     }
 }

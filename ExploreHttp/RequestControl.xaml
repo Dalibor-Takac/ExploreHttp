@@ -163,11 +163,9 @@
                     <GroupBox.Header>Response Headers</GroupBox.Header>
                     <local:HeaderCollectionControl DataContext="{Binding ResponseHeaders}"/>
                 </GroupBox>
-                <TextBox IsEnabled="False"
-                         MinHeight="60"
-                         Text="{Binding ResponseBody.Source}"
-                         Grid.Row="5"
-                         Grid.ColumnSpan="3"/>
+                <local:ResponseBodyControl DataContext="{Binding ResponseBody}"
+                                           Grid.Row="5"
+                                           Grid.ColumnSpan="3" />
             </Grid>
         </ScrollViewer>
         <StatusBar Grid.Row="3"
