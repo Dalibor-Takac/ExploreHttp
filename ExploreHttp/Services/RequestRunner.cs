@@ -1,11 +1,11 @@
 ﻿using DotLiquid;
 using ExploreHttp.Models;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Xml.Linq;
 
 namespace ExploreHttp.Services;
 public class RequestRunner : IDisposable
@@ -208,7 +208,8 @@ public class RequestRunner : IDisposable
         }
         else if (contentType.MediaType.Equals("text/xml", StringComparison.OrdinalIgnoreCase))
         {
-            throw new NotImplementedException();
+            var xmldoc = XDocument.Parse(responseBody);
+            return VisitXmlNode(xmldoc.Document.Root);
         }
 
         return null;
@@ -247,6 +248,30 @@ public class RequestRunner : IDisposable
                 {
                     result.NodeValue = prop.Value.ToString();
                 }
+                break;
+        }
+
+        return result;
+    }
+
+    private TreeNodeModel VisitXmlNode(XElement node)
+    {
+        var result = new TreeNodeModel()
+        {
+            NodeName = node.Name.LocalName
+        };
+
+        switch (node.NodeType)
+        {
+            case System.Xml.XmlNodeType.Element:
+                result.NodeValue = string.Join(" ", node.Attributes().Select(x => $"{x.Name}=\"{x.Value}\""));
+                foreach (var elem in node.Elements())
+                {
+                    result.SubNodes.Add(VisitXmlNode(elem));
+                }
+                break;
+            default:
+                result.NodeValue = node.Value;
                 break;
         }
 
